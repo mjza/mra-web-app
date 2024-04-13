@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';  // Import useLocation
 
 const HeaderNavbar = () => {
   const [searchValue, setSearchValue] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSearchSubmit = (e) => {
     // Prevent the default form submission behavior
@@ -25,7 +26,7 @@ const HeaderNavbar = () => {
 
   return (
     <>
-      <Navbar bg="light" expand="lg" className="global-nav d-none d-lg-flex">
+      <Navbar bg="white" expand="lg" className="global-nav d-none d-lg-flex">
         <Container fluid className="d-flex align-items-center">
           <div className="flex-grow-0"></div>
 
@@ -34,7 +35,7 @@ const HeaderNavbar = () => {
               <RCLogo color="#282c34" size="50" />
             </Navbar.Brand>
             <Form className="d-flex ms-0" onSubmit={handleSearchSubmit}>
-              <InputGroup>
+              <InputGroup className={`search-input-group ${isFocused ? 'input-group-focused' : ''}`}>
                 <InputGroup.Text>
                   <FontAwesomeIcon icon={faSearch} />
                 </InputGroup.Text>
@@ -45,6 +46,8 @@ const HeaderNavbar = () => {
                   aria-label="Search"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
                 />
               </InputGroup>
             </Form>
@@ -62,7 +65,7 @@ const HeaderNavbar = () => {
                 <Nav.Link
                   key={link.text}
                   href={link.href}
-                  className={`d-flex flex-column align-items-center text-center ${isActive(link.href) ? activeLinkClass : ''}`}
+                  className={`d-flex flex-column align-items-center text-center me-2 me-md-3 me-lg-4 ${isActive(link.href) ? activeLinkClass : ''}`}
                 >
                   <FontAwesomeIcon icon={link.icon} className="ms-md-2 me-md-2 fs-4" />
                   <div style={{ fontSize: '12px' }}>{link.text}</div>
