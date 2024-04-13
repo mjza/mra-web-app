@@ -22,11 +22,11 @@ const HeaderNavbar = () => {
   const activeLinkClass = `border-bottom border-3 ${theme === 'light' ? 'border-dark text-dark' : 'border-light text-light'}`;
   const navbarClass = theme === 'dark' ? 'navbar-dark bg-dark' : 'navbar-light bg-light';
   const iconColor = theme === 'dark' ? '#F8F9FA' : '#212529';
-
+  const bgColor = theme === 'light' ? 'white' : '';
 
   return (
     <>
-      <Navbar expand="lg" className={`global-nav d-flex py-0 ${navbarClass}`}>
+      <Navbar bg={bgColor} expand="lg" className={`global-nav d-flex py-0 ${navbarClass}`}>
         <Container fluid className="d-flex align-items-center" style={{ flexWrap: 'nowrap' }}>
           <div className="flex-grow-0 d-none d-md-flex"></div>
 

@@ -1,3 +1,15 @@
+/* App.css */
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* This ensures that the footer pushes to the bottom */
+main {
+  flex: 1;
+}
+
 // Define fs for different 
 // Define font sizes as variables for easy maintenance
 $font-size-1: 2.5rem;
