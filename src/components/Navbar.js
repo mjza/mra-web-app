@@ -1,48 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import ThemeContext from '../contexts/ThemeContext';
 import RCLogo from './RCLogo';
-import { Navbar, Nav, Container, Form, FormControl, InputGroup } from 'react-bootstrap';
+import { Navbar, Nav, Container, Form, FormControl, InputGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faGifts, faCommentDots, faTicket, faHome, faQrcode } from '@fortawesome/free-solid-svg-icons';
-import { useLocation } from 'react-router-dom';  // Import useLocation
+import { useLocation } from 'react-router-dom';
+import '../css/Navbar.scss';
 
 const HeaderNavbar = () => {
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const { theme } = useContext(ThemeContext);
+  const location = useLocation(); 
 
   const handleSearchSubmit = (e) => {
-    // Prevent the default form submission behavior
     e.preventDefault();
-    // Log the current state of the search input
     console.log(searchValue);
   };
 
-  const location = useLocation();  // Get the current location
-
-  // Function to determine if the current path matches the Nav.Link href
   const isActive = (path) => location.pathname.startsWith(path);
+  const activeLinkClass = `border-bottom border-3 ${theme === 'light' ? 'border-dark text-dark' : 'border-light text-light'}`;
+  const navbarClass = theme === 'dark' ? 'navbar-dark bg-dark' : 'navbar-light bg-light';
+  const iconColor = theme === 'dark' ? '#F8F9FA' : '#212529';
 
-  // Add the class for border-bottom thick and color
-  const activeLinkClass = "border-bottom border-3 border-dark text-dark";
 
   return (
     <>
-      <Navbar bg="white" expand="lg" className="global-nav d-none d-lg-flex">
-        <Container fluid className="d-flex align-items-center">
-          <div className="flex-grow-0"></div>
+      <Navbar expand="lg" className={`global-nav d-flex py-0 ${navbarClass}`}>
+        <Container fluid className="d-flex align-items-center" style={{ flexWrap: 'nowrap' }}>
+          <div className="flex-grow-0 d-none d-md-flex"></div>
 
-          <div className="d-flex align-items-center">
-            <Navbar.Brand href="/" className="d-flex align-items-center">
-              <RCLogo color="#282c34" size="50" />
+          <div className="d-flex align-items-center flex-grow-1 flex-md-grow-0">
+            <Navbar.Brand href="/" className="d-flex align-items-center me-2">
+              <RCLogo color={iconColor} size="50" />
             </Navbar.Brand>
-            <Form className="d-flex ms-0" onSubmit={handleSearchSubmit}>
+            <Form className="d-flex ms-0 flex-grow-1 flex-md-grow-0" onSubmit={handleSearchSubmit}>
               <InputGroup className={`search-input-group ${isFocused ? 'input-group-focused' : ''}`}>
-                <InputGroup.Text>
+                <InputGroup.Text className='bg-transparent d-none d-md-inline-block'>
                   <FontAwesomeIcon icon={faSearch} />
                 </InputGroup.Text>
                 <FormControl
                   type="search"
                   placeholder="Search"
-                  className="me-6"
+                  className="me-2"
                   aria-label="Search"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
@@ -54,7 +54,7 @@ const HeaderNavbar = () => {
           </div>
 
           <div className="d-flex align-items-center">
-            <Nav className="flex-row flex-grow-0 justify-content-end me-3">
+            <Nav className="flex-row flex-grow-0 justify-content-end me-3 d-none d-md-flex">
               {[
                 { href: "/feed", icon: faHome, text: "Home" },
                 { href: "/tickets", icon: faTicket, text: "My Tickets" },
@@ -67,26 +67,28 @@ const HeaderNavbar = () => {
                   href={link.href}
                   className={`d-flex flex-column align-items-center text-center me-2 me-md-3 me-lg-4 ${isActive(link.href) ? activeLinkClass : ''}`}
                 >
-                  <FontAwesomeIcon icon={link.icon} className="ms-md-2 me-md-2 fs-4" />
-                  <div style={{ fontSize: '12px' }}>{link.text}</div>
+                  <OverlayTrigger
+                    overlay={<Tooltip className='d-lg-none'>{link.text}</Tooltip>}
+                    placement="bottom-start"
+                    trigger={['hover', 'focus', 'click']}
+                  >
+                    <FontAwesomeIcon icon={link.icon} className="ms-md-2 me-md-2 fs-md-1 fs-lg-4" />
+                  </OverlayTrigger>
+                  <div className="d-none d-md-none d-lg-block" style={{ fontSize: '12px' }}>{link.text}</div>
                 </Nav.Link>
               ))}
             </Nav>
             <Nav.Item>
               <img
                 src="https://via.placeholder.com/40"
-                className="d-inline-block align-top"
+                className="d-inline-block align-top rounded-circle ms-2 ms-md-0"
                 alt="User Avatar"
-                style={{ borderRadius: '50%' }}
               />
             </Nav.Item>
           </div>
-          <div className="flex-grow-0"></div>
+          <div className="flex-grow-0 d-none d-md-flex"></div>
         </Container>
       </Navbar>
-      <div className="d-lg-none">
-        {/* Mobile navbar components */}
-      </div>
     </>
   );
 };

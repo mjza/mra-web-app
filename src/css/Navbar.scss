@@ -1,0 +1,30 @@
+// Assuming Bootstrap variables are imported
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/bootstrap";
+
+.search-input-group {
+  background-color: aliceblue;
+
+  // Scoped modifications when the input group is focused
+  &.input-group-focused {
+    background-color: $white;
+    border: 2px solid #80bdff;
+    outline: none;
+    box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+  }
+
+  // Styles for form-control and input-group-text within the search input group
+  .form-control,
+  .input-group-text {
+    border: none;
+    background-color: transparent;
+  }
+
+  // Additional focus styles for form-control
+  .form-control:focus {
+    box-shadow: none;
+  }
+}
+

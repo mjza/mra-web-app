@@ -1,0 +1,25 @@
+// Define fs for different 
+// Define font sizes as variables for easy maintenance
+$font-size-1: 2.5rem;
+$font-size-2: 2rem;
+$font-size-3: 1.75rem;
+$font-size-4: 1.5rem;
+$font-size-5: 1.25rem;
+$font-size-6: 1rem;
+
+// Media query mixins for brevity
+@mixin responsive-font-sizes($breakpoint) {
+  .fs-#{$breakpoint}-1 { font-size: $font-size-1; }
+  .fs-#{$breakpoint}-2 { font-size: $font-size-2; }
+  .fs-#{$breakpoint}-3 { font-size: $font-size-3; }
+  .fs-#{$breakpoint}-4 { font-size: $font-size-4; }
+  .fs-#{$breakpoint}-5 { font-size: $font-size-5; }
+  .fs-#{$breakpoint}-6 { font-size: $font-size-6; }
+}
+
+// Apply media queries using mixins
+@media (min-width: 576px)  { @include responsive-font-sizes(sm); }
+@media (min-width: 768px)  { @include responsive-font-sizes(md); }
+@media (min-width: 992px)  { @include responsive-font-sizes(lg); }
+@media (min-width: 1200px) { @include responsive-font-sizes(xl); }
+@media (min-width: 1400px) { @include responsive-font-sizes(xxl); }

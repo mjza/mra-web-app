@@ -1,0 +1,33 @@
+
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    min-height: 100vh;
+    flex: 1;
+}
+
+/* Light theme styles */
+body.light {
+    background-color: #f4f2ee;
+    color: #212529;
+}
+
+/* Dark theme styles */
+body.dark {
+    background-color: #000;
+    color: #f8f9fa;
+}
