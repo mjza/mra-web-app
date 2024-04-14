@@ -13,7 +13,7 @@ const Login = () => {
 
     // Parse the URL query parameters
     const searchParams = new URLSearchParams(location.search);
-    const redirect = searchParams.get('redirect') || '/home';
+    const redirect = searchParams.get('redirect') || '/';
 
     const handleChange = (e) => {
         const { name, value } = e.target;
