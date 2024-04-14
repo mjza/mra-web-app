@@ -7,7 +7,15 @@ import { useLocation } from 'react-router-dom';
 
 const FooterNavbar = () => {
     const location = useLocation();
-    const isActive = (path) => location.pathname.startsWith(path);
+    const isActive = (path) => {
+        const pathname = location.pathname;
+        // Check if the path matches and the next character is "/", "?", or end of string
+        if (!pathname.startsWith(path)) {
+          return false;
+        }
+        const nextChar = pathname[path.length];
+        return nextChar === '/' || nextChar === '?' || nextChar === undefined;
+      };
     const { theme } = useContext(ThemeContext);    
     const activeLinkClass = `border-top border-3 ${theme === 'light' ? 'border-dark text-dark' : 'border-light text-light'}`;
     const inactiveLinkClass = `border-top border-3 ${theme === 'dark' ? 'border-dark' : 'border-light'}`;

@@ -10,15 +10,23 @@ import '../css/Navbar.scss';
 const HeaderNavbar = () => {
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
-  const { theme } = useContext(ThemeContext);
-  const location = useLocation(); 
+  const { theme } = useContext(ThemeContext);  
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     console.log(searchValue);
   };
 
-  const isActive = (path) => location.pathname.startsWith(path);
+  const location = useLocation();
+  const isActive = (path) => {
+    const pathname = location.pathname;
+    // Check if the path matches and the next character is "/", "?", or end of string
+    if (!pathname.startsWith(path)) {
+      return false;
+    }
+    const nextChar = pathname[path.length];
+    return nextChar === '/' || nextChar === '?' || nextChar === undefined;
+  };
   const activeLinkClass = `border-bottom border-3 ${theme === 'light' ? 'border-dark text-dark' : 'border-light text-light'}`;
   const navbarClass = theme === 'dark' ? 'navbar-dark bg-dark' : 'navbar-light bg-light';
   const iconColor = theme === 'dark' ? '#F8F9FA' : '#212529';
