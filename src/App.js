@@ -76,7 +76,7 @@ export default App;
 
 // Dummy components for the route targets
 const News = () => (
-  <div>
+  <div className='py-5'>
     <h1>News Page</h1>
     <ToggleThemeButton />  {/* Theme toggle button included */}
     <SignOut />
