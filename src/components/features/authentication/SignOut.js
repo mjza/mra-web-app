@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useUser } from '../contexts/UserContext';
+import { useUser } from '../../../contexts/UserContext';
 import { Navigate } from 'react-router-dom';
-import ConfirmDialog from './ConfirmDialog';
-import LoadingOverlay from './LoadingOverlay';
+import ConfirmDialog from '../../common/ConfirmDialog';
+import LoadingOverlay from '../../ui/LoadingOverlay';
 
-const Logout = () => {
+const SignOut = () => {
     const { user, logout } = useUser();
     const [isRedirecting, setIsRedirecting] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
@@ -59,7 +59,7 @@ const Logout = () => {
     };
 
     if (isRedirecting) {
-        return <Navigate to="/login" replace={true} />;
+        return <Navigate to="/signin" replace={true} />;
     }
 
     return (
@@ -80,12 +80,12 @@ const Logout = () => {
                 {loading ? (
                     <>
                         <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>
-                        &nbsp;Logout...
+                        &nbsp;Sign out...
                     </>
-                ) : "Logout"}
+                ) : "Sign out"}
             </button>
         </div>
     );
 };
 
-export default Logout;
+export default SignOut;

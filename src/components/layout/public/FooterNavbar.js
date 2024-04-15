@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faTicket, faQrcode, faCommentDots, faGifts } from '@fortawesome/free-solid-svg-icons';
-import ThemeContext from '../contexts/ThemeContext';
+import ThemeContext from '../../../contexts/ThemeContext';
 import { useLocation } from 'react-router-dom';
 
 const FooterNavbar = () => {

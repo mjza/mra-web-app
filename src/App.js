@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import './css/App.scss';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { UserProvider, useUser } from './contexts/UserContext';
-import ToggleThemeButton from './components/ToggleThemeButton';
-import HeaderNavbar from './components/HeaderNavbar';
-import FooterNavbar from './components/FooterNavbar';
-import Login from './components/Login';
-import Logout from './components/Logout';
-import NotFound from './components/NotFound';
+import ToggleThemeButton from './components/ui/ToggleThemeButton';
+import PublicUserHeaderNavbar from './components/layout/public/HeaderNavbar';
+import PublicUserFooterNavbar from './components/layout/public/FooterNavbar';
+import UserHeaderNavbar from './components/layout/users/HeaderNavbar';
+import UserFooterNavbar from './components/layout/users/FooterNavbar';
+import SignIn from './components/features/authentication/SignIn';
+import SignOut from './components/features/authentication/SignOut';
+import NotFound from './components/pages/NotFound';
 
 const AppContent = () => {
   const { user } = useUser();
@@ -16,20 +18,29 @@ const AppContent = () => {
 
   if (!user) {
     const redirectTo = `${location.pathname}${location.search}`;
-    const loginPath = `/login?redirect=${encodeURIComponent(redirectTo)}`;
+    const signInPath = `/signin?redirect=${encodeURIComponent(redirectTo)}`;
 
     return <>
+      <PublicUserHeaderNavbar />
       <main>
         <Routes>
-          <Route path="/" element={<Navigate replace to="/login" />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate replace to={loginPath} />} />
+          <Route path="/" element={<Navigate replace to={signInPath} />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<Empty />} />
+          <Route path="/forgot-password" element={<Empty />} />
+          <Route path="/reset-password" element={<Empty />} />
+          <Route path="/forgot_username" element={<Empty />} />
+          <Route path="/news" element={<Empty />} />
+          <Route path="/tickets" element={<Empty />} />
+          <Route path="/qrcodes" element={<Empty />} />
+          <Route path="*" element={<Navigate replace to={signInPath} />} />
         </Routes>
       </main>
+      <PublicUserFooterNavbar />
     </>;
   } else {
     return <>
-      <HeaderNavbar />
+      <UserHeaderNavbar />
       <main>
         <Routes>
           <Route path="/" element={<Navigate replace to="/feed" />} />
@@ -41,7 +52,7 @@ const AppContent = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <FooterNavbar />
+      <UserFooterNavbar />
     </>;
   }
 };
@@ -68,10 +79,11 @@ const News = () => (
   <div>
     <h1>News Page</h1>
     <ToggleThemeButton />  {/* Theme toggle button included */}
-    <Logout />
+    <SignOut />
   </div>
 );
 const Tickets = () => <div>Tickets Page</div>;
 const QRCodes = () => <div>QR Codes Page</div>;
 const Messaging = () => <div>Messaging Page</div>;
 const Gifts = () => <div>Gifts Page</div>;
+const Empty = () => <div>Reserved for work</div>;

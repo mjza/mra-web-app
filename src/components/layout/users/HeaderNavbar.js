@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
-import ThemeContext from '../contexts/ThemeContext';
-import RCLogo from './RCLogo';
+import ThemeContext from '../../../contexts/ThemeContext';
+import RCLogo from '../../common/RCLogo';
 import { Navbar, Nav, Container, Form, FormControl, InputGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faGifts, faCommentDots, faTicket, faHome, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
-import '../css/Navbar.scss';
+import './scss/Navbar.scss';
 
 const HeaderNavbar = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -35,7 +35,7 @@ const HeaderNavbar = () => {
   return (
     <>
       <Navbar bg={bgColor} expand="lg" className={`global-nav d-flex py-0 ${navbarClass}`}>
-        <Container fluid className="d-flex align-items-center" style={{ flexWrap: 'nowrap' }}>
+        <Container fluid className="d-flex flex-nowrap align-items-center">
           <div className="flex-grow-0 d-none d-md-flex"></div>
 
           <div className="d-flex align-items-center flex-grow-1 flex-md-grow-0">
