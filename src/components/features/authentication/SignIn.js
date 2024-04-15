@@ -4,6 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { useUser } from '../../../contexts/UserContext';
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import Footer from '../../common/Footer';
 
 const SignIn = () => {
     const { login } = useUser();
@@ -44,6 +45,7 @@ const SignIn = () => {
     };
 
     return (
+        <>
         <div className="min-vh-100 align-items-center py-5">
             <Row className="w-100 p-0 m-0">
                 {loading && <LoadingOverlay />}
@@ -104,7 +106,12 @@ const SignIn = () => {
                 </Col>
                 <Col xs={1} sm={1} md={1} lg={2} xl={2} xxl={3}></Col> {/* Right gap */}
             </Row>
+            <Row className="w-100 p-0 m-0 feature-row">
+                &nbsp;
+            </Row>
         </div>
+        <Footer />
+        </>
     );
 };
 

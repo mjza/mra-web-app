@@ -22,12 +22,18 @@ body {
 
 /* Light theme styles */
 body.light {
-    background-color: #f4f2ee;
+    background-color: #fff;
     color: #212529;
+    .feature-row {
+        background-color: #f4f2ee;
+    }
 }
 
 /* Dark theme styles */
 body.dark {
     background-color: #000;
     color: #f8f9fa;
+    .feature-row {
+        background-color: #201f1f;
+    }
 }
