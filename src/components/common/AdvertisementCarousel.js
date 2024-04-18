@@ -13,7 +13,7 @@ function AdvertisementCarousel() {
             src: "/images/banner2.webp",
             title: "Engage With Organizations",
             text: "Take action in your community with MyReportApp. Vote on local issues, track their resolution, and stay informed by simply scanning QR codes on issue announcements. Your involvement can drive change. Start by keeping updated on the progress of reports in your neighborhood."
-        },        
+        },
         {
             src: "/images/banner3.webp",
             title: "Enhance Citizen Satisfaction",
@@ -27,27 +27,38 @@ function AdvertisementCarousel() {
     ];
 
     return (
-        <Carousel className="m-3 carousel-dark">
-            {advertisements.map((ad, idx) => (
-                <Carousel.Item key={idx}>
-                    <div className={`p-5 d-flex justify-content-center flex-column flex-md-column flex-lg-row ${idx % 2 === 0 ? '' : 'flex-lg-row-reverse'} `}>
-                        <div className="col-lg-1 col-xxl-2"/>
-                        <div className={`mx-auto col-sm-8 col-lg-5 col-xxl-4 d-flex justify-content-center align-items-center ${idx % 2 === 0 ? 'pe-lg-4' : 'ps-lg-4'} `}>
-                            <img
-                                className="img-fluid rounded-circle w-80 w-lg-100"
-                                src={ad.src}
-                                alt={`Slide ${idx}`}
-                            />
+        <>
+            <style>
+                {`
+                    @media (min-width: 992px) {  /* Bootstrap 'lg' breakpoint */
+                        .custom-lg-rounded {
+                        border-radius: 0.3rem !important;  /* mimics Bootstrap's .rounded-5 */
+                        }
+                    }
+                `}
+            </style>
+            <Carousel className="m-3 carousel-dark">
+                {advertisements.map((ad, idx) => (
+                    <Carousel.Item key={idx}>
+                        <div className={`p-5 d-flex justify-content-center flex-column flex-md-column flex-lg-row ${idx % 2 === 0 ? '' : 'flex-lg-row-reverse'} `}>
+                            <div className="col-12 col-lg-1 col-xxl-2" />
+                            <div className={`mx-auto my-3 col-8 col-lg-5 col-xxl-4 d-flex justify-content-center align-items-center ${idx % 2 === 0 ? 'justify-content-xl-end me-xl-5' : 'justify-content-xl-start ms-xl-5'}`}>
+                                <img
+                                    className="img-fluid rounded-circle custom-lg-rounded w-75"
+                                    src={ad.src}
+                                    alt={`Slide ${idx}`}
+                                />
+                            </div>
+                            <div className={`col-12 col-lg-5 col-xxl-4 d-flex flex-column justify-content-center align-items-start px-3`}>
+                                <h3 className="w-100 display-xs-3 display-md-4 display-xl-5 mb-4 text-center text-lg-start" style={{ color: "#b24020" }}>{ad.title}</h3>
+                                <p className="fs-xs-3 fs-md-4 fs-xl-5 text-center text-lg-start">{ad.text}</p>
+                            </div>
+                            <div className="col-12 col-lg-1 col-xxl-2" />
                         </div>
-                        <div className={`col-lg-5 col-xxl-4 d-flex flex-column justify-content-center align-items-start ${idx % 2 === 0 ? 'ps-lg-4' : 'pe-lg-4'} `}>
-                            <h3 className="display-3" style={{color: "#b24020"}}>{ad.title}</h3>
-                            <p className="fs-4">{ad.text}</p>
-                        </div>
-                        <div className="col-lg-1 col-xxl-2"/>
-                    </div>
-                </Carousel.Item>
-            ))}
-        </Carousel>
+                    </Carousel.Item>
+                ))}
+            </Carousel>
+        </>
     );
 }
 

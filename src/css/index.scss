@@ -24,7 +24,7 @@ body {
 body.light {
     background-color: #fff;
     color: #212529;
-    .feature-row {
+    .feature-box {
         background-color: aliceblue;
     }
 }
@@ -33,7 +33,7 @@ body.light {
 body.dark {
     background-color: #000;
     color: #f8f9fa;
-    .feature-row {
+    .feature-box {
         background-color: #201f1f;
     }
 }

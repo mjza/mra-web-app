@@ -101,7 +101,7 @@ const SignIn = () => {
                                         alt="A graph that explains the main functionality of the application."
                                         className="py-3 img-fluid"
                                         style={{
-                                            borderRadius: '25%',  // top-right, bottom-right, bottom-left, top-left
+                                            borderRadius: '20%',  // top-right, bottom-right, bottom-left, top-left
 
                                         }}
                                     />
@@ -111,9 +111,9 @@ const SignIn = () => {
                     </Col>
                     <Col xs={1} sm={1} md={1} lg={2} xl={2} xxl={3}></Col> {/* Right gap */}
                 </Row>
-                <Row className="w-100 p-0 m-0 feature-row">
+                <div className="w-100 p-0 m-0 feature-box">
                     <AdvertisementCarousel />
-                </Row>
+                </div>
             </div>
             <Footer />
         </>
