@@ -5,7 +5,6 @@ import { useUser } from '../../../contexts/UserContext';
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import AdvertisementCarousel from '../../common/AdvertisementCarousel';
-import Footer from '../../common/Footer';
 
 const SignIn = () => {
     const { login } = useUser();
@@ -115,7 +114,6 @@ const SignIn = () => {
                     <AdvertisementCarousel />
                 </div>
             </div>
-            <Footer />
         </>
     );
 };

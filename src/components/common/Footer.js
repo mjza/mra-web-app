@@ -12,13 +12,13 @@ const Footer = () => {
                             <Nav.Link href="https://reportcycle.com" className="text-muted">
                             ReportCycle &copy; 2023-{currentYear} 
                             </Nav.Link>
-                            <Nav.Link href="https://about.myreportapp.com" className="text-muted">About</Nav.Link>
-                            <Nav.Link href="https://accessibility.myreportapp.com" className="text-muted">Accessibility</Nav.Link>
-                            <Nav.Link href="https://user-agreement.myreportapp.com" className="text-muted">User Agreement</Nav.Link>
-                            <Nav.Link href="https://privacy.myreportapp.com" className="text-muted">Privacy Policy</Nav.Link>
-                            <Nav.Link href="https://cookie-policy.myreportapp.com" className="text-muted">Cookie Policy</Nav.Link>
-                            <Nav.Link href="https://copyright.myreportapp.com" className="text-muted">Copyright Policy</Nav.Link>
-                            <Nav.Link href="https://brand.myreportapp.com" className="text-muted">Brand Policy</Nav.Link>
+                            <Nav.Link href="/about" className="text-muted">About</Nav.Link>
+                            <Nav.Link href="/accessibility" className="text-muted">Accessibility</Nav.Link>
+                            <Nav.Link href="/user-agreement" className="text-muted">User Agreement</Nav.Link>
+                            <Nav.Link href="/privacy" className="text-muted">Privacy Policy</Nav.Link>
+                            <Nav.Link href="/cookie-policy" className="text-muted">Cookie Policy</Nav.Link>
+                            <Nav.Link href="/copyright" className="text-muted">Copyright Policy</Nav.Link>
+                            <Nav.Link href="/brand" className="text-muted">Brand Policy</Nav.Link>
                         </Nav>
                     </Col>
                 </Row>

@@ -6,11 +6,24 @@ import { UserProvider, useUser } from './contexts/UserContext';
 import ToggleThemeButton from './components/ui/ToggleThemeButton';
 import PublicUserHeaderNavbar from './components/layout/public/HeaderNavbar';
 import PublicUserFooterNavbar from './components/layout/public/FooterNavbar';
+import Footer from './components/common/Footer';
 import UserHeaderNavbar from './components/layout/users/HeaderNavbar';
 import UserFooterNavbar from './components/layout/users/FooterNavbar';
 import SignIn from './components/features/authentication/SignIn';
 import SignOut from './components/features/authentication/SignOut';
 import NotFound from './components/pages/NotFound';
+import UnderConstruction from './components/pages/UnderConstruction';
+
+const infoRoutes = () => [
+  <Route key="about" path="/about" element={<UnderConstruction />} />,
+  <Route key="accessibility" path="/accessibility" element={<UnderConstruction />} />,
+  <Route key="user-agreement" path="/user-agreement" element={<UnderConstruction />} />,
+  <Route key="privacy" path="/privacy" element={<UnderConstruction />} />,
+  <Route key="cookie-policy" path="/cookie-policy" element={<UnderConstruction />} />,
+  <Route key="copyright" path="/copyright" element={<UnderConstruction />} />,
+  <Route key="brand" path="/brand" element={<UnderConstruction />} />
+];
+
 
 const AppContent = () => {
   const { user } = useUser();
@@ -26,16 +39,18 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Navigate replace to={signInPath} />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<Empty />} />
-          <Route path="/forgot-password" element={<Empty />} />
-          <Route path="/reset-password" element={<Empty />} />
-          <Route path="/forgot_username" element={<Empty />} />
-          <Route path="/news" element={<Empty />} />
-          <Route path="/tickets" element={<Empty />} />
-          <Route path="/qrcodes" element={<Empty />} />
+          <Route path="/signup" element={<UnderConstruction />} />
+          <Route path="/forgot-password" element={<UnderConstruction />} />
+          <Route path="/reset-password" element={<UnderConstruction />} />
+          <Route path="/forgot_username" element={<UnderConstruction />} />
+          <Route path="/news" element={<UnderConstruction />} />
+          <Route path="/tickets" element={<UnderConstruction />} />
+          <Route path="/qrcodes" element={<UnderConstruction />} />
+          {infoRoutes()}
           <Route path="*" element={<Navigate replace to={signInPath} />} />
         </Routes>
       </main>
+      <Footer />
       <PublicUserFooterNavbar />
     </>;
   } else {
@@ -45,10 +60,11 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Navigate replace to="/feed" />} />
           <Route path="/feed" element={<News />} />
-          <Route path="/tickets" element={<Tickets />} />
-          <Route path="/qrcodes" element={<QRCodes />} />
-          <Route path="/messaging" element={<Messaging />} />
-          <Route path="/gifts" element={<Gifts />} />
+          <Route path="/tickets" element={<UnderConstruction />} />
+          <Route path="/qrcodes" element={<UnderConstruction />} />
+          <Route path="/messaging" element={<UnderConstruction />} />
+          <Route path="/gifts" element={<UnderConstruction />} />
+          {infoRoutes()}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
@@ -82,8 +98,3 @@ const News = () => (
     <SignOut />
   </div>
 );
-const Tickets = () => <div>Tickets Page</div>;
-const QRCodes = () => <div>QR Codes Page</div>;
-const Messaging = () => <div>Messaging Page</div>;
-const Gifts = () => <div>Gifts Page</div>;
-const Empty = () => <div>Reserved for work</div>;
