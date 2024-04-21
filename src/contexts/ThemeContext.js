@@ -13,7 +13,6 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     // Update the body class and local storage whenever the theme changes
     document.documentElement.setAttribute('data-bs-theme', theme);
-    document.body.className = theme;
     localStorage.setItem('theme', theme);
   }, [theme]);
 

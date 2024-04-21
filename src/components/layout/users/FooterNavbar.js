@@ -20,10 +20,9 @@ const FooterNavbar = () => {
     const activeLinkClass = `border-top border-3 ${theme === 'light' ? 'border-dark text-dark' : 'border-light text-light'}`;
     const inactiveLinkClass = `border-top border-3 ${theme === 'dark' ? 'border-dark' : 'border-light'}`;
     const navbarClass = theme === 'dark' ? 'navbar-dark bg-dark' : 'navbar-light bg-light';
-    const bgColor = theme === 'light' ? 'white' : '';
 
     return (
-        <Navbar bg={bgColor} fixed="bottom" className={`d-block d-md-none py-0 ${navbarClass}`}>
+        <Navbar fixed="bottom" className={`d-block d-md-none py-0 border-top  ${navbarClass}`}>
             <Nav className="d-flex justify-content-around w-100 text-center">
                 {[
                     { href: "/feed", icon: faHome, text: "Home" },

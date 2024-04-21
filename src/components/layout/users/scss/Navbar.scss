@@ -5,26 +5,36 @@
 @import "bootstrap/scss/bootstrap";
 
 .search-input-group {
-  background-color: aliceblue;
-
-  // Scoped modifications when the input group is focused
-  &.input-group-focused {
-    background-color: $white;
-    border: 2px solid #80bdff;
-    outline: none;
-    box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
-  }
-
-  // Styles for form-control and input-group-text within the search input group
+  // Default styles that are not dependent on the theme
   .form-control,
   .input-group-text {
     border: none;
     background-color: transparent;
   }
 
-  // Additional focus styles for form-control
   .form-control:focus {
+    background-color: transparent;
     box-shadow: none;
   }
-}
 
+  // Conditional theme styling
+  html[data-bs-theme='light'] & {
+    background-color: #fff;
+
+    &.input-group-focused {
+      border: 2px solid #80bdff;
+      outline: none;
+      box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+    }
+  }
+
+  html[data-bs-theme='dark'] & {
+    background-color: #333;
+
+    &.input-group-focused {
+      border: 2px solid #505050;
+      outline: none;
+      box-shadow: 0 0 0 0.1rem rgba(255, 255, 255, 0.25);  // Lighter shadow for better visibility in dark mode
+    }
+  }
+}

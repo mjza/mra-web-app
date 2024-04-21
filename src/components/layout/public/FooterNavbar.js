@@ -23,7 +23,7 @@ const FooterNavbar = () => {
     const bgColor = theme === 'light' ? 'white' : '';
 
     return (
-        <Navbar bg={bgColor} fixed="bottom" className={`d-block d-md-none py-0 ${navbarClass}`}>
+        <Navbar bg={bgColor} fixed="bottom" className={`d-block d-md-none py-0 border-top ${navbarClass}`}>
             <Nav className="d-flex justify-content-around mw-100 text-center">
                 {[
                     { href: "/news", icon: faNewspaper, text: "News" },

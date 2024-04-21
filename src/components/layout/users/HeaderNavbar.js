@@ -30,11 +30,10 @@ const HeaderNavbar = () => {
   const activeLinkClass = `border-bottom border-3 ${theme === 'light' ? 'border-dark text-dark' : 'border-light text-light'}`;
   const navbarClass = theme === 'dark' ? 'navbar-dark bg-dark' : 'navbar-light bg-light';
   const iconColor = theme === 'dark' ? '#F8F9FA' : '#212529';
-  const bgColor = theme === 'light' ? 'white' : '';
 
   return (
     <>
-      <Navbar bg={bgColor} fixed="top" className={`global-nav py-0 ${navbarClass}`}>
+      <Navbar fixed="top" className={`global-nav py-0 border-bottom ${navbarClass}`}>
         <Container fluid>
           <Row className="w-100 p-0 m-0">
             <Col xs={0} sm={1} md={1} lg={2} xl={2} xxl={3}></Col>

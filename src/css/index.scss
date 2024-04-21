@@ -1,42 +1,61 @@
-
-
 *,
 *::before,
 *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
 }
 
 html,
 body {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 body {
-    min-height: 100vh;
-    flex: 1;
-}
+  min-height: 100vh;
+  flex: 1;
 
-/* Light theme styles */
-body.light {
+  /* Light theme styles */
+  html[data-bs-theme='light'] & {
     background-color: #fff;
     color: #212529;
-    .feature-box {
-        background-color: aliceblue;
-    }
-}
 
-/* Dark theme styles */
-body.dark {
+    .feature-box {
+      background-color: aliceblue;
+    }
+  }
+
+  /* Dark theme styles */
+  html[data-bs-theme='dark'] & {
     background-color: #000;
     color: #f8f9fa;
+
     .feature-box {
-        background-color: #201f1f;
+      background-color: #201f1f;
     }
+  }
 }
+
+
+
+/* Disable focus for all elements */
+*:focus {
+  outline: none !important;
+}
+
+/* Only allow focus on interactive elements */
+button:focus,
+a[href]:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: auto;
+  /* Or specify a custom outline style */
+}
+
 
 // Define breakpoints
 $breakpoints: (
@@ -85,8 +104,11 @@ $display-line-height: 1.2;
 // Responsive font size mixins
 @mixin responsive-font-sizes($breakpoint) {
   @each $index, $size in $font-sizes {
-    .fs-#{$breakpoint}-#{$index} { font-size: $size; }
+    .fs-#{$breakpoint}-#{$index} {
+      font-size: $size;
+    }
   }
+
   @each $index, $size in $display-sizes {
     .display-#{$breakpoint}-#{$index} {
       font-size: $size;
@@ -101,8 +123,13 @@ $display-line-height: 1.2;
   @each $break, $size in $breakpoints {
     @media (min-width: $size) {
       @for $i from 0 through 100 {
-        .w-#{$break}-#{$i} { width: #{$i + 0%} !important; }
-        .h-#{$break}-#{$i} { height: #{$i + 0%} !important; }
+        .w-#{$break}-#{$i} {
+          width: #{$i + 0%} !important;
+        }
+
+        .h-#{$break}-#{$i} {
+          height: #{$i + 0%} !important;
+        }
       }
     }
   }
@@ -121,16 +148,53 @@ $display-line-height: 1.2;
 @mixin responsive-spacing-xxxl {
   @media (min-width: map-get($breakpoints, xxxl)) {
     @each $num, $value in $spaces {
-      .p-xxxl-#{$num} { padding: $value !important; }
-      .m-xxxl-#{$num} { margin: $value !important; }
-      .px-xxxl-#{$num}, .pe-xxxl-#{$num}, .ps-xxxl-#{$num} { padding-left: $value !important; padding-right: $value !important; }
-      .py-xxxl-#{$num} { padding-top: $value; padding-bottom: $value !important; }
-      .pt-xxxl-#{$num} { padding-top: $value !important; }
-      .pb-xxxl-#{$num} { padding-bottom: $value !important; }
-      .mx-xxxl-#{$num}, .me-xxxl-#{$num}, .ms-xxxl-#{$num} { margin-left: $value !important; margin-right: $value !important; }
-      .my-xxxl-#{$num} { margin-top: $value; margin-bottom: $value !important; }
-      .mt-xxxl-#{$num} { margin-top: $value !important; }
-      .mb-xxxl-#{$num} { margin-bottom: $value !important; }
+      .p-xxxl-#{$num} {
+        padding: $value !important;
+      }
+
+      .m-xxxl-#{$num} {
+        margin: $value !important;
+      }
+
+      .px-xxxl-#{$num},
+      .pe-xxxl-#{$num},
+      .ps-xxxl-#{$num} {
+        padding-left: $value !important;
+        padding-right: $value !important;
+      }
+
+      .py-xxxl-#{$num} {
+        padding-top: $value;
+        padding-bottom: $value !important;
+      }
+
+      .pt-xxxl-#{$num} {
+        padding-top: $value !important;
+      }
+
+      .pb-xxxl-#{$num} {
+        padding-bottom: $value !important;
+      }
+
+      .mx-xxxl-#{$num},
+      .me-xxxl-#{$num},
+      .ms-xxxl-#{$num} {
+        margin-left: $value !important;
+        margin-right: $value !important;
+      }
+
+      .my-xxxl-#{$num} {
+        margin-top: $value;
+        margin-bottom: $value !important;
+      }
+
+      .mt-xxxl-#{$num} {
+        margin-top: $value !important;
+      }
+
+      .mb-xxxl-#{$num} {
+        margin-bottom: $value !important;
+      }
     }
   }
 }
