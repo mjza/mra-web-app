@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useUser } from '../../../contexts/UserContext';
 import LoadingOverlay from '../../ui/LoadingOverlay';
+import { loginService } from '../../../services/auth';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import AdvertisementCarousel from '../../common/AdvertisementCarousel';
 
@@ -25,22 +26,13 @@ const SignIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const response = await fetch('https://auth.myreport.app/v1/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(credentials)
-        });
-
-        const data = await response.json();
+        const { success, message, data } = await loginService(credentials.usernameOrEmail, credentials.password);        
         setLoading(false);
-
-        if (response.status === 200) {
+        if (success) {
             login(data);
             navigate(redirect, { replace: true });
         } else {
-            setError(data.message || 'Login failed, please try again.');
+            setError(message);
         }
     };
 

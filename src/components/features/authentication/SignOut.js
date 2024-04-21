@@ -3,6 +3,7 @@ import { useUser } from '../../../contexts/UserContext';
 import { Navigate } from 'react-router-dom';
 import ConfirmDialog from '../../common/ConfirmDialog';
 import LoadingOverlay from '../../ui/LoadingOverlay';
+import { logoutService } from '../../../services/auth';
 
 const SignOut = () => {
     const { user, logout } = useUser();
@@ -10,6 +11,12 @@ const SignOut = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [dialogContent, setDialogContent] = useState({ title: '', message: '', type: 'primary' });
+    const performLogout = () => {
+        logout();        
+        setIsRedirecting(true);
+        setShowDialog(false);
+        setLoading(false);
+    };    
 
     const handleLogout = async () => {
         if (!user) {
@@ -19,44 +26,18 @@ const SignOut = () => {
 
         try {
             setLoading(true);
-            const response = await fetch('https://auth.myreport.app/v1/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${user.token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                const data = await response.json();
-                setLoading(false);
-                setDialogContent({
-                    title: 'Logout Failed',
-                    message: data.message || 'Failed to logout.',
-                    type: 'danger'
-                });
-                setShowDialog(true);
-            } else {
-                performLogout();
-            }
-        } catch (error) {
-            console.error('Logout error:', error);
+            await logoutService(user.token);
+            performLogout();
+        } catch (error) {            
             setDialogContent({
-                title: 'Error',
-                message: 'Network or server error during logout.',
+                title: 'Logout Failed',
+                message: error.message,
                 type: 'danger'
             });
             setLoading(false);
             setShowDialog(true);
         }
-    };
-
-    const performLogout = () => {
-        logout();
-        setLoading(false);
-        setIsRedirecting(true);
-        setShowDialog(false);
-    };
+    };    
 
     if (isRedirecting) {
         return <Navigate to="/signin" replace={true} />;
@@ -73,7 +54,7 @@ const SignOut = () => {
                     title={dialogContent.title}
                     message={dialogContent.message}
                     type={dialogContent.type}
-                    onCancel={null}  // Not providing onCancel to make the dialog only dismissible
+                    onCancel={null}
                 />
             }
             <button className="btn btn-danger" onClick={handleLogout} disabled={loading}>
