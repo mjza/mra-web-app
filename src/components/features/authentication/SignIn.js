@@ -26,7 +26,7 @@ const SignIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const { success, message, data } = await loginService(credentials.usernameOrEmail, credentials.password);        
+        const { success, message, data } = await loginService(credentials.usernameOrEmail, credentials.password);
         setLoading(false);
         if (success) {
             login(data);
@@ -48,9 +48,9 @@ const SignIn = () => {
                                 {/* Form Column */}
                                 <Col sm={12} md={6} className="d-flex flex-column justify-content-center align-items-center">
                                     <Form onSubmit={handleSubmit} className="w-100">
-                                        <h1 className="display-6 text-primary">Welcome to your reporting assistant</h1>
+                                        <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Welcome to your reporting assistant</h1>
                                         {error && <Alert variant="danger">{error}</Alert>}
-                                        <Form.Group className="mb-3">
+                                        <Form.Group className="mb-2 mb-xxxl-4">
                                             <Form.Label>Username or Email:</Form.Label>
                                             <Form.Control
                                                 type="text"
@@ -61,7 +61,7 @@ const SignIn = () => {
                                                 disabled={loading}
                                             />
                                         </Form.Group>
-                                        <Form.Group className="mb-3">
+                                        <Form.Group className="mb-3 mb-xxxl-4">
                                             <Form.Label>Password:</Form.Label>
                                             <Form.Control
                                                 type="password"
@@ -72,10 +72,7 @@ const SignIn = () => {
                                                 disabled={loading}
                                             />
                                         </Form.Group>
-                                        <LinkContainer to="/forgot-password">
-                                            <Button variant="link">Forgot Password?</Button>
-                                        </LinkContainer>
-                                        <Button type="submit" disabled={loading} className="w-100 my-4">
+                                        <Button type="submit" disabled={loading} className="text-nowrap overflow-hidden w-100 mt-2 mb-4 mb-xxxl-5">
                                             {loading ? (
                                                 <>
                                                     <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
@@ -83,6 +80,14 @@ const SignIn = () => {
                                                 </>
                                             ) : "Sign In"}
                                         </Button>
+                                        <div class="d-flex flex-column flex-md-row justify-content-between">
+                                            <LinkContainer to="/forgot-password">
+                                                <Button variant="warning" className="text-nowrap overflow-hidden w-lg-48 w-xxxl-45 mb-4 mb-md-0 ">Forgot Password?</Button>
+                                            </LinkContainer>
+                                            <LinkContainer to="/signup">
+                                                <Button variant="success" className="text-nowrap overflow-hidden w-lg-48 w-xxxl-45">Have no account?</Button>
+                                            </LinkContainer>
+                                        </div>
                                     </Form>
                                 </Col>
                                 {/* Image Column */}

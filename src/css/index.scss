@@ -37,3 +37,104 @@ body.dark {
         background-color: #201f1f;
     }
 }
+
+// Define breakpoints
+$breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1900px
+);
+
+// Font sizes and additional properties
+$font-sizes: (
+  1: 2.5rem,
+  2: 2rem,
+  3: 1.75rem,
+  4: 1.5rem,
+  5: 1.25rem,
+  6: 1rem
+);
+
+$display-sizes: (
+  1: 4rem,
+  2: 3.5rem,
+  3: 3rem,
+  4: 2.5rem,
+  5: 2rem,
+  6: 1.5rem
+);
+
+// Define spacing values
+$spaces: (
+  0: 0,
+  1: 0.25rem,
+  2: 0.5rem,
+  3: 1rem,
+  4: 1.5rem,
+  5: 3rem,
+  auto: auto
+);
+
+$display-weight: bold;
+$display-line-height: 1.2;
+
+// Responsive font size mixins
+@mixin responsive-font-sizes($breakpoint) {
+  @each $index, $size in $font-sizes {
+    .fs-#{$breakpoint}-#{$index} { font-size: $size; }
+  }
+  @each $index, $size in $display-sizes {
+    .display-#{$breakpoint}-#{$index} {
+      font-size: $size;
+      font-weight: $display-weight;
+      line-height: $display-line-height;
+    }
+  }
+}
+
+// Mixin for responsive width and height
+@mixin responsive-wh {
+  @each $break, $size in $breakpoints {
+    @media (min-width: $size) {
+      @for $i from 0 through 100 {
+        .w-#{$break}-#{$i} { width: #{$i + 0%} !important; }
+        .h-#{$break}-#{$i} { height: #{$i + 0%} !important; }
+      }
+    }
+  }
+}
+
+// Responsive media queries
+@each $break, $size in $breakpoints {
+  @media (min-width: $size) {
+    @include responsive-font-sizes($break);
+  }
+}
+
+
+
+// Mixin for xxxl padding and margin
+@mixin responsive-spacing-xxxl {
+  @media (min-width: map-get($breakpoints, xxxl)) {
+    @each $num, $value in $spaces {
+      .p-xxxl-#{$num} { padding: $value !important; }
+      .m-xxxl-#{$num} { margin: $value !important; }
+      .px-xxxl-#{$num}, .pe-xxxl-#{$num}, .ps-xxxl-#{$num} { padding-left: $value !important; padding-right: $value !important; }
+      .py-xxxl-#{$num} { padding-top: $value; padding-bottom: $value !important; }
+      .pt-xxxl-#{$num} { padding-top: $value !important; }
+      .pb-xxxl-#{$num} { padding-bottom: $value !important; }
+      .mx-xxxl-#{$num}, .me-xxxl-#{$num}, .ms-xxxl-#{$num} { margin-left: $value !important; margin-right: $value !important; }
+      .my-xxxl-#{$num} { margin-top: $value; margin-bottom: $value !important; }
+      .mt-xxxl-#{$num} { margin-top: $value !important; }
+      .mb-xxxl-#{$num} { margin-bottom: $value !important; }
+    }
+  }
+}
+
+// Include mixins
+@include responsive-wh;
+@include responsive-spacing-xxxl;
