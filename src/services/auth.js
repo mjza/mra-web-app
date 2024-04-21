@@ -1,5 +1,5 @@
 // auth.js
-const baseURL = 'https://auth.myreport.app';
+const baseURL = process.env.REACT_APP_AUTH_BASE_URL;
 
 const loginService = async (usernameOrEmail, password) => {
     try {
