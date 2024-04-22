@@ -64,7 +64,7 @@ const SignIn = () => {
                                     <Form onSubmit={handleSubmit} className="w-100">
                                         <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Welcome to your reporting assistant</h1>
                                         {error && <Alert variant="danger">{error}</Alert>}
-                                        <Form.Group className="mb-2 mb-xxxl-4">
+                                        <Form.Group>
                                             <Form.Label className="w-100">Username or Email:
                                                 <Form.Control
                                                     type="text"
@@ -76,7 +76,10 @@ const SignIn = () => {
                                                 />
                                             </Form.Label>
                                         </Form.Group>
-                                        <Form.Group className="mb-3 mb-xxxl-4">
+                                        <LinkContainer to="/forgot-username" >
+                                            <Button variant="link" disabled={loading} className="w-100 text-end text-secondary">Forgot username?</Button>
+                                        </LinkContainer>
+                                        <Form.Group>
                                             <Form.Label className="w-100">Password:
                                                 <Form.Control
                                                     type="password"
@@ -88,6 +91,9 @@ const SignIn = () => {
                                                 />
                                             </Form.Label>
                                         </Form.Group>
+                                        <LinkContainer to="/forgot-password" >
+                                            <Button variant="link" disabled={loading} className="w-100 text-end text-secondary mb-2">Forgot password?</Button>
+                                        </LinkContainer>
                                         <Button type="submit" disabled={loading} className="text-nowrap overflow-hidden w-100 mt-2 mb-4 mb-xxxl-5">
                                             {loading ? (
                                                 <>
@@ -96,6 +102,7 @@ const SignIn = () => {
                                                 </>
                                             ) : "Sign In"}
                                         </Button>
+                                        {/*
                                         <div className="d-flex flex-column flex-md-row justify-content-between">
                                             <LinkContainer to="/forgot-password">
                                                 <Button variant="warning" className="text-nowrap overflow-hidden w-lg-48 w-xxxl-45 mb-4 mb-md-0 ">Forgot Password?</Button>
@@ -104,6 +111,7 @@ const SignIn = () => {
                                                 <Button variant="success" className="text-nowrap overflow-hidden w-lg-48 w-xxxl-45">Have no account?</Button>
                                             </LinkContainer>
                                         </div>
+                                        */}
                                     </Form>
                                 </Col>
                                 {/* Image Column */}
