@@ -10,9 +10,11 @@ import Footer from './components/common/Footer';
 import UserHeaderNavbar from './components/layout/users/HeaderNavbar';
 import UserFooterNavbar from './components/layout/users/FooterNavbar';
 import SignIn from './components/features/authentication/SignIn';
+import SignUp from './components/features/authentication/SignUp';
 import SignOut from './components/features/authentication/SignOut';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
+import RegistrationSuccess from './components/pages/RegistrationSuccess';
 
 const infoRoutes = () => [
   <Route key="about" path="/about" element={<UnderConstruction />} />,
@@ -29,7 +31,7 @@ const AppContent = () => {
   const { user } = useUser();
   const location = useLocation();
 
-  if (!user) {
+  if (!user || !user.token) {
     const redirectTo = `${location.pathname}${location.search}`;
     const signInPath = `/signin?redirect=${encodeURIComponent(redirectTo)}`;
 
@@ -39,7 +41,8 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Navigate replace to={signInPath} />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<UnderConstruction />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/registration-success" element={<RegistrationSuccess />} />
           <Route path="/forgot-password" element={<UnderConstruction />} />
           <Route path="/reset-password" element={<UnderConstruction />} />
           <Route path="/forgot_username" element={<UnderConstruction />} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useUser } from '../../../contexts/UserContext';
@@ -8,15 +8,29 @@ import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstr
 import AdvertisementCarousel from '../../common/AdvertisementCarousel';
 
 const SignIn = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const { login } = useUser();
     const [credentials, setCredentials] = useState({ usernameOrEmail: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
-    const location = useLocation();
+    const [redirect, setRedirect] = useState('/');
+    
 
-    const searchParams = new URLSearchParams(location.search);
-    const redirect = searchParams.get('redirect') || '/';
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const redirect = searchParams.get('redirect');
+        if(redirect && redirect.trim().length > 0){
+            setRedirect(redirect);
+        }
+        const username = searchParams.get('username') || '';
+        if (username) {
+            setCredentials(currentCredentials => ({
+                ...currentCredentials,
+                usernameOrEmail: username
+            }));
+        }
+    }, [location.search]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -80,7 +94,7 @@ const SignIn = () => {
                                                 </>
                                             ) : "Sign In"}
                                         </Button>
-                                        <div class="d-flex flex-column flex-md-row justify-content-between">
+                                        <div className="d-flex flex-column flex-md-row justify-content-between">
                                             <LinkContainer to="/forgot-password">
                                                 <Button variant="warning" className="text-nowrap overflow-hidden w-lg-48 w-xxxl-45 mb-4 mb-md-0 ">Forgot Password?</Button>
                                             </LinkContainer>

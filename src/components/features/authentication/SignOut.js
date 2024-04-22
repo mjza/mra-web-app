@@ -19,7 +19,7 @@ const SignOut = () => {
     };    
 
     const handleLogout = async () => {
-        if (!user) {
+        if (!user || !user.token) {
             setIsRedirecting(true); // Redirect if there's no user to log out
             return;
         }
