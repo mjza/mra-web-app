@@ -1,30 +1,69 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { registerService } from '../../../services/auth';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
 
 const SignUp = () => {
-    const usernameRef = useRef('');
-    const emailRef = useRef('');
-    const passwordRef = useRef('');
-    const repeatPasswordRef = useRef('');
+    const [userInfo, setUserInfo] = useState({
+        username: '',
+        email: '',
+        password: '',
+        repeatPassword: ''
+    });
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUserInfo(prev => ({ ...prev, [name]: value }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const username = usernameRef.current.value;
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
-        const repeatPassword = repeatPasswordRef.current.value;
+        const { username, email, password, repeatPassword } = userInfo;
+        let errors = ['Erros:'];
 
+        // Username validations
+        if (!/^[A-Za-z0-9_]+$/.test(username)) {
+            errors.push('Username can only contain letters, numbers, and underscores.');
+        }
+        if (username.length < 5 || username.length > 30) {
+            errors.push('Username must be between 5 and 30 characters.');
+        }
+
+        // Email validation
+        if (!/\S+@\S+\.\S+/.test(email)) {
+            errors.push('Invalid email address.');
+        }
+
+        // Password validations
+        if (password.length < 8 || password.length > 30) {
+            errors.push('Password must be between 8 and 30 characters.');
+        }
+        if (!/[A-Z]/.test(password)) {
+            errors.push('Password must contain at least one uppercase letter.');
+        }
+        if (!/[a-z]/.test(password)) {
+            errors.push('Password must contain at least one lowercase letter.');
+        }
+        if (!/\d/.test(password)) {
+            errors.push('Password must contain at least one digit.');
+        }
+        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+            errors.push('Password must contain at least one symbol.');
+        }           
         if (password !== repeatPassword) {
-            setError('Passwords do not match.');
+            errors.push('Passwords do not match.');
+        }
+
+        if (errors.length > 0) {
+            setError(errors.join('\n'));
             return;
         }
+
         setLoading(true);
         const { success, message } = await registerService(username, email, password);
         setLoading(false);
@@ -61,7 +100,8 @@ const SignUp = () => {
                                             type="text"
                                             name="username"
                                             autoComplete="username"
-                                            ref={usernameRef}
+                                            value={userInfo.username}
+                                            onChange={handleChange}
                                             required
                                             disabled={loading}
                                         />
@@ -73,7 +113,8 @@ const SignUp = () => {
                                             type="email"
                                             name="email"
                                             autoComplete="email"
-                                            ref={emailRef}
+                                            value={userInfo.email}
+                                            onChange={handleChange}
                                             required
                                             disabled={loading}
                                         />
@@ -85,7 +126,8 @@ const SignUp = () => {
                                             type="password"
                                             name="password"
                                             autoComplete="new-password"
-                                            ref={passwordRef}
+                                            value={userInfo.password}
+                                            onChange={handleChange}
                                             required
                                             disabled={loading}
                                         />
@@ -100,7 +142,8 @@ const SignUp = () => {
                                             type="password"
                                             name="repeatPassword"
                                             autoComplete="new-password"
-                                            ref={repeatPasswordRef}
+                                            value={userInfo.repeatPassword}
+                                            onChange={handleChange}
                                             required
                                             disabled={loading}
                                         />
