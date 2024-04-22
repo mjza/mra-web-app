@@ -59,7 +59,7 @@ const SignUp = () => {
             errors.push('Passwords do not match.');
         }
 
-        if (errors.length > 0) {
+        if (errors.length > 1) {
             setError(errors.join('\n'));
             return;
         }
