@@ -50,6 +50,7 @@ const HeaderNavbar = () => {
                       </InputGroup.Text>
                       <FormControl
                         type="search"
+                        name="search"
                         placeholder="Search"
                         className="me-2"
                         aria-label="Search"

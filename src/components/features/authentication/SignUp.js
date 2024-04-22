@@ -56,51 +56,55 @@ const SignUp = () => {
                                     </Alert>
                                 }
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label>Username:</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="username"
-                                        autoComplete="username"
-                                        ref={usernameRef}
-                                        required
-                                        disabled={loading}
-                                    />
+                                    <Form.Label className="w-100">Username:
+                                        <Form.Control
+                                            type="text"
+                                            name="username"
+                                            autoComplete="username"
+                                            ref={usernameRef}
+                                            required
+                                            disabled={loading}
+                                        />
+                                    </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label>Email:</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        name="email"
-                                        autoComplete="email"
-                                        ref={emailRef}
-                                        required
-                                        disabled={loading}
-                                    />
+                                    <Form.Label className="w-100">Email:
+                                        <Form.Control
+                                            type="email"
+                                            name="email"
+                                            autoComplete="email"
+                                            ref={emailRef}
+                                            required
+                                            disabled={loading}
+                                        />
+                                    </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label>Password:</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="password"
-                                        autoComplete="new-password"
-                                        ref={passwordRef}
-                                        required
-                                        disabled={loading}
-                                    />
-                                    <Form.Text className="text-muted">
-                                        Make sure your password is strong.
-                                    </Form.Text>
+                                    <Form.Label className="w-100">Password:
+                                        <Form.Control
+                                            type="password"
+                                            name="password"
+                                            autoComplete="new-password"
+                                            ref={passwordRef}
+                                            required
+                                            disabled={loading}
+                                        />
+                                        <Form.Text className="text-muted">
+                                            Make sure your password is strong.
+                                        </Form.Text>
+                                    </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label>Repeat Password:</Form.Label>
-                                    <Form.Control
-                                        type="password"
-                                        name="repeatPassword"
-                                        autoComplete="new-password"
-                                        ref={repeatPasswordRef}
-                                        required
-                                        disabled={loading}
-                                    />
+                                    <Form.Label className="w-100">Repeat Password:
+                                        <Form.Control
+                                            type="password"
+                                            name="repeatPassword"
+                                            autoComplete="new-password"
+                                            ref={repeatPasswordRef}
+                                            required
+                                            disabled={loading}
+                                        />
+                                    </Form.Label>
                                 </Form.Group>
                                 <div className="mt-2 mb-3">
                                     By clicking Agree & Sign up or Continue, you agree to the ReportCycle&nbsp;

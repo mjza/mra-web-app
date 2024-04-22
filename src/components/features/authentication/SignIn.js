@@ -15,12 +15,12 @@ const SignIn = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [redirect, setRedirect] = useState('/');
-    
+
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const redirect = searchParams.get('redirect');
-        if(redirect && redirect.trim().length > 0){
+        if (redirect && redirect.trim().length > 0) {
             setRedirect(redirect);
         }
         const username = searchParams.get('username') || '';
@@ -65,26 +65,28 @@ const SignIn = () => {
                                         <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Welcome to your reporting assistant</h1>
                                         {error && <Alert variant="danger">{error}</Alert>}
                                         <Form.Group className="mb-2 mb-xxxl-4">
-                                            <Form.Label>Username or Email:</Form.Label>
-                                            <Form.Control
-                                                type="text"
-                                                name="usernameOrEmail"
-                                                value={credentials.usernameOrEmail}
-                                                onChange={handleChange}
-                                                required
-                                                disabled={loading}
-                                            />
+                                            <Form.Label className="w-100">Username or Email:
+                                                <Form.Control
+                                                    type="text"
+                                                    name="usernameOrEmail"
+                                                    value={credentials.usernameOrEmail}
+                                                    onChange={handleChange}
+                                                    required
+                                                    disabled={loading}
+                                                />
+                                            </Form.Label>
                                         </Form.Group>
                                         <Form.Group className="mb-3 mb-xxxl-4">
-                                            <Form.Label>Password:</Form.Label>
-                                            <Form.Control
-                                                type="password"
-                                                name="password"
-                                                value={credentials.password}
-                                                onChange={handleChange}
-                                                required
-                                                disabled={loading}
-                                            />
+                                            <Form.Label className="w-100">Password:
+                                                <Form.Control
+                                                    type="password"
+                                                    name="password"
+                                                    value={credentials.password}
+                                                    onChange={handleChange}
+                                                    required
+                                                    disabled={loading}
+                                                />
+                                            </Form.Label>
                                         </Form.Group>
                                         <Button type="submit" disabled={loading} className="text-nowrap overflow-hidden w-100 mt-2 mb-4 mb-xxxl-5">
                                             {loading ? (
