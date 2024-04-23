@@ -3,8 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { registerService } from '../../../services/auth';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const SignUp = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const toggleRepeatPasswordVisibility = () => {
+        setShowRepeatPassword(!showRepeatPassword);
+    };
+
     const [userInfo, setUserInfo] = useState({
         username: '',
         email: '',
@@ -24,7 +37,7 @@ const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { username, email, password, repeatPassword } = userInfo;
-        let errors = ['Erros:'];
+        let errors = [];
 
         // Username validations
         if (!/^[A-Za-z0-9_]+$/.test(username)) {
@@ -54,13 +67,14 @@ const SignUp = () => {
         }
         if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
             errors.push('Password must contain at least one symbol.');
-        }           
+        }
         if (password !== repeatPassword) {
             errors.push('Passwords do not match.');
         }
 
         if (errors.length > 1) {
-            setError(errors.join('\n'));
+            var evaluation = 'Erros:\n' + errors.map((err, index) => `${index + 1}. ${err}`).join('\n');
+            setError(evaluation);
             return;
         }
 
@@ -122,15 +136,20 @@ const SignUp = () => {
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Password:
-                                        <Form.Control
-                                            type="password"
-                                            name="password"
-                                            autoComplete="new-password"
-                                            value={userInfo.password}
-                                            onChange={handleChange}
-                                            required
-                                            disabled={loading}
-                                        />
+                                        <div className="input-group">
+                                            <Form.Control
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                autoComplete="new-password"
+                                                value={userInfo.password}
+                                                onChange={handleChange}
+                                                required
+                                                disabled={loading}
+                                            />
+                                            <Button variant="outline-secondary" onClick={togglePasswordVisibility}>
+                                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                            </Button>
+                                        </div>
                                         <Form.Text className="text-muted">
                                             Make sure your password is strong.
                                         </Form.Text>
@@ -138,15 +157,20 @@ const SignUp = () => {
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Repeat Password:
-                                        <Form.Control
-                                            type="password"
-                                            name="repeatPassword"
-                                            autoComplete="new-password"
-                                            value={userInfo.repeatPassword}
-                                            onChange={handleChange}
-                                            required
-                                            disabled={loading}
-                                        />
+                                        <div className="input-group">
+                                            <Form.Control
+                                                type={showRepeatPassword ? "text" : "password"}
+                                                name="repeatPassword"
+                                                autoComplete="new-password"
+                                                value={userInfo.repeatPassword}
+                                                onChange={handleChange}
+                                                required
+                                                disabled={loading}
+                                            />
+                                            <Button variant="outline-secondary" onClick={toggleRepeatPasswordVisibility}>
+                                                <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
+                                            </Button>
+                                        </div>
                                     </Form.Label>
                                 </Form.Group>
                                 <div className="mt-2 mb-3">

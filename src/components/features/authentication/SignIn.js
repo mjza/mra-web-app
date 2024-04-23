@@ -6,6 +6,8 @@ import LoadingOverlay from '../../ui/LoadingOverlay';
 import { loginService } from '../../../services/auth';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import AdvertisementCarousel from '../../common/AdvertisementCarousel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -15,7 +17,10 @@ const SignIn = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [redirect, setRedirect] = useState('/');
-
+    const [showPassword, setShowPassword] = useState(false);
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -81,14 +86,19 @@ const SignIn = () => {
                                         </LinkContainer>
                                         <Form.Group>
                                             <Form.Label className="w-100">Password:
-                                                <Form.Control
-                                                    type="password"
-                                                    name="password"
-                                                    value={credentials.password}
-                                                    onChange={handleChange}
-                                                    required
-                                                    disabled={loading}
-                                                />
+                                                <div className="input-group">
+                                                    <Form.Control
+                                                        type={showPassword ? "text" : "password"}
+                                                        name="password"
+                                                        value={credentials.password}
+                                                        onChange={handleChange}
+                                                        required
+                                                        disabled={loading}
+                                                    />
+                                                    <Button variant="outline-secondary" onClick={togglePasswordVisibility}>
+                                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                                    </Button>
+                                                </div>
                                             </Form.Label>
                                         </Form.Group>
                                         <LinkContainer to="/forgot-password" >
