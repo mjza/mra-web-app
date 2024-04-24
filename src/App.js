@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import './css/App.scss';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { UserProvider, useUser } from './contexts/UserContext';
-import ToggleThemeButton from './components/ui/ToggleThemeButton';
 import PublicUserHeaderNavbar from './components/layout/public/HeaderNavbar';
 import PublicUserFooterNavbar from './components/layout/public/FooterNavbar';
 import Footer from './components/common/Footer';
@@ -43,6 +42,7 @@ const AppContent = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/registration-success" element={<RegistrationSuccess />} />
+          <Route path="/forgot-username" element={<UnderConstruction />} />
           <Route path="/forgot-password" element={<UnderConstruction />} />
           <Route path="/reset-password" element={<UnderConstruction />} />
           <Route path="/forgot_username" element={<UnderConstruction />} />
@@ -97,7 +97,6 @@ export default App;
 const News = () => (
   <div className='mh-100 py-5 feature-row'>
     <h1>News Page</h1>
-    <ToggleThemeButton />  {/* Theme toggle button included */}
     <SignOut />
   </div>
 );

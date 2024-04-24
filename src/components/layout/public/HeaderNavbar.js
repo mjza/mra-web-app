@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import ThemeContext from '../../../contexts/ThemeContext';
 import RCLogo from '../../common/RCLogo';
+import ToggleThemeButton from '../../ui/ToggleThemeButton';
 import { Navbar, Nav, Container, Row, Col, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faNewspaper, faTicket, faQrcode } from '@fortawesome/free-solid-svg-icons';
@@ -33,9 +34,13 @@ const HeaderNavbar = () => {
             <Col xs={0} sm={1} md={1} lg={2} xl={2} xxl={3}></Col>
             <Col xs={12} sm={10} md={10} lg={8} xl={8} xxl={6} className='p-0 m-0'>
               <div className="d-flex align-items-center justify-content-between">
-                <Navbar.Brand href="/" className="d-flex align-items-center flex-grow-1">
-                  <RCLogo color={iconColor} size="50" />
-                </Navbar.Brand>
+                <div className="d-flex align-items-center flex-grow-1">
+                  <Navbar.Brand href="/" className="me-2">
+                    <RCLogo color={iconColor} size="50" />
+                  </Navbar.Brand>
+                  {/* Put mechanism for changin theme here */}
+                  <ToggleThemeButton useIcons={true} fontSize={1}/>
+                </div>
 
                 <Nav className="flex-row justify-content-end me-2 d-none d-md-flex">
                   {[
