@@ -18,6 +18,8 @@ const SignIn = () => {
     const [loading, setLoading] = useState(false);
     const [redirect, setRedirect] = useState('/');
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(true);
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -48,7 +50,7 @@ const SignIn = () => {
         const { success, message, data } = await loginService(credentials.usernameOrEmail, credentials.password);
         setLoading(false);
         if (success) {
-            login(data);
+            login(data, rememberMe);
             navigate(redirect, { replace: true });
         } else {
             setError(message);
@@ -101,9 +103,18 @@ const SignIn = () => {
                                                 </div>
                                             </Form.Label>
                                         </Form.Group>
-                                        <LinkContainer to="/forgot-password" >
-                                            <Button variant="link" disabled={loading} className="w-100 text-end text-secondary mb-2">Forgot password?</Button>
-                                        </LinkContainer>
+                                        <Form.Group className="d-flex flex-column flex-column-reverse flex-sm-row justify-content-between align-items-baseline mb-3">
+                                            <Form.Check
+                                                type="checkbox"
+                                                label="Remember Me"
+                                                checked={rememberMe}
+                                                onChange={(e) => setRememberMe(e.target.checked)}
+                                                disabled={loading}
+                                            />
+                                            <LinkContainer to="/forgot-password" >
+                                                <Button variant="link" disabled={loading} className="w-xs-100 w-sm-auto text-end text-secondary">Forgot password?</Button>
+                                            </LinkContainer>
+                                        </Form.Group>
                                         <Button type="submit" disabled={loading} className="text-nowrap overflow-hidden w-100 mt-2 mb-4 mb-xxxl-5">
                                             {loading ? (
                                                 <>

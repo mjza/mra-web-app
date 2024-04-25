@@ -137,6 +137,13 @@ $display-line-height: 1.2;
           height: #{$i + 0%} !important;
         }
       }
+      .w-#{$break}-auto {
+        width: auto !important;
+      }
+
+      .h-#{$break}-auto {
+        height: auto !important;
+      }
     }
   }
 }

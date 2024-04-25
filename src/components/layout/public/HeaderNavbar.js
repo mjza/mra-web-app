@@ -38,8 +38,7 @@ const HeaderNavbar = () => {
                   <Navbar.Brand href="/" className="me-2">
                     <RCLogo color={iconColor} size="50" />
                   </Navbar.Brand>
-                  {/* Put mechanism for changin theme here */}
-                  <ToggleThemeButton useIcons={true} fontSize={1}/>
+                  <ToggleThemeButton useIcons={true} fontSize={2}/>
                 </div>
 
                 <Nav className="flex-row justify-content-end me-2 d-none d-md-flex">
