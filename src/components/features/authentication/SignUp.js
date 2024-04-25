@@ -31,7 +31,7 @@ const SignUp = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setUserInfo(prev => ({ ...prev, [name]: value }));
+        setUserInfo(prev => ({ ...prev, [name]: value}));
     };
 
     const handleSubmit = async (e) => {
@@ -72,7 +72,7 @@ const SignUp = () => {
             errors.push('Passwords do not match.');
         }
 
-        if (errors.length > 1) {
+        if (errors.length > 0) {
             var evaluation = 'Erros:\n' + errors.map((err, index) => `${index + 1}. ${err}`).join('\n');
             setError(evaluation);
             return;
@@ -113,7 +113,7 @@ const SignUp = () => {
                                         <Form.Control
                                             type="text"
                                             name="username"
-                                            autoComplete="username"
+                                            autoComplete="new-username"
                                             value={userInfo.username}
                                             onChange={handleChange}
                                             required
