@@ -12,6 +12,7 @@ import SignIn from './components/features/authentication/SignIn';
 import SignUp from './components/features/authentication/SignUp';
 import SignOut from './components/features/authentication/SignOut';
 import ForgetUsername from './components/features/authentication/ForgetUsername';
+import ForgetPassword from './components/features/authentication/ForgetPassword';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
@@ -44,9 +45,8 @@ const AppContent = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/registration-success" element={<RegistrationSuccess />} />
           <Route path="/forgot-username" element={<ForgetUsername />} />
-          <Route path="/forgot-password" element={<UnderConstruction />} />
+          <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route path="/reset-password" element={<UnderConstruction />} />
-          <Route path="/forgot_username" element={<UnderConstruction />} />
           <Route path="/news" element={<UnderConstruction />} />
           <Route path="/tickets" element={<UnderConstruction />} />
           <Route path="/qrcodes" element={<UnderConstruction />} />

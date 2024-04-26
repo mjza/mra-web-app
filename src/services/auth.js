@@ -177,7 +177,7 @@ export { fetchUsernamesByEmail };
  * @param {string} passwordResetPageRedirectURL - The URL to redirect the user to reset their password.
  * @returns {Promise<{success: boolean, message: string}>} A promise that resolves to an object indicating the outcome of the operation. Includes a message detailing the action taken.
  */
-const requestPasswordResetToken = async (username, passwordResetPageRedirectURL) => {
+const requestPasswordResetToken = async (username, passwordResetPageRedirectURL = `${appURL}/reset-password`) => {
     try {
         const response = await fetch(`${baseURL}/v1/reset_token`, {
             method: 'POST',
