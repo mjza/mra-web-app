@@ -13,6 +13,7 @@ import SignUp from './components/features/authentication/SignUp';
 import SignOut from './components/features/authentication/SignOut';
 import ForgetUsername from './components/features/authentication/ForgetUsername';
 import ForgetPassword from './components/features/authentication/ForgetPassword';
+import ResetPassword from './components/features/authentication/ResetPassword';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
@@ -46,7 +47,7 @@ const AppContent = () => {
           <Route path="/registration-success" element={<RegistrationSuccess />} />
           <Route path="/forgot-username" element={<ForgetUsername />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
-          <Route path="/reset-password" element={<UnderConstruction />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/news" element={<UnderConstruction />} />
           <Route path="/tickets" element={<UnderConstruction />} />
           <Route path="/qrcodes" element={<UnderConstruction />} />
@@ -64,6 +65,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<Navigate replace to="/feed" />} />
           <Route path="/feed" element={<News />} />
+          <Route path="/news" element={<UnderConstruction />} />
           <Route path="/tickets" element={<UnderConstruction />} />
           <Route path="/qrcodes" element={<UnderConstruction />} />
           <Route path="/messaging" element={<UnderConstruction />} />

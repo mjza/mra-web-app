@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import LoadingOverlay from '../../ui/LoadingOverlay';
-import { requestPasswordResetToken } from '../../../services/auth'; // Replace with actual import path to your service
+import { requestPasswordResetToken } from '../../../services/auth';
 
 const ForgotPassword = () => {
     const [username, setUsername] = useState('');
