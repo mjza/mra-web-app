@@ -76,6 +76,7 @@ const SignIn = () => {
                                                 <Form.Control
                                                     type="text"
                                                     name="usernameOrEmail"
+                                                    autoComplete="username"
                                                     value={credentials.usernameOrEmail}
                                                     onChange={handleChange}
                                                     required
@@ -92,6 +93,7 @@ const SignIn = () => {
                                                     <Form.Control
                                                         type={showPassword ? "text" : "password"}
                                                         name="password"
+                                                        autoComplete="current-password"
                                                         value={credentials.password}
                                                         onChange={handleChange}
                                                         required
@@ -107,6 +109,7 @@ const SignIn = () => {
                                             <Form.Check
                                                 type="checkbox"
                                                 label="Remember Me"
+                                                id="rememberMeCheckbox"
                                                 checked={rememberMe}
                                                 onChange={(e) => setRememberMe(e.target.checked)}
                                                 disabled={loading}

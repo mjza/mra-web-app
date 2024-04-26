@@ -11,6 +11,7 @@ import UserFooterNavbar from './components/layout/users/FooterNavbar';
 import SignIn from './components/features/authentication/SignIn';
 import SignUp from './components/features/authentication/SignUp';
 import SignOut from './components/features/authentication/SignOut';
+import ForgetUsername from './components/features/authentication/ForgetUsername';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
@@ -42,7 +43,7 @@ const AppContent = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/registration-success" element={<RegistrationSuccess />} />
-          <Route path="/forgot-username" element={<UnderConstruction />} />
+          <Route path="/forgot-username" element={<ForgetUsername />} />
           <Route path="/forgot-password" element={<UnderConstruction />} />
           <Route path="/reset-password" element={<UnderConstruction />} />
           <Route path="/forgot_username" element={<UnderConstruction />} />
