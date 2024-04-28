@@ -4,9 +4,16 @@ import LoadingOverlay from '../../ui/LoadingOverlay';
 import { registerService } from '../../../services/auth';
 import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faDice } from '@fortawesome/free-solid-svg-icons';
 
 const SignUp = () => {
+    const [userInfo, setUserInfo] = useState({
+        username: '',
+        email: '',
+        password: '',
+        repeatPassword: ''
+    });
+
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
@@ -18,12 +25,47 @@ const SignUp = () => {
         setShowRepeatPassword(!showRepeatPassword);
     };
 
-    const [userInfo, setUserInfo] = useState({
-        username: '',
-        email: '',
-        password: '',
-        repeatPassword: ''
-    });
+    const suggestRandomCredentials = () => {
+        // Characters to use in the username
+        const characters = 'abcdefghijklmnopqrstuvwxyz0123456789_';
+        const groups = [
+            'abcdefghijklmnopqrstuvwxyz', // Lowercase
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ', // Uppercase
+            '0123456789',                 // Numbers
+            '`~!@#$%^&*()-_=+{}|\\[]:";\'<>?,./' // Special characters
+        ];
+        // Generate a random length between 8 and 30 that is a multiple of 4
+        const passwordLength = Math.floor(Math.random() * (31 - 8) / 4) * 4 + 8;
+        const usernameLength = 7;
+        let username = '';
+        let password = '';
+
+        // Build a username of the chosen length
+        for (let i = 0; i < usernameLength; i++) {
+            username += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+
+        // Build a password
+        for (let i = 0; i < groups.length; i++) {
+            const group = groups[i];
+            const length = i !== groups.length - 1 ? passwordLength / groups.length : passwordLength - password.length;
+            for (let j = 0; j < length; j++) {
+                password += group.charAt(Math.floor(Math.random() * group.length));
+            }
+        }
+
+        // Shuffle the password to avoid group clustering
+        password = password.split('').sort(() => 0.5 - Math.random()).join('');
+
+        // Update state with new credentials
+        setUserInfo(prevState => ({
+            ...prevState,
+            username: username,
+            password: password,
+            repeatPassword: password
+        }));
+    };
+
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -31,7 +73,7 @@ const SignUp = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setUserInfo(prev => ({ ...prev, [name]: value}));
+        setUserInfo(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
@@ -65,7 +107,7 @@ const SignUp = () => {
         if (!/\d/.test(password)) {
             errors.push('Password must contain at least one digit.');
         }
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        if (!/[`~!@#$%^&*()-_=+{}|\\[\]:";'<>?,./]/.test(password)) {
             errors.push('Password must contain at least one symbol.');
         }
         if (password !== repeatPassword) {
@@ -110,15 +152,23 @@ const SignUp = () => {
                                 }
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Username:
-                                        <Form.Control
-                                            type="text"
-                                            name="username"
-                                            autoComplete="new-username"
-                                            value={userInfo.username}
-                                            onChange={handleChange}
-                                            required
-                                            disabled={loading}
-                                        />
+                                        <div className="input-group">
+                                            <Form.Control
+                                                type="text"
+                                                name="username"
+                                                autoComplete="off"
+                                                value={userInfo.username}
+                                                onChange={handleChange}
+                                                required
+                                                disabled={loading}
+                                            />
+                                            <Button variant="outline-secondary" onClick={suggestRandomCredentials}>
+                                                <FontAwesomeIcon icon={faDice} />
+                                            </Button>
+                                        </div>
+                                        <Form.Text className="text-muted">
+                                            Username must be at least 5 characters.
+                                        </Form.Text>
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
@@ -140,7 +190,6 @@ const SignUp = () => {
                                             <Form.Control
                                                 type={showPassword ? "text" : "password"}
                                                 name="password"
-                                                autoComplete="new-password"
                                                 value={userInfo.password}
                                                 onChange={handleChange}
                                                 required
@@ -161,7 +210,6 @@ const SignUp = () => {
                                             <Form.Control
                                                 type={showRepeatPassword ? "text" : "password"}
                                                 name="repeatPassword"
-                                                autoComplete="new-password"
                                                 value={userInfo.repeatPassword}
                                                 onChange={handleChange}
                                                 required
@@ -171,6 +219,15 @@ const SignUp = () => {
                                                 <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
                                             </Button>
                                         </div>
+                                    </Form.Label>
+                                </Form.Group>
+                                <Form.Group className="mb-2 mb-xxxl-4 d-none">
+                                    <Form.Label className="w-100">Hidden Password:
+                                            <Form.Control
+                                                type="password"
+                                                name="passwordHidden"
+                                                autoComplete="new-password"
+                                            />
                                     </Form.Label>
                                 </Form.Group>
                                 <div className="mt-2 mb-3">
