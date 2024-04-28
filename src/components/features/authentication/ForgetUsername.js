@@ -66,7 +66,13 @@ const ForgetUsername = () => {
                             </Form>
                             {message && (
                                 <Alert variant={alertVariant} className="mt-3">
-                                    {message}
+                                    {alertVariant === 'danger' && <><b>Errors:</b><br /></>}
+                                    {message.split('\n').map((line, index) => (
+                                        <React.Fragment key={index}>
+                                            {line}
+                                            <br />
+                                        </React.Fragment>
+                                    ))}
                                 </Alert>
                             )}
                         </Container>

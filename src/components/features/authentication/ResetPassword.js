@@ -4,7 +4,7 @@ import { Container, Row, Col, Form, Button, Alert, Spinner } from 'react-bootstr
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { resetPassword } from '../../../services/auth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faDice } from '@fortawesome/free-solid-svg-icons';
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();
@@ -22,6 +22,34 @@ const ResetPassword = () => {
 
     const toggleRepeatPasswordVisibility = () => {
         setShowRepeatPassword(!showRepeatPassword);
+    };
+
+    const suggestRandomPassword = () => {
+        const groups = [
+            'abcdefghijklmnopqrstuvwxyz', // Lowercase
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ', // Uppercase
+            '0123456789',                 // Numbers
+            '`~!@#$%^&*()-_=+{}|\\[]:";\'<>?,./' // Special characters
+        ];
+        // Generate a random length between 8 and 30 that is a multiple of 4
+        const passwordLength = Math.floor(Math.random() * (31 - 8) / 4) * 4 + 8;
+        let password = '';
+
+        // Build a password
+        for (let i = 0; i < groups.length; i++) {
+            const group = groups[i];
+            const length = i !== groups.length - 1 ? passwordLength / groups.length : passwordLength - password.length;
+            for (let j = 0; j < length; j++) {
+                password += group.charAt(Math.floor(Math.random() * group.length));
+            }
+        }
+
+        // Shuffle the password to avoid group clustering
+        password = password.split('').sort(() => 0.5 - Math.random()).join('');
+
+        // Update state with new credentials
+        setNewPassword(password);
+        setRepeatPassword(password);
     };
 
     const username = searchParams.get('username');
@@ -52,7 +80,7 @@ const ResetPassword = () => {
         if (!/\d/.test(newPassword)) {
             errors.push('Password must contain at least one digit.');
         }
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
+        if (!/[`~!@#$%^&*()-_=+{}|\\[\]:";'<>?,./]/.test(newPassword)) {
             errors.push('Password must contain at least one symbol.');
         }
         if (newPassword !== repeatPassword) {
@@ -60,7 +88,7 @@ const ResetPassword = () => {
         }
 
         if (errors.length > 0) {
-            setMessage('Errors:\n' + errors.map((err, index) => `${index + 1}. ${err}`).join('\n'));
+            setMessage(errors.map((err, index) => `${index + 1}. ${err}`).join('\n'));
             setAlertVariant('danger');
             return;
         }
@@ -83,8 +111,9 @@ const ResetPassword = () => {
                         <Container className='unfeature-box p-4 rounded-4'>
                             <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Set a New Password</h1>
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-2 mb-xxxl-4 d-none">
+                                <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Username:
+                                    <div className="input-group">
                                         <Form.Control
                                             type="text"
                                             name="username"
@@ -93,6 +122,10 @@ const ResetPassword = () => {
                                             required
                                             disabled
                                         />
+                                        <Button variant="outline-secondary" onClick={suggestRandomPassword} disabled={loading}>
+                                                <FontAwesomeIcon icon={faDice} />
+                                            </Button>
+                                        </div>
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
@@ -101,13 +134,13 @@ const ResetPassword = () => {
                                             <Form.Control
                                                 type={showPassword ? "text" : "password"}
                                                 name="password"
-                                                autoComplete="new-password"
+                                                autoComplete="off"
                                                 value={newPassword}
                                                 onChange={(e) => setNewPassword(e.target.value)}
                                                 required
                                                 disabled={loading}
                                             />
-                                            <Button variant="outline-secondary" onClick={togglePasswordVisibility}>
+                                            <Button variant="outline-secondary" onClick={togglePasswordVisibility} disabled={loading}>
                                                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                                             </Button>
                                         </div>
@@ -122,16 +155,25 @@ const ResetPassword = () => {
                                             <Form.Control
                                                 type={showRepeatPassword ? "text" : "password"}
                                                 name="repeatPassword"
-                                                autoComplete="new-password"
+                                                autoComplete="off"
                                                 value={repeatPassword}
                                                 onChange={(e) => setRepeatPassword(e.target.value)}
                                                 required
                                                 disabled={loading}
                                             />
-                                            <Button variant="outline-secondary" onClick={toggleRepeatPasswordVisibility}>
+                                            <Button variant="outline-secondary" onClick={toggleRepeatPasswordVisibility} disabled={loading}>
                                                 <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
                                             </Button>
                                         </div>
+                                    </Form.Label>
+                                </Form.Group>
+                                <Form.Group className="mb-2 mb-xxxl-4 d-none">
+                                    <Form.Label className="w-100">Hidden Password:
+                                            <Form.Control
+                                                type="password"
+                                                name="passwordHidden"
+                                                autoComplete="new-password"
+                                            />
                                     </Form.Label>
                                 </Form.Group>
                                 <Button variant="primary" type="submit" disabled={loading} className="text-nowrap overflow-hidden w-100 mt-2 mb-4 mb-xxxl-5">
@@ -145,6 +187,7 @@ const ResetPassword = () => {
                             </Form>
                             {message &&
                                 <Alert variant={alertVariant} className="mt-3">
+                                    {alertVariant === 'danger' && <><b>Errors:</b><br /></>}
                                     {message.split('\n').map((line, index) => (
                                         <React.Fragment key={index}>
                                             {line}

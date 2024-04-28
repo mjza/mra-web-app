@@ -115,7 +115,7 @@ const SignUp = () => {
         }
 
         if (errors.length > 0) {
-            var evaluation = 'Erros:\n' + errors.map((err, index) => `${index + 1}. ${err}`).join('\n');
+            var evaluation = errors.map((err, index) => `${index + 1}. ${err}`).join('\n');
             setError(evaluation);
             return;
         }
@@ -142,6 +142,7 @@ const SignUp = () => {
                                 <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Create Your Account</h1>
                                 {error &&
                                     <Alert variant="danger">
+                                        <b>Errors:</b><br />
                                         {error.split('\n').map((line, index) => (
                                             <React.Fragment key={index}>
                                                 {line}
@@ -162,7 +163,7 @@ const SignUp = () => {
                                                 required
                                                 disabled={loading}
                                             />
-                                            <Button variant="outline-secondary" onClick={suggestRandomCredentials}>
+                                            <Button variant="outline-secondary" onClick={suggestRandomCredentials} disabled={loading}>
                                                 <FontAwesomeIcon icon={faDice} />
                                             </Button>
                                         </div>
@@ -195,7 +196,7 @@ const SignUp = () => {
                                                 required
                                                 disabled={loading}
                                             />
-                                            <Button variant="outline-secondary" onClick={togglePasswordVisibility}>
+                                            <Button variant="outline-secondary" onClick={togglePasswordVisibility} disabled={loading}>
                                                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                                             </Button>
                                         </div>
@@ -215,7 +216,7 @@ const SignUp = () => {
                                                 required
                                                 disabled={loading}
                                             />
-                                            <Button variant="outline-secondary" onClick={toggleRepeatPasswordVisibility}>
+                                            <Button variant="outline-secondary" onClick={toggleRepeatPasswordVisibility} disabled={loading}>
                                                 <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
                                             </Button>
                                         </div>

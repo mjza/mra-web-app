@@ -18,14 +18,16 @@ const loginService = async (usernameOrEmail, password) => {
             body: JSON.stringify({ usernameOrEmail, password })
         });
 
-        const data = await response.json();
+        const result = await response.json();
 
         if (response.status === 200) {
-            return { success: true, data };
+            return { success: true, data: result };
         } else {
-            return { success: false, message: data.message || 'Login failed, please try again.' };
+            const message = handlingErrors(result, 'Login failed, please try again.');
+            return { success: false, message };
         }
     } catch (error) {
+        console.error('Error login:', error);
         return { success: false, message: 'Network error, please try again later.' };
     }
 }
@@ -50,8 +52,9 @@ const logoutService = async (token) => {
         });
 
         if (!response.ok) {
-            const data = await response.json();
-            throw new Error(data.message || 'Failed to logout.');
+            const result = await response.json();
+            const message = handlingErrors(result, 'Failed to logout.');
+            throw new Error(message);
         }
 
         return { success: true };
@@ -78,17 +81,18 @@ const refreshToken = async (currentToken) => {
             }
         });
 
-        const data = await response.json();
+        const result = await response.json();
 
         if (response.status === 200) {
             return {
                 success: true,
-                token: data.token,
-                exp: data.exp,
-                userId: data.userId
+                token: result.token,
+                exp: result.exp,
+                userId: result.userId
             };
         } else {
-            return { success: false, message: data.message || 'Failed to refresh token.' };
+            const message = handlingErrors(result, 'Failed to refresh token.');
+            return { success: false, message };
         }
     } catch (error) {
         console.error('Error refreshing token:', error);
@@ -117,19 +121,14 @@ const registerService = async (username, email, password, loginRedirectURL = `${
             body: JSON.stringify({ username, email, password, loginRedirectURL })
         });
 
-        const data = await response.json();
+        const result = await response.json();
 
         if (response.status === 201) {
             // Success case
-            return { success: true, message: data.message, userId: data.userId };
+            return { success: true, message: result.message, userId: result.userId };
         } else {
-            // Handling errors
-            let message = 'Registration failed, please try again.';
-            if (data.errors && data.errors.length) {
-                // Combine all error messages into one string
-                message = 'Erros:\n' + data.errors.map((err, index) => `${index + 1}. ${err.msg}`).join('\n');
-            }
-            return { success: false, message: message };
+            const message = handlingErrors(result, 'Registration failed, please try again.');
+            return { success: false, message };
         }
     } catch (error) {
         console.error('Register service error:', error);
@@ -154,12 +153,13 @@ const fetchUsernamesByEmail = async (email) => {
             }
         });
 
-        const data = await response.json();
+        const result = await response.json();
 
         if (response.status === 200) {
-            return { success: true, message: data.message };
+            return { success: true, message: result.message };
         } else {
-            return { success: false, message: data.message || 'Failed to retrieve usernames, please try again.' };
+            const message = handlingErrors(result, 'Failed to retrieve usernames, please try again.');
+            return { success: false, message};
         }
     } catch (error) {
         console.error('Error fetching usernames:', error);
@@ -187,12 +187,13 @@ const requestPasswordResetToken = async (username, passwordResetPageRedirectURL 
             body: JSON.stringify({ username, passwordResetPageRedirectURL })
         });
 
-        const data = await response.json();
+        const result = await response.json();
 
         if (response.status === 200) {
-            return { success: true, message: data.message };
+            return { success: true, message: result.message };
         } else {
-            return { success: false, message: data.message || 'Failed to generate password reset token, please try again.' };
+            const message = handlingErrors(result, 'Failed to generate password reset token, please try again.');
+            return { success: false, message};
         }
     } catch (error) {
         console.error('Error requesting password reset token:', error);
@@ -226,12 +227,23 @@ const resetPassword = async (username, token, data, newPassword) => {
         if (response.status === 200) {
             return { success: true, message: result.message };
         } else {
-            return { success: false, message: result.message || 'Failed to reset password.' };
+            const message = handlingErrors(result, 'Failed to reset password.');
+            return { success: false, message};
         }
     } catch (error) {
         console.error('Error resetting password:', error);
         return { success: false, message: 'Network error, please try again later.' };
     }
+}
+
+const handlingErrors = (data, message) => {
+    if (data.errors && data.errors.length) {
+        // Combine all error messages into one string
+        message = data.errors.map((err, index) => `${index + 1}. ${err.msg}`).join('\n');
+    }
+    if(data.message)
+        return data.message;
+    return message;
 }
 
 export { resetPassword };

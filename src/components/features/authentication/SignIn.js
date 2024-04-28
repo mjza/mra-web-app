@@ -70,7 +70,16 @@ const SignIn = () => {
                                 <Col sm={12} md={6} className="d-flex flex-column justify-content-center align-items-center">
                                     <Form onSubmit={handleSubmit} className="w-100">
                                         <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Welcome to your reporting assistant</h1>
-                                        {error && <Alert variant="danger">{error}</Alert>}
+                                        {error &&
+                                            <Alert variant="danger">
+                                                <b>Errors:</b><br />
+                                                {error.split('\n').map((line, index) => (
+                                                    <React.Fragment key={index}>
+                                                        {line}
+                                                        <br />
+                                                    </React.Fragment>
+                                                ))}
+                                            </Alert>}
                                         <Form.Group>
                                             <Form.Label className="w-100">Username or Email:
                                                 <Form.Control
