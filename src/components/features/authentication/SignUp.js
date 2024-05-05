@@ -9,6 +9,7 @@ import { faEye, faEyeSlash, faDice } from '@fortawesome/free-solid-svg-icons';
 const SignUp = () => {
     const [userInfo, setUserInfo] = useState({
         username: '',
+        displayName: '',
         email: '',
         password: '',
         repeatPassword: ''
@@ -78,7 +79,7 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { username, email, password, repeatPassword } = userInfo;
+        const { username, email, password, repeatPassword, displayName } = userInfo;
         let errors = [];
 
         // Username validations
@@ -121,7 +122,7 @@ const SignUp = () => {
         }
 
         setLoading(true);
-        const { success, message } = await registerService(username, email, password);
+        const { success, message } = await registerService(username, displayName, email, password);
         setLoading(false);
         if (success) {
             navigate('/registration-success', { replace: true });
@@ -152,12 +153,11 @@ const SignUp = () => {
                                     </Alert>
                                 }
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label className="w-100">Username:
+                                    <Form.Label className="w-100">Username: <span className="text-danger">*</span>
                                         <div className="input-group">
                                             <Form.Control
                                                 type="text"
                                                 name="username"
-                                                autoComplete="off"
                                                 value={userInfo.username}
                                                 onChange={handleChange}
                                                 required
@@ -168,25 +168,41 @@ const SignUp = () => {
                                             </Button>
                                         </div>
                                         <Form.Text className="text-muted">
-                                            Username must be at least 5 characters.
+                                            Can be generated automatically by the dice button.
                                         </Form.Text>
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label className="w-100">Email:
+                                    <Form.Label className="w-100">Display name:
+                                        <Form.Control
+                                            type="text"
+                                            name="displayName"
+                                            value={userInfo.displayName}
+                                            onChange={handleChange}
+                                            disabled={loading}
+                                        />
+                                        <Form.Text className="text-muted">
+                                            If leave empty the username will be used.
+                                        </Form.Text>
+                                    </Form.Label>
+                                </Form.Group>
+                                <Form.Group className="mb-2 mb-xxxl-4">
+                                    <Form.Label className="w-100">Email: <span className="text-danger">*</span>
                                         <Form.Control
                                             type="email"
                                             name="email"
-                                            autoComplete="email"
                                             value={userInfo.email}
                                             onChange={handleChange}
                                             required
                                             disabled={loading}
                                         />
+                                        <Form.Text className="text-muted">
+                                            Will be used for activation.
+                                        </Form.Text>
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label className="w-100">Password:
+                                    <Form.Label className="w-100">Password: <span className="text-danger">*</span>
                                         <div className="input-group">
                                             <Form.Control
                                                 type={showPassword ? "text" : "password"}
@@ -206,7 +222,7 @@ const SignUp = () => {
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
-                                    <Form.Label className="w-100">Repeat Password:
+                                    <Form.Label className="w-100">Repeat Password: <span className="text-danger">*</span>
                                         <div className="input-group">
                                             <Form.Control
                                                 type={showRepeatPassword ? "text" : "password"}
@@ -220,15 +236,18 @@ const SignUp = () => {
                                                 <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
                                             </Button>
                                         </div>
+                                        <Form.Text className="text-muted">
+                                            Must be exactly the same as your password.
+                                        </Form.Text>
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4 d-none">
                                     <Form.Label className="w-100">Hidden Password:
-                                            <Form.Control
-                                                type="password"
-                                                name="passwordHidden"
-                                                autoComplete="new-password"
-                                            />
+                                        <Form.Control
+                                            type="password"
+                                            name="passwordHidden"
+                                            autoComplete="new-password"
+                                        />
                                     </Form.Label>
                                 </Form.Group>
                                 <div className="mt-2 mb-3">

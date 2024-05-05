@@ -106,19 +106,20 @@ export { refreshToken };
  * Registers a new user with the given details.
  * 
  * @param {string} username - The username for the new user.
+ * @param {string} displayName - The displayName for the new user.
  * @param {string} email - The email address of the new user.
  * @param {string} password - The password for the new user.
  * @param {string} loginRedirectURL - The URL to redirect after login, optional.
  * @returns {Promise<{success: boolean, message?: string, userId?: number}>} A promise that resolves to an object indicating the result of the registration attempt. On success, returns user ID and message; on failure, returns an error message.
  */
-const registerService = async (username, email, password, loginRedirectURL = `${appURL}/signin`) => {
+const registerService = async (username, displayName, email, password, loginRedirectURL = `${appURL}/signin`) => {
     try {
         const response = await fetch(`${baseURL}/v1/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, email, password, loginRedirectURL })
+            body: JSON.stringify({ username, displayName, email, password, loginRedirectURL })
         });
 
         const result = await response.json();
