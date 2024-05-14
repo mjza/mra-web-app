@@ -17,6 +17,7 @@ import ResetPassword from './components/features/authentication/ResetPassword';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
+import FileUpload from './components/ui/FileUpload';
 
 const infoRoutes = () => [
   <Route key="about" path="/about" element={<UnderConstruction />} />,
@@ -100,6 +101,7 @@ export default App;
 const News = () => (
   <div className='mh-100 py-5 feature-row'>
     <h1>News Page</h1>
+    <FileUpload />
     <SignOut />
   </div>
 );
