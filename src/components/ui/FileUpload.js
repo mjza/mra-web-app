@@ -33,7 +33,7 @@ const FileUpload = () => {
         const token = user.token;  // Replace with your actual token
         const domain = '0'; // Replace with your actual domain ID
 
-        const { success, presignedUrl, message, exp } = await getPresignedUrlService(
+        const { success, presignedUrl, message, headers, exp } = await getPresignedUrlService(
             token,
             file.name,
             file.type,
@@ -50,9 +50,7 @@ const FileUpload = () => {
             const response = await fetch(presignedUrl, {
                 method: 'PUT',
                 body: file,
-                headers: {
-                    'Content-Type': file.type
-                },
+                headers,
                 onUploadProgress: (progressEvent) => {
                     setProgress(Math.round((progressEvent.loaded * 100) / progressEvent.total));
                 }
