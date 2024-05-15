@@ -40,7 +40,7 @@ const getPresignedUrlService = async (token, fileName, fileType, fileSize, domai
         const result = await response.json();
 
         if (response.ok) {
-            return { success: true, presignedUrl: result.presignedUrl, exp: result.exp };
+            return { success: true, url: result.url, fields: result.fields };
         } else {
             const message = handlingErrors(result, 'Failed to generate presigned URL, please try again.');
             return { success: false, message };

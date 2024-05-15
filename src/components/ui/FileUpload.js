@@ -33,31 +33,50 @@ const FileUpload = () => {
         const token = user.token;  // Replace with your actual token
         const domain = '0'; // Replace with your actual domain ID
 
-        const { success, presignedUrl, message, exp } = await getPresignedUrlService(
+        
+        const response = await getPresignedUrlService(
             token,
             file.name,
             file.type,
             file.size,
             domain
         );
-
+        console.log(response);
+        const { success, url, message, fields }  = response;
         if (!success) {
             setUploadStatus(message);
             return;
         }
 
         try {
+            /*
             const response = await fetch(presignedUrl, {
                 method: 'PUT',
                 body: file,
                 headers: {
-                    'Content-Type': file.type
+                    'Content-Type': file.type,
+                    //'x-amz-acl': 'public-read'
                 },
                 onUploadProgress: (progressEvent) => {
                     setProgress(Math.round((progressEvent.loaded * 100) / progressEvent.total));
                 }
             });
-
+            */
+            console.log("1");
+            // Create a form data object with the presigned POST fields
+            const formData = new FormData();
+            console.log(fields);
+            Object.entries(fields).forEach(([key, value]) => {
+                formData.append(key, value);
+            });
+            formData.append('file', file);
+            console.log("2");
+            // Upload the file to S3 using the presigned POST URL
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData
+            });
+            console.log("3");
             if (response.ok) {
                 setUploadStatus('File uploaded successfully!');
             } else {
