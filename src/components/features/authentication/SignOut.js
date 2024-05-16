@@ -12,11 +12,10 @@ const SignOut = () => {
     const [loading, setLoading] = useState(false);
     const [dialogContent, setDialogContent] = useState({ title: '', message: '', type: 'primary' });
     const performLogout = () => {
-        logout();        
         setIsRedirecting(true);
         setShowDialog(false);
         setLoading(false);
-    };    
+    };
 
     const handleLogout = async () => {
         if (!user || !user.token) {
@@ -26,9 +25,12 @@ const SignOut = () => {
 
         try {
             setLoading(true);
-            await logoutService(user.token);
+            const { token } = user;
+            if (logout()) {
+                await logoutService(token);
+            }
             performLogout();
-        } catch (error) {            
+        } catch (error) {
             setDialogContent({
                 title: 'Logout Failed',
                 message: error.message,
@@ -37,7 +39,7 @@ const SignOut = () => {
             setLoading(false);
             setShowDialog(true);
         }
-    };    
+    };
 
     if (isRedirecting) {
         return <Navigate to="/signin" replace={true} />;

@@ -4,7 +4,10 @@ const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
     const storedUser = sessionStorage.getItem('user') || localStorage.getItem('user');
-    const [user, setUser] = useState(storedUser ? JSON.parse(storedUser): null);
+    const { exp } = storedUser ? JSON.parse(storedUser) : {};
+    // Get the current time in Unix timestamp format (seconds since Epoch)
+    const now = Math.floor(Date.now() / 1000);
+    const [user, setUser] = useState(exp > now ? JSON.parse(storedUser) : null);
 
     const login = (userData, remember) => {
         if (remember) {
@@ -16,9 +19,13 @@ export const UserProvider = ({ children }) => {
     };
 
     const logout = () => {
+        const { exp } = user;
+        // Get the current time in Unix timestamp format (seconds since Epoch)
+        const now = Math.floor(Date.now() / 1000);
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
         setUser(null);
+        return exp > now;
     };
 
     useEffect(() => {
@@ -26,9 +33,16 @@ export const UserProvider = ({ children }) => {
         const sessionUser = sessionStorage.getItem('user');
         const localUser = localStorage.getItem('user');
         const storedUser = sessionUser ? sessionUser : localUser;
+        const { exp } = storedUser ? JSON.parse(storedUser) : {};
+        // Get the current time in Unix timestamp format (seconds since Epoch)
+        const now = Math.floor(Date.now() / 1000);
 
-        if (storedUser) {
+        // Compare the expiration time with the current time
+        if (exp > now) {
             setUser(JSON.parse(storedUser));
+        } else {
+            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
         }
     }, []);
 
