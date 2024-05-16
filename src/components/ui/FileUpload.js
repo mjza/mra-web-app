@@ -32,13 +32,15 @@ const FileUpload = () => {
 
         const token = user.token;  // Replace with your actual token
         const domain = '0'; // Replace with your actual domain ID
+        const countryISOCode = 'ca';
 
-        const { success, presignedUrl, message, headers, exp } = await getPresignedUrlService(
+        const { success, presignedUrl, message, headers } = await getPresignedUrlService(
             token,
+            countryISOCode,
+            domain,
             file.name,
             file.type,
-            file.size,
-            domain
+            file.size            
         );
 
         if (!success) {

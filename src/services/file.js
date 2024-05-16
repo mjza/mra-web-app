@@ -14,18 +14,20 @@ const handlingErrors = (data, message) => {
  * `getPresignedUrlService` requests a presigned URL from the server for performing file operations.
  *
  * @param {string} token - The secret token required to authorize the password reset.
+ * @param {string} countryISOCode - The ISO code of the country.
+ * @param {number} domain - The domain ID associated with the user or operation.
  * @param {string} fileName - The name of the file for which the presigned URL is requested.
  * @param {string} fileType - The MIME type of the file.
  * @param {number} fileSize - The fileSize is a number representing the file size in bytes.
- * @param {number} domain - The domain ID associated with the user or operation.
  * @returns {Promise<{success: boolean, presignedUrl?: string, exp?: number, message?: string}>} A promise that resolves to an object indicating the result of the request. Includes the presigned URL and its expiration time on success.
  */
-const getPresignedUrlService = async (token, fileName, fileType, fileSize, domain) => {
+const getPresignedUrlService = async (token, countryISOCode, domain, fileName, fileType, fileSize) => {
     try {
         const queryParams = new URLSearchParams({
+            countryISOCode,
+            domain,
             fileName,
             fileType,
-            domain,
             fileSize
         }).toString();
 
@@ -50,7 +52,5 @@ const getPresignedUrlService = async (token, fileName, fileType, fileSize, domai
         return { success: false, message: 'Network error, please try again later.' };
     }
 }
-
-
 
 export { getPresignedUrlService };
