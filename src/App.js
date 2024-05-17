@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './css/App.scss';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -17,7 +17,7 @@ import ResetPassword from './components/features/authentication/ResetPassword';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
-import FileUpload from './components/ui/FileUpload';
+import Media from './components/ui/Media';
 
 const infoRoutes = () => [
   <Route key="about" path="/about" element={<UnderConstruction />} />,
@@ -80,6 +80,8 @@ const AppContent = () => {
   }
 };
 
+
+
 const App = () => {
 
   return (
@@ -98,10 +100,31 @@ const App = () => {
 export default App;
 
 // Dummy components for the route targets
-const News = () => (
-  <div className='mh-100 py-5 feature-row'>
-    <h1>News Page</h1>
-    <FileUpload />
-    <SignOut />
-  </div>
-);
+const News = () => {
+  const [mediaUrl, setMediaUrl] = useState(null);//"https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240517201127005-3576-248e-a2a3-org.jpg");
+
+  const handleDelete = () => {
+    setMediaUrl(null);
+    // Additional logic for handling delete, e.g., removing from server
+    console.log('Media deleted');
+  };
+  return (
+    <div className='mh-100 py-5 feature-row'>
+      <h1>News Page</h1>
+      <Media
+        countryISOCode="ca"
+        domain="1"
+        acceptedTypes="images"  // Accepted file types
+        initialUrl={mediaUrl}  // Initial media URL, if any
+        onDelete={handleDelete}  // Callback function for handling delete
+      />
+      <SignOut />
+    </div>
+  );
+};
+
+
+
+
+
+
