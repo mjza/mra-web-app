@@ -7,7 +7,6 @@ import { faImage, faVideo, faMusic, faTrash } from '@fortawesome/free-solid-svg-
 
 const Media = ({ countryISOCode, domain, acceptedTypes, initialUrl, onDelete }) => {
     const { user } = useUser();
-    const [file, setFile] = useState(null);
     const [progress, setProgress] = useState(0);
     const [url, setUrl] = useState(initialUrl);
     const [showModal, setShowModal] = useState(false);
@@ -25,7 +24,6 @@ const Media = ({ countryISOCode, domain, acceptedTypes, initialUrl, onDelete }) 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile && acceptedFileTypes[acceptedTypes].includes(selectedFile.type)) {
-            setFile(selectedFile);
             setModalMessage('');
             handleFileUpload(selectedFile);
         } else {
@@ -89,7 +87,6 @@ const Media = ({ countryISOCode, domain, acceptedTypes, initialUrl, onDelete }) 
 
     const handleDelete = () => {
         setUrl(null);
-        setFile(null);
         setProgress(0);
         if (onDelete) {
             onDelete();
