@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../../contexts/UserContext';
 import { getPresignedUrlService } from '../../services/file';
-import { Modal, Button, ProgressBar } from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faVideo, faMusic, faTrash } from '@fortawesome/free-solid-svg-icons';
 

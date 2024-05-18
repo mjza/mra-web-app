@@ -1,5 +1,9 @@
 import React from 'react';
-import { Container, Row, Col, Nav } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Nav from 'react-bootstrap/Nav';
+
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();

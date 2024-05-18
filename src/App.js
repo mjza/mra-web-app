@@ -110,7 +110,7 @@ const News = () => {
   };
   return (
     <div className='mh-100 py-5 feature-row'>
-      <h1>&nbsp;</h1>
+      <h1>&nbsp;</h1> 
       <Media
         countryISOCode="ca"
         domain="1"
