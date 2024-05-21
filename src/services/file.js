@@ -5,7 +5,7 @@ const handlingErrors = (data, message) => {
         // Combine all error messages into one string
         message = data.errors.map((err, index) => `${index + 1}. ${err.msg}`).join('\n');
     }
-    if(data.message)
+    if (data.message)
         return data.message;
     return message;
 }
@@ -54,3 +54,43 @@ const getPresignedUrlService = async (token, countryISOCode, domain, fileName, f
 }
 
 export { getPresignedUrlService };
+
+/**
+ * `getAccessUrlsService` sends a list of S3 URLs to the server to generate access URLs.
+ *
+ * @param {string} token - The secret token required for authorization.
+ * @param {number} domain - The domain ID associated with the user or operation.
+ * @param {Array<string>} urls - An array of S3 URLs for which access URLs are needed.
+ * @returns {Promise<{success: boolean, urls?: object, message?: string}>} A promise that resolves to an object indicating the result of the request. Includes the access URLs on success.
+ */
+const getAccessUrlsService = async (token, domain, urls) => {
+    try {
+        const requestBody = {
+            domain,
+            urls
+        };
+
+        const response = await fetch(`${fileBaseURL}/v1/generate-access-urls`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            return { success: true, urls: result.urls };
+        } else {
+            const message = handlingErrors(result, 'Failed to generate access URLs, please try again.');
+            return { success: false, message };
+        }
+    } catch (error) {
+        console.error('Error generating access URLs:', error);
+        return { success: false, message: 'Network error, please try again later.' };
+    }
+}
+
+export { getAccessUrlsService };

@@ -101,7 +101,7 @@ export default App;
 
 // Dummy components for the route targets
 const News = () => {
-  const [mediaUrl, setMediaUrl] = useState(null);//"https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240517201127005-3576-248e-a2a3-org.jpg");
+  const [mediaUrl, setMediaUrl] = useState([]);//"https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240517201127005-3576-248e-a2a3-org.jpg");
 
   const handleDelete = () => {
     setMediaUrl(null);
@@ -114,7 +114,6 @@ const News = () => {
       <Media
         countryISOCode="ca"
         domain="1"
-        acceptedTypes="images"  // Accepted file types
         initialUrl={mediaUrl}  // Initial media URL, if any
         onDelete={handleDelete}  // Callback function for handling delete
       />

@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../../contexts/UserContext';
-import { getPresignedUrlService } from '../../services/file';
+import { getPresignedUrlService, getAccessUrlsService } from '../../services/file';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faVideo, faMusic, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const Media = ({ countryISOCode, domain, acceptedTypes, initialUrl, onDelete }) => {
+const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const { user } = useUser();
     const [progress, setProgress] = useState(0);
-    const [url, setUrl] = useState(initialUrl);
+    const [urls, setUrls] = useState(initialUrls);
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
-    const acceptedFileTypes = {
-        images: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/heic', 'image/heif'],
-        videos: ['video/mp4', 'video/quicktime', 'video/x-msvideo'],
-        audios: ['audio/mpeg', 'audio/wav', 'audio/ogg']
-    };
+    const acceptedFileTypes = [
+        'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/heic', 'image/heif'
+    ];
 
     useEffect(() => {
-        setUrl(initialUrl);
-    }, [initialUrl]);
+        setUrls(initialUrls);
+    }, [initialUrls]);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
-        if (selectedFile && acceptedFileTypes[acceptedTypes].includes(selectedFile.type)) {
+        if (selectedFile && acceptedFileTypes.includes(selectedFile.type)) {
             setModalMessage('');
             handleFileUpload(selectedFile);
         } else {
@@ -72,10 +70,15 @@ const Media = ({ countryISOCode, domain, acceptedTypes, initialUrl, onDelete }) 
             });
 
             if (response.ok) {
-                const fileUrl = presignedUrl.split('?')[0];
-                setUrl(fileUrl);
+                const baseUrl = presignedUrl.split('?')[0];
                 setModalMessage('File uploaded successfully!');
                 setShowModal(false);
+                const response = await getAccessUrlsService(token, domain, [baseUrl]);
+                if (response.success) {
+                    setUrls(response.urls[baseUrl]);
+                } else {
+                    setModalMessage(response.message);
+                }
             } else {
                 setModalMessage('File upload failed.');
                 setShowModal(true);
@@ -88,42 +91,36 @@ const Media = ({ countryISOCode, domain, acceptedTypes, initialUrl, onDelete }) 
     };
 
     const handleDelete = () => {
-        setUrl(null);
+        setUrls([]);
         setProgress(0);
         if (onDelete) {
             onDelete();
         }
     };
 
-    const getFileIcon = () => {
-        switch (acceptedTypes) {
-            case 'images':
-                return <FontAwesomeIcon icon={faImage} size="3x" />;
-            case 'videos':
-                return <FontAwesomeIcon icon={faVideo} size="3x" />;
-            case 'audios':
-                return <FontAwesomeIcon icon={faMusic} size="3x" />;
-            default:
-                return null;
-        }
-    };
+    const renderImage = (urls) => {
+        const sizes = ["-xl.webp", "-lg.webp", "-md.webp", "-sm.webp", "-xs.webp", "-org"];
+        const sortedUrls = sizes.map(size => urls.find(url => url.endsWith(size))).filter(Boolean);
+        const src = sortedUrls[0] || urls.find(url => url.includes('-org')); // Fallback to original if specific sizes not found
+        return (
+          <img src={src} alt="Uploaded media" className="img-fluid" />
+        );
+      };
 
     return (
         <div className="border p-2" style={{ maxWidth: '300px', height: '300px' }}>
-            {url ? (
+            {urls && Object.keys(urls).length > 0 ? (
                 <div className="d-flex flex-column align-items-center">
-                    {acceptedTypes === 'images' && <img src={url} alt="Uploaded media" className="img-fluid" />}
-                    {acceptedTypes === 'videos' && <video src={url} controls className="img-fluid" />}
-                    {acceptedTypes === 'audios' && <audio src={url} controls className="img-fluid" />}
+                    {renderImage(urls)}
                     <button onClick={handleDelete} className="btn btn-danger mt-2">
                         <FontAwesomeIcon icon={faTrash} /> Delete
                     </button>
                 </div>
             ) : (
                 <div className="d-flex flex-column align-items-center">
-                    <input type="file" accept={acceptedFileTypes[acceptedTypes].join(',')} onChange={handleFileChange} hidden id="fileInput" />
+                    <input type="file" accept={acceptedFileTypes.join(',')} onChange={handleFileChange} hidden id="fileInput" />
                     <label htmlFor="fileInput" className="btn btn-light border">
-                        {getFileIcon() || 'Select File'}
+                        <FontAwesomeIcon icon={faImage} size="3x" />
                     </label>
                     {progress > 0 && <ProgressBar now={progress} label={`${progress}%`} className="mt-2" />}
                 </div>
