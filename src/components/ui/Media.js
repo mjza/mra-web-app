@@ -47,7 +47,7 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
 
         const token = user.token;
 
-        const { success, presignedUrl, message, headers } = await getPresignedUrlService(
+        const { success, presignedUrl, message, fields } = await getPresignedUrlService(
             token,
             countryISOCode,
             domain,
@@ -63,14 +63,20 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }
 
         try {
+            const formData = new FormData();
+            Object.keys(fields).forEach((key) => {
+            formData.append(key, fields[key]);
+            });
+            formData.append('file', selectedFile);
+
             const response = await fetch(presignedUrl, {
-                method: 'PUT',
-                body: selectedFile,
-                headers
+                method: 'POST',
+                body: formData
             });
 
             if (response.ok) {
-                const baseUrl = presignedUrl.split('?')[0];
+                const baseUrl = `${presignedUrl}${fields.key}`; // url after post
+                //const baseUrl = presignedUrl.split('?')[0]; // url after put
                 setModalMessage('File uploaded successfully!');
                 setShowModal(false);
                 const response = await getAccessUrlsService(token, domain, [baseUrl]);

@@ -31,7 +31,7 @@ const getPresignedUrlService = async (token, countryISOCode, domain, fileName, f
             fileSize
         }).toString();
 
-        const response = await fetch(`${fileBaseURL}/v1/generate-presigned-url?${queryParams}`, {
+        const response = await fetch(`${fileBaseURL}/v1/generate-presigned-post-url?${queryParams}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -42,7 +42,7 @@ const getPresignedUrlService = async (token, countryISOCode, domain, fileName, f
         const result = await response.json();
 
         if (response.ok) {
-            return { success: true, presignedUrl: result.presignedUrl, headers: result.headers, exp: result.exp };
+            return { success: true, presignedUrl: result.presignedUrl, fields: result.fields, exp: result.exp };
         } else {
             const message = handlingErrors(result, 'Failed to generate presigned URL, please try again.');
             return { success: false, message };
