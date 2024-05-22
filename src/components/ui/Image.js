@@ -5,14 +5,15 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
-const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
+const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const { user } = useUser();
     const [progress, setProgress] = useState(0);
     const [urls, setUrls] = useState(initialUrls);
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [uploading, setUploading] = useState(false);
     const acceptedFileTypes = [
         'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/heic', 'image/heif'
     ];
@@ -21,11 +22,13 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         setUrls(initialUrls);
     }, [initialUrls]);
 
-    const handleFileChange = (event) => {
+    const handleFileChange = async (event) => {
         const selectedFile = event.target.files[0];
         if (selectedFile && acceptedFileTypes.includes(selectedFile.type)) {
+            setUploading(true);
             setModalMessage('');
-            handleFileUpload(selectedFile);
+            await handleFileUpload(selectedFile);
+            setUploading(false);
         } else {
             setModalMessage('Please select a valid file type.');
             setShowModal(true);
@@ -46,7 +49,6 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }
 
         const token = user.token;
-
         const { success, presignedUrl, message, fields } = await getPresignedUrlService(
             token,
             countryISOCode,
@@ -64,9 +66,7 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
 
         try {
             const formData = new FormData();
-            Object.keys(fields).forEach((key) => {
-            formData.append(key, fields[key]);
-            });
+            Object.keys(fields).forEach(key => formData.append(key, fields[key]));
             formData.append('file', selectedFile);
 
             const response = await fetch(presignedUrl, {
@@ -75,8 +75,7 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
             });
 
             if (response.ok) {
-                const baseUrl = `${presignedUrl}${fields.key}`; // url after post
-                //const baseUrl = presignedUrl.split('?')[0]; // url after put
+                const baseUrl = `${presignedUrl}${fields.key}`;
                 setModalMessage('File uploaded successfully!');
                 setShowModal(false);
                 const response = await getAccessUrlsService(token, domain, [baseUrl]);
@@ -105,30 +104,49 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     };
 
     const renderImage = (urls) => {
-        const sizes = ["-xl.webp", "-lg.webp", "-md.webp", "-sm.webp", "-xs.webp", "-org"];
-        const sortedUrls = sizes.map(size => urls.find(url => url.endsWith(size))).filter(Boolean);
-        const src = sortedUrls[0] || urls.find(url => url.includes('-org')); // Fallback to original if specific sizes not found
+        const sizeMap = [
+            { key: '-xl.webp', media: '(min-width: 1200px)' },
+            { key: '-lg.webp', media: '(min-width: 992px)' },
+            { key: '-md.webp', media: '(min-width: 768px)' },
+            { key: '-sm.webp', media: '(min-width: 576px)' },
+            { key: '-xs.webp', media: '' }  // No media query for XS as it's the default
+        ];
+        const sortedUrls = sizeMap.filter(size => urls.find(url => url.includes(size.key))).map(size => ({
+            srcSet: urls.find(url => url.includes(size.key)),
+            media: size.media
+        }));
+        const baseImageUrl = urls.find(url => url.includes('-org.')); // Fallback to original if specific sizes not found
         return (
-          <img src={src} alt="Uploaded media" className="img-fluid" />
+            <picture>
+                {sortedUrls.map((url, index) => url.media && (
+                    <source key={index} srcSet={url.srcSet} media={url.media} />
+                ))}
+                <img src={baseImageUrl} alt="Responsive media" className="img-fluid" />
+            </picture>
         );
-      };
+    };
 
     return (
-        <div className="border p-2" style={{ maxWidth: '300px', height: '300px' }}>
+        <div className="position-relative border p-2" style={{ maxWidth: '300px', height: '300px' }}>
+            {uploading && (
+                <div className="overlay" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <FontAwesomeIcon icon={faSpinner} spin size="3x" />
+                </div>
+            )}
             {urls && Object.keys(urls).length > 0 ? (
-                <div className="d-flex flex-column align-items-center">
+                <div className="d-flex flex-column align-items-center justify-content-center position-relative">
                     {renderImage(urls)}
-                    <button onClick={handleDelete} className="btn btn-danger mt-2">
-                        <FontAwesomeIcon icon={faTrash} /> Delete
+                    <button onClick={handleDelete} className="btn position-absolute" style={{ top: 5, right: 5 }}>
+                        <FontAwesomeIcon icon={faTrash} />
                     </button>
                 </div>
             ) : (
-                <div className="d-flex flex-column align-items-center">
+                <div className="d-flex flex-column align-items-center justify-content-center h-100">
                     <input type="file" accept={acceptedFileTypes.join(',')} onChange={handleFileChange} hidden id="fileInput" />
                     <label htmlFor="fileInput" className="btn btn-light border">
                         <FontAwesomeIcon icon={faImage} size="3x" />
                     </label>
-                    {progress > 0 && <ProgressBar now={progress} label={`${progress}%`} className="mt-2" />}
+                    {progress > 0 && <ProgressBar now={progress} label={`${progress}%`} className="w-100 mt-2" />}
                 </div>
             )}
 
@@ -145,4 +163,4 @@ const Media = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     );
 };
 
-export default Media;
+export default Image;

@@ -17,7 +17,7 @@ import ResetPassword from './components/features/authentication/ResetPassword';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
-import Media from './components/ui/Media';
+import Image from './components/ui/Image';
 
 const infoRoutes = () => [
   <Route key="about" path="/about" element={<UnderConstruction />} />,
@@ -111,7 +111,7 @@ const News = () => {
   return (
     <div className='mh-100 py-5 feature-row'>
       <h1>&nbsp;</h1> 
-      <Media
+      <Image
         countryISOCode="ca"
         domain="1"
         initialUrl={mediaUrl}  // Initial media URL, if any
