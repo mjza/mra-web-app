@@ -7,6 +7,10 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
+const getFileExtension = (filename) => {
+    return filename.split('.').pop().toLowerCase();
+};
+
 const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const { user } = useUser();
     const [progress, setProgress] = useState(0);
@@ -14,23 +18,23 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [uploading, setUploading] = useState(false);
-    const acceptedFileTypes = [
-        'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/heic', 'image/heif'
-    ];
+    const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp', ];
 
     useEffect(() => {
         setUrls(initialUrls);
     }, [initialUrls]);
 
     const handleFileChange = async (event) => {
-        const selectedFile = event.target.files[0];
-        if (selectedFile && acceptedFileTypes.includes(selectedFile.type)) {
+        const selectedFile = event.target.files[0];        
+
+        // Check if the file extension is accepted
+        if (selectedFile && acceptedFileTypes.includes(`${getFileExtension(selectedFile.name)}`)) {
             setUploading(true);
             setModalMessage('');
             await handleFileUpload(selectedFile);
             setUploading(false);
         } else {
-            setModalMessage('Please select a valid file type.');
+            setModalMessage(`Please select a valid file type. Only these extensions {${acceptedFileTypes.join(',')}} are accepted.`);
             setShowModal(true);
         }
     };
@@ -49,12 +53,14 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }
 
         const token = user.token;
+        const fileExtension = getFileExtension(selectedFile.name);
+
         const { success, presignedUrl, message, fields } = await getPresignedUrlService(
             token,
             countryISOCode,
             domain,
             selectedFile.name,
-            selectedFile.type,
+            `image/${fileExtension}`,
             selectedFile.size
         );
 
@@ -142,7 +148,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                 </div>
             ) : (
                 <div className="d-flex flex-column align-items-center justify-content-center h-100">
-                    <input type="file" accept={acceptedFileTypes.join(',')} onChange={handleFileChange} hidden id="fileInput" />
+                    <input type="file" accept={acceptedFileTypes.map(type => `.${type}`).join(',')} onChange={handleFileChange} hidden id="fileInput" />
                     <label htmlFor="fileInput" className="btn btn-light border">
                         <FontAwesomeIcon icon={faImage} size="3x" />
                     </label>
