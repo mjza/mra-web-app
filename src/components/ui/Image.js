@@ -18,6 +18,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [uploading, setUploading] = useState(false);
+    const [processing, setProcessing] = useState(false);
     const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp', ];
 
     useEffect(() => {
@@ -75,25 +76,40 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
             Object.keys(fields).forEach(key => formData.append(key, fields[key]));
             formData.append('file', selectedFile);
 
-            const response = await fetch(presignedUrl, {
-                method: 'POST',
-                body: formData
-            });
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', presignedUrl, true);
 
-            if (response.ok) {
-                const baseUrl = `${presignedUrl}${fields.key}`;
-                setModalMessage('File uploaded successfully!');
-                setShowModal(false);
-                const response = await getAccessUrlsService(token, domain, [baseUrl]);
-                if (response.success) {
-                    setUrls(response.urls[baseUrl]);
-                } else {
-                    setModalMessage(response.message);
+            xhr.upload.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    const percentComplete = Math.round((event.loaded * 100) / event.total);                    
+                    setProgress(percentComplete);
                 }
-            } else {
-                setModalMessage('File upload failed.');
-                setShowModal(true);
-            }
+            };
+
+            xhr.onload = async () => {
+                if (xhr.status === 204) {
+                    setProcessing(true);
+                    const baseUrl = `${presignedUrl}${fields.key}`;
+                    setModalMessage('File uploaded successfully!');
+                    setShowModal(false);
+                    const response = await getAccessUrlsService(token, domain, [baseUrl]);
+                    if (response.success) {
+                        setUrls(response.urls[baseUrl]);
+                    } else {
+                        setModalMessage(response.message);
+                    }
+                    setProcessing(false);
+                } else {
+                    setModalMessage('File upload failed.');
+                    setShowModal(true);
+                }
+            };
+
+            xhr.onerror = () => {
+                console.log('Upload error');
+            };
+
+            xhr.send(formData);
         } catch (error) {
             console.error('Error uploading file:', error);
             setModalMessage('Network error, please try again later.');
@@ -134,7 +150,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
 
     return (
         <div className="position-relative border p-2" style={{ maxWidth: '300px', height: '300px' }}>
-            {uploading && (
+            {processing && (
                 <div className="overlay" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <FontAwesomeIcon icon={faSpinner} spin size="3x" />
                 </div>
@@ -148,12 +164,20 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                 </div>
             ) : (
                 <div className="d-flex flex-column align-items-center justify-content-center h-100">
-                    <input type="file" accept={acceptedFileTypes.map(type => `.${type}`).join(',')} onChange={handleFileChange} hidden id="fileInput" />
-                    <label htmlFor="fileInput" className="btn btn-light border">
+                    <input
+                        type="file"
+                        accept={acceptedFileTypes.map(type => `.${type}`).join(',')}
+                        onChange={handleFileChange}
+                        hidden
+                        id="fileInput"
+                        disabled={uploading}
+                    />
+                    <label htmlFor="fileInput" className={`btn btn-light border ${uploading ? 'disabled' : ''}`}>
                         <FontAwesomeIcon icon={faImage} size="3x" />
                     </label>
                     {progress > 0 && <ProgressBar now={progress} label={`${progress}%`} className="w-100 mt-2" />}
                 </div>
+
             )}
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
