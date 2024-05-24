@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '../../contexts/UserContext';
 import { getPresignedUrlService, getAccessUrlsService } from '../../services/file';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faTrash, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faImage, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 const getFileExtension = (filename) => {
     return filename.split('.').pop().toLowerCase();
@@ -14,19 +14,82 @@ const getFileExtension = (filename) => {
 const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const { user } = useUser();
     const [progress, setProgress] = useState(0);
+    const [counter, setCounter] = useState(1);
     const [urls, setUrls] = useState(initialUrls);
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [uploading, setUploading] = useState(false);
     const [processing, setProcessing] = useState(false);
-    const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp', ];
+    const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp',];
+    const [buttonBgColor, setButtonBgColor] = useState('black');
+    const imgRef = useRef(null);
 
     useEffect(() => {
         setUrls(initialUrls);
     }, [initialUrls]);
 
+    useEffect(() => {
+        let intervalId;
+
+        if (processing) {
+            intervalId = setInterval(() => {
+                setCounter(prevCounter => prevCounter + 1);
+            }, 1000);
+        } else {
+            clearInterval(intervalId);
+            setCounter(1);
+        }
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [processing]);
+
+    useEffect(() => {
+        const img = imgRef.current;
+        const handleLoad = () => extractColor(img);
+        if (img && img.complete) {
+            // Extract color if image is already loaded
+            extractColor(img);
+        } else if (img) {
+            // Extract color once image is loaded
+            img.addEventListener('load', handleLoad);
+        }
+    }, [urls]);
+
+    const extractColor = (img) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0, img.width, img.height);
+
+        // Define the size of the square
+        const squareSize = 20;
+        const startX = img.width - 35;
+        const startY = 15;
+
+        // Get the color data from the top-right 20x20 pixels
+        const imageData = context.getImageData(startX, startY, squareSize, squareSize);
+        const { data } = imageData;
+
+        // Calculate the average color
+        let rTotal = 0, gTotal = 0, bTotal = 0, pixelCount = 0;
+        for (let i = 0; i < data.length; i += 4) {
+            rTotal += data[i];
+            gTotal += data[i + 1];
+            bTotal += data[i + 2];
+            pixelCount++;
+        }
+        const rAvg = rTotal / pixelCount;
+        const gAvg = gTotal / pixelCount;
+        const bAvg = bTotal / pixelCount;
+
+        // Calculate the luminance of the average color
+        const luminance = (0.299 * rAvg + 0.587 * gAvg + 0.114 * bAvg) / 255;
+        setButtonBgColor(luminance > 0.7 ? 'black' : 'white');
+    };
+
     const handleFileChange = async (event) => {
-        const selectedFile = event.target.files[0];        
+        const selectedFile = event.target.files[0];
 
         // Check if the file extension is accepted
         if (selectedFile && acceptedFileTypes.includes(`${getFileExtension(selectedFile.name)}`)) {
@@ -81,7 +144,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
 
             xhr.upload.onprogress = (event) => {
                 if (event.lengthComputable) {
-                    const percentComplete = Math.round((event.loaded * 100) / event.total);                    
+                    const percentComplete = Math.round((event.loaded * 100) / event.total);
                     setProgress(percentComplete);
                 }
             };
@@ -105,8 +168,10 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                 }
             };
 
-            xhr.onerror = () => {
-                console.log('Upload error');
+            xhr.onerror = (error) => {
+                console.log(error);
+                setModalMessage('Upload error.');
+                setShowModal(true);
             };
 
             xhr.send(formData);
@@ -139,11 +204,14 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }));
         const baseImageUrl = urls.find(url => url.includes('-org.')); // Fallback to original if specific sizes not found
         return (
-            <picture>
+            <picture className="position-relative mw-100 mh-100 overflow-hidden">
                 {sortedUrls.map((url, index) => url.media && (
                     <source key={index} srcSet={url.srcSet} media={url.media} />
                 ))}
-                <img src={baseImageUrl} alt="Responsive media" className="img-fluid" />
+                <img ref={imgRef} src={baseImageUrl} alt="Responsive media" className="img-fluid" crossOrigin="anonymous" />
+                <button onClick={handleDelete} className="btn position-absolute" style={{ top: 5, right: 5, color: buttonBgColor }}>
+                    <FontAwesomeIcon icon={faCircleXmark} />
+                </button>
             </picture>
         );
     };
@@ -151,19 +219,16 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     return (
         <div className="position-relative border p-2" style={{ maxWidth: '300px', height: '300px' }}>
             {processing && (
-                <div className="overlay" style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="overlay position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center" style={{ backgroundColor: 'rgba(255,255,255,0.8)', }}>
                     <FontAwesomeIcon icon={faSpinner} spin size="3x" />
                 </div>
             )}
             {urls && Object.keys(urls).length > 0 ? (
-                <div className="d-flex flex-column align-items-center justify-content-center position-relative">
+                <div className="d-flex flex-column align-items-center justify-content-center h-100 w-100">
                     {renderImage(urls)}
-                    <button onClick={handleDelete} className="btn position-absolute" style={{ top: 5, right: 5 }}>
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
                 </div>
             ) : (
-                <div className="d-flex flex-column align-items-center justify-content-center h-100">
+                <div className="d-flex flex-column align-items-center justify-content-center h-100 w-100">
                     <input
                         type="file"
                         accept={acceptedFileTypes.map(type => `.${type}`).join(',')}
@@ -173,9 +238,15 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                         disabled={uploading}
                     />
                     <label htmlFor="fileInput" className={`btn btn-light border ${uploading ? 'disabled' : ''}`}>
-                        <FontAwesomeIcon icon={faImage} size="3x" />
+                        <FontAwesomeIcon icon={faImage} size="5x" />
                     </label>
-                    {progress > 0 && <ProgressBar now={progress} label={`${progress}%`} className="w-100 mt-2" />}
+                    {progress > 0 && <ProgressBar now={progress} label={progress < 100 ? (
+                        <span>
+                            <FontAwesomeIcon icon={faUpload} /> {progress}%
+                        </span>
+                    ) : (
+                        `Processing... ${counter}`
+                    )} className="w-100 mt-2" style={{ height: "20px" }} />}
                 </div>
 
             )}
