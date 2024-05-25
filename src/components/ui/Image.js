@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
 
 const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
+    const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp',];
     const { user } = useUser();
     const [progress, setProgress] = useState(0);
     const [counter, setCounter] = useState(1);
@@ -16,8 +17,8 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const [modalMessage, setModalMessage] = useState('');
     const [uploading, setUploading] = useState(false);
     const [processing, setProcessing] = useState(false);
-    const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp',];
     const [buttonBgColor, setButtonBgColor] = useState('black');
+    const [isHorizontal, setIsHorizontal] = useState(true);
     const imgRef = useRef(null);
 
     const getFileExtension = (filename) => {
@@ -53,8 +54,8 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
 
     const fetchUrls = useCallback(async (baseUrl) => {
         setProcessing(true);
-        const token = user?.token;      
-        const { domain } = parseS3Url(baseUrl);              
+        const token = user?.token;
+        const { domain } = parseS3Url(baseUrl);
         const response = await getAccessUrlsService(token, domain, [baseUrl]);
         if (response.success) {
             setUrls(response.urls[baseUrl]);
@@ -89,20 +90,22 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
 
     useEffect(() => {
         const img = imgRef.current;
-        const handleLoad = () => extractColor(img);
-        if (img && img.complete) {
-            // Extract color if image is already loaded
+        const handleLoad = () => {
+            const { naturalWidth, naturalHeight } = img;
+            setIsHorizontal(naturalWidth >= naturalHeight);
             extractColor(img);
+        };
+        if (img && img.complete) {
+            handleLoad();
         } else if (img) {
             // Extract color once image is loaded
             img.addEventListener('load', handleLoad);
-        }
-        // Cleanup function to remove the event listener
-        return () => {
-            if (img) {
+            // Cleanup function to remove the event listener
+            return () => {
                 img.removeEventListener('load', handleLoad);
-            }
-        };
+            };
+        }
+
     }, [urls]);
 
     const extractColor = (img) => {
@@ -142,11 +145,9 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         const selectedFile = event.target.files[0];
 
         // Check if the file extension is accepted
-        if (selectedFile && acceptedFileTypes.includes(`${getFileExtension(selectedFile.name)}`)) {
-            setUploading(true);
+        if (selectedFile && acceptedFileTypes.includes(`${getFileExtension(selectedFile.name)}`)) {            
             setModalMessage('');
-            await handleFileUpload(selectedFile);
-            setUploading(false);
+            await handleFileUpload(selectedFile);            
         } else {
             setModalMessage(`Please select a valid file type. Only these extensions {${acceptedFileTypes.join(',')}} are accepted.`);
             setShowModal(true);
@@ -185,6 +186,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }
 
         try {
+            setUploading(true);
             const formData = new FormData();
             Object.keys(fields).forEach(key => formData.append(key, fields[key]));
             formData.append('file', selectedFile);
@@ -200,9 +202,9 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
             };
 
             xhr.onload = async () => {
+                setUploading(false);
                 if (xhr.status === 204) {
-                    setProcessing(true);
-                    const baseUrl = `${presignedUrl}${fields.key}`;                    
+                    const baseUrl = `${presignedUrl}${fields.key}`;
                     fetchUrls(baseUrl);
                 } else {
                     setModalMessage('File upload failed.');
@@ -212,6 +214,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
 
             xhr.onerror = (error) => {
                 console.log(error);
+                setUploading(false);
                 setModalMessage('Upload error.');
                 setShowModal(true);
             };
@@ -221,6 +224,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
             console.error('Error uploading file:', error);
             setModalMessage('Network error, please try again later.');
             setShowModal(true);
+            setUploading(false);
         }
     };
 
@@ -246,14 +250,22 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }));
         const baseImageUrl = urls.find(url => url.includes('-org.')); // Fallback to original if specific sizes not found
         return (
-            <picture className="position-relative mw-100 mh-100 overflow-hidden">
-                {sortedUrls.map((url, index) => url.media && (
-                    <source key={index} srcSet={url.srcSet} media={url.media} />
-                ))}
-                <img ref={imgRef} src={baseImageUrl} alt="Responsive media" className="img-fluid w-100 h-100 object-fit-cover object-position-center" crossOrigin="anonymous" />
-                <button onClick={handleDelete} className="btn position-absolute" style={{ top: 5, right: 5, color: buttonBgColor }}>
-                    <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
+            <picture className="position-relative d-flex align-items-center justify-content-center overflow-hidden w-100 h-100">
+                <div className={isHorizontal? 'position-relative' : ''}>
+                    {sortedUrls.map((url, index) => url.media && (
+                        <source key={index} srcSet={url.srcSet} media={url.media} />
+                    ))}
+                    <img
+                        ref={imgRef}
+                        src={baseImageUrl}
+                        alt="Responsive media"
+                        className="img-fluid flex-fill mw-100 mh-100 object-fit-cover"
+                        crossOrigin="anonymous"
+                    />
+                    <button onClick={handleDelete} className="btn position-absolute" style={{ top: 5, right: 5, color: buttonBgColor }}>
+                        <FontAwesomeIcon icon={faCircleXmark} />
+                    </button>
+                </div>
             </picture>
         );
     };
@@ -277,9 +289,12 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                         onChange={handleFileChange}
                         hidden
                         id="fileInput"
-                        disabled={uploading}
+                        disabled={uploading || processing}
                     />
-                    <label htmlFor="fileInput" className={`btn btn-light border ${uploading ? 'disabled' : ''}`}>
+                    <label 
+                        htmlFor="fileInput" 
+                        className={`btn btn-light border ${uploading || processing ? 'disabled' : ''}`}
+                        style={{ pointerEvents: uploading || processing ? 'none' : 'auto' }}>
                         <FontAwesomeIcon icon={faImage} size="5x" />
                     </label>
                     {progress > 0 && <ProgressBar now={progress} label={progress < 100 ? (

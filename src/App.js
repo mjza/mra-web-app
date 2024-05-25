@@ -102,7 +102,7 @@ export default App;
 // Dummy components for the route targets
 const News = () => {
   const [mediaUrl, setMediaUrl] = useState("https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240525065449681-30a4-4122-1a9b-org.jpg");
-
+  //useState("https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240525200734693-3b19-78a1-fad8-org.jpg");
   const handleDelete = () => {
     setMediaUrl(null);
     // Additional logic for handling delete, e.g., removing from server
