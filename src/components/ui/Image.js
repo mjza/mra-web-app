@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUser } from '../../contexts/UserContext';
 import { getPresignedUrlService, getAccessUrlsService } from '../../services/file';
 import Modal from 'react-bootstrap/Modal';
@@ -7,15 +7,11 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
 
-const getFileExtension = (filename) => {
-    return filename.split('.').pop().toLowerCase();
-};
-
 const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const { user } = useUser();
     const [progress, setProgress] = useState(0);
     const [counter, setCounter] = useState(1);
-    const [urls, setUrls] = useState(initialUrls);
+    const [urls, setUrls] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
     const [uploading, setUploading] = useState(false);
@@ -24,13 +20,61 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
     const [buttonBgColor, setButtonBgColor] = useState('black');
     const imgRef = useRef(null);
 
+    const getFileExtension = (filename) => {
+        return filename.split('.').pop().toLowerCase();
+    };
+
+    function parseS3Url(url) {
+        const match = url.match(/^https:\/\/([^.]+)\.s3\.([^.]+)\.amazonaws\.com\/(.+)$/);
+        if (!match) {
+            throw new Error(`Invalid S3 URL: ${url}`);
+        }
+        const [, bucketName, region, key] = match;
+
+        // Extract domain and userId from the key
+        const keyParts = key.split('/');
+        // Find the domain and userId parts based on their positions
+        const domainPart = keyParts[2]; // Domain is always the third part
+        const userPart = keyParts[3]; // UserId is always the fourth part
+
+        if (!domainPart || !userPart || !domainPart.startsWith('d') || !userPart.startsWith('u')) {
+            throw new Error(`Invalid S3 key structure: ${key}`);
+        }
+
+        const domain = parseInt(domainPart.substring(1), 10); // Remove the 'd' prefix and convert to integer
+        const userId = parseInt(userPart.substring(1), 10); // Remove the 'u' prefix and convert to integer
+
+        if (isNaN(userId)) {
+            throw new Error(`Invalid userId extracted from key: ${key}`);
+        }
+
+        return { bucketName, region, key, domain, userId };
+    }
+
+    const fetchUrls = useCallback(async (baseUrl) => {
+        setProcessing(true);
+        const token = user?.token;      
+        const { domain } = parseS3Url(baseUrl);              
+        const response = await getAccessUrlsService(token, domain, [baseUrl]);
+        if (response.success) {
+            setUrls(response.urls[baseUrl]);
+        } else {
+            setModalMessage(response.message);
+            setShowModal(true);
+        }
+        setProcessing(false);
+    }, [user]);
+
     useEffect(() => {
-        setUrls(initialUrls);
-    }, [initialUrls]);
+        if (typeof initialUrls === 'string') {
+            fetchUrls(initialUrls);
+        } else {
+            setUrls(initialUrls);
+        }
+    }, [initialUrls, fetchUrls]);
 
     useEffect(() => {
         let intervalId;
-
         if (processing) {
             intervalId = setInterval(() => {
                 setCounter(prevCounter => prevCounter + 1);
@@ -53,6 +97,12 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
             // Extract color once image is loaded
             img.addEventListener('load', handleLoad);
         }
+        // Cleanup function to remove the event listener
+        return () => {
+            if (img) {
+                img.removeEventListener('load', handleLoad);
+            }
+        };
     }, [urls]);
 
     const extractColor = (img) => {
@@ -152,16 +202,8 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
             xhr.onload = async () => {
                 if (xhr.status === 204) {
                     setProcessing(true);
-                    const baseUrl = `${presignedUrl}${fields.key}`;
-                    setModalMessage('File uploaded successfully!');
-                    setShowModal(false);
-                    const response = await getAccessUrlsService(token, domain, [baseUrl]);
-                    if (response.success) {
-                        setUrls(response.urls[baseUrl]);
-                    } else {
-                        setModalMessage(response.message);
-                    }
-                    setProcessing(false);
+                    const baseUrl = `${presignedUrl}${fields.key}`;                    
+                    fetchUrls(baseUrl);
                 } else {
                     setModalMessage('File upload failed.');
                     setShowModal(true);
@@ -208,7 +250,7 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                 {sortedUrls.map((url, index) => url.media && (
                     <source key={index} srcSet={url.srcSet} media={url.media} />
                 ))}
-                <img ref={imgRef} src={baseImageUrl} alt="Responsive media" className="img-fluid" crossOrigin="anonymous" />
+                <img ref={imgRef} src={baseImageUrl} alt="Responsive media" className="img-fluid w-100 h-100 object-fit-cover object-position-center" crossOrigin="anonymous" />
                 <button onClick={handleDelete} className="btn position-absolute" style={{ top: 5, right: 5, color: buttonBgColor }}>
                     <FontAwesomeIcon icon={faCircleXmark} />
                 </button>
