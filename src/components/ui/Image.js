@@ -311,6 +311,7 @@ const Image = ({
                     <input
                         type="file"
                         accept={acceptedFileTypes.map(type => `.${type}`).join(',')}
+                        capture="environment"
                         onChange={handleFileChange}
                         hidden
                         id="fileInput"
