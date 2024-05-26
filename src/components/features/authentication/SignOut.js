@@ -46,7 +46,7 @@ const SignOut = () => {
     }
 
     return (
-        <div className="container mt-5">
+        <div className="container m-0 p-0">
             {loading && <LoadingOverlay />}
             {showDialog &&
                 <ConfirmDialog
@@ -59,7 +59,7 @@ const SignOut = () => {
                     onCancel={null}
                 />
             }
-            <button className="btn btn-danger" onClick={handleLogout} disabled={loading}>
+            <button className="btn btn-danger w-100" onClick={handleLogout} disabled={loading}>
                 {loading ? (
                     <>
                         <span className="spinner-border spinner-border-sm" aria-hidden="true"></span>

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import ThemeContext from '../../../contexts/ThemeContext';
 import RCLogo from '../../common/RCLogo';
+import SideNavigation from './SideNavigation';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Container from 'react-bootstrap/Container';
@@ -19,6 +20,7 @@ import './scss/Navbar.scss';
 const HeaderNavbar = () => {
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const { theme } = useContext(ThemeContext);
 
   const handleSearchSubmit = (e) => {
@@ -97,13 +99,17 @@ const HeaderNavbar = () => {
                       </Nav.Link>
                     ))}
                   </Nav>
-                  <Nav.Item>
+                  <OverlayTrigger
+                    overlay={<Tooltip>Profile</Tooltip>}
+                    placement="bottom"
+                  >
                     <img
                       src="https://via.placeholder.com/40"
-                      className="d-inline-block align-top rounded-circle ms-2 ms-md-0"
+                      className="d-inline-block align-top rounded-circle ms-2 ms-md-0 avatar"
                       alt="User Avatar"
+                      onClick={() => setIsNavOpen(true)}
                     />
-                  </Nav.Item>
+                  </OverlayTrigger>
                 </div>
               </div>
             </Col>
@@ -111,6 +117,7 @@ const HeaderNavbar = () => {
           </Row>
         </Container>
       </Navbar>
+      <SideNavigation isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
     </>
   );
 };

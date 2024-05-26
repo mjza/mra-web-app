@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import './css/App.scss';
+import './scss/App.scss';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { UserProvider, useUser } from './contexts/UserContext';
 import PublicUserHeaderNavbar from './components/layout/public/HeaderNavbar';
@@ -10,7 +10,6 @@ import UserHeaderNavbar from './components/layout/users/HeaderNavbar';
 import UserFooterNavbar from './components/layout/users/FooterNavbar';
 import SignIn from './components/features/authentication/SignIn';
 import SignUp from './components/features/authentication/SignUp';
-import SignOut from './components/features/authentication/SignOut';
 import ForgetUsername from './components/features/authentication/ForgetUsername';
 import ForgetPassword from './components/features/authentication/ForgetPassword';
 import ResetPassword from './components/features/authentication/ResetPassword';
@@ -130,7 +129,7 @@ const News = () => {
     }
     console.log('Image double-clicked');
   };
-  
+
   return (
     <div className='mh-100 py-5 feature-row'>
       <h1>&nbsp;</h1>
@@ -144,7 +143,7 @@ const News = () => {
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
       />
-      <SignOut />
+      
     </div>
   );
 };
