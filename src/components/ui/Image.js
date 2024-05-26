@@ -14,7 +14,9 @@ const Image = ({
     countryISOCode,
     domain,
     initialUrls = [],
-    onDelete
+    onDelete,
+    onClick,
+    onDoubleClick
 }) => {
     const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp',];
     const { user } = useUser();
@@ -275,6 +277,8 @@ const Image = ({
                             objectFit: 'cover',
                             objectPosition: 'center',
                         }}
+                        onClick={onClick}
+                        onDoubleClick={onDoubleClick}
                     />
                     {handleDelete && (
                         <button
