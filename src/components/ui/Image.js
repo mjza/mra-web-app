@@ -5,9 +5,17 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faCamera, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 
-const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
+const Image = ({
+    size: { maxHeight = '100%', maxWidth = '100%', height = 'auto', width = 'auto' } = {},
+    borderType,
+    countryISOCode,
+    domain,
+    initialUrls = [],
+    onDelete
+}) => {
     const acceptedFileTypes = ['jpeg', 'jpg', 'png', 'gif', 'bmp',];
     const { user } = useUser();
     const [progress, setProgress] = useState(0);
@@ -145,9 +153,9 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         const selectedFile = event.target.files[0];
 
         // Check if the file extension is accepted
-        if (selectedFile && acceptedFileTypes.includes(`${getFileExtension(selectedFile.name)}`)) {            
+        if (selectedFile && acceptedFileTypes.includes(`${getFileExtension(selectedFile.name)}`)) {
             setModalMessage('');
-            await handleFileUpload(selectedFile);            
+            await handleFileUpload(selectedFile);
         } else {
             setModalMessage(`Please select a valid file type. Only these extensions {${acceptedFileTypes.join(',')}} are accepted.`);
             setShowModal(true);
@@ -228,13 +236,13 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }
     };
 
-    const handleDelete = () => {
+    const handleDelete = onDelete ? () => {
         setUrls([]);
+        setUploading(0);
         setProgress(0);
-        if (onDelete) {
-            onDelete();
-        }
-    };
+        onDelete();
+    } : undefined;
+
 
     const renderImage = (urls) => {
         const sizeMap = [
@@ -250,8 +258,8 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
         }));
         const baseImageUrl = urls.find(url => url.includes('-org.')); // Fallback to original if specific sizes not found
         return (
-            <picture className="position-relative d-flex align-items-center justify-content-center overflow-hidden w-100 h-100">
-                <div className={isHorizontal? 'position-relative' : ''}>
+            <div className={`position-relative d-flex align-items-center justify-content-center overflow-hidden w-100 h-100 ${borderType ? borderType : ''}`}>
+                <picture className={`${isHorizontal ? 'position-relative' : ''} ${borderType === 'rounded-circle' ? 'w-100 h-100' : ''}`}>
                     {sortedUrls.map((url, index) => url.media && (
                         <source key={index} srcSet={url.srcSet} media={url.media} />
                     ))}
@@ -261,17 +269,34 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                         alt="Responsive media"
                         className="img-fluid flex-fill mw-100 mh-100 object-fit-cover"
                         crossOrigin="anonymous"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: 'center',
+                        }}
                     />
-                    <button onClick={handleDelete} className="btn position-absolute" style={{ top: 5, right: 5, color: buttonBgColor }}>
-                        <FontAwesomeIcon icon={faCircleXmark} />
-                    </button>
-                </div>
-            </picture>
+                    {handleDelete && (
+                        <button
+                            onClick={handleDelete}
+                            className="btn position-absolute"
+                            style={{
+                                top: borderType === 'rounded-circle' ? '20%' : '5px',
+                                right: borderType === 'rounded-circle' ? '20%' : '5px',
+                                transform: borderType === 'rounded-circle' ? 'translate(50%, -50%)' : 'none',
+                                color: buttonBgColor
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faCircleXmark} />
+                        </button>
+                    )}
+                </picture>
+            </div>
         );
     };
 
     return (
-        <div className="position-relative border p-2" style={{ maxWidth: '300px', height: '300px' }}>
+        <div className={`position-relative border ${borderType ? borderType : ''}`} style={{ maxHeight, maxWidth, height, width, }}>
             {processing && (
                 <div className="overlay position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center" style={{ backgroundColor: 'rgba(255,255,255,0.8)', }}>
                     <FontAwesomeIcon icon={faSpinner} spin size="3x" />
@@ -291,11 +316,11 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
                         id="fileInput"
                         disabled={uploading || processing}
                     />
-                    <label 
-                        htmlFor="fileInput" 
-                        className={`btn btn-light border ${uploading || processing ? 'disabled' : ''}`}
+                    <label
+                        htmlFor="fileInput"
+                        className={`btn btn-light border p-0 mh-100 mw-100 ${uploading || processing ? 'disabled' : ''}`}
                         style={{ pointerEvents: uploading || processing ? 'none' : 'auto' }}>
-                        <FontAwesomeIcon icon={faImage} size="5x" />
+                        <FontAwesomeIcon icon={faCamera} size="2x" />
                     </label>
                     {progress > 0 && <ProgressBar now={progress} label={progress < 100 ? (
                         <span>
@@ -319,6 +344,16 @@ const Image = ({ countryISOCode, domain, initialUrls, onDelete }) => {
             </Modal>
         </div>
     );
+};
+
+Image.propTypes = {
+    size: PropTypes.shape({
+        maxHeight: PropTypes.oneOfType([PropTypes.string]),
+        maxWidth: PropTypes.oneOfType([PropTypes.string]),
+        height: PropTypes.oneOfType([PropTypes.string]),
+        width: PropTypes.oneOfType([PropTypes.string]),
+    }),
+    borderType: PropTypes.oneOf([undefined, 'rounded', 'rounded-circle']),
 };
 
 export default Image;
