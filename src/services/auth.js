@@ -1,3 +1,5 @@
+import {handlingErrors} from './utils'; 
+
 const appURL = process.env.REACT_APP_BASE_URL;
 const baseURL = process.env.REACT_APP_AUTH_BASE_URL;
 
@@ -235,16 +237,6 @@ const resetPassword = async (username, token, data, newPassword) => {
         console.error('Error resetting password:', error);
         return { success: false, message: 'Network error, please try again later.' };
     }
-}
-
-const handlingErrors = (data, message) => {
-    if (data.errors && data.errors.length) {
-        // Combine all error messages into one string
-        message = data.errors.map((err, index) => `${index + 1}. ${err.msg}`).join('\n');
-    }
-    if(data.message)
-        return data.message;
-    return message;
 }
 
 export { resetPassword };

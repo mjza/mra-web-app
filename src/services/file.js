@@ -1,14 +1,6 @@
-const fileBaseURL = process.env.REACT_APP_FILE_BASE_URL;
+import {handlingErrors} from './utils'; 
 
-const handlingErrors = (data, message) => {
-    if (data.errors && data.errors.length) {
-        // Combine all error messages into one string
-        message = data.errors.map((err, index) => `${index + 1}. ${err.msg}`).join('\n');
-    }
-    if (data.message)
-        return data.message;
-    return message;
-}
+const fileBaseURL = process.env.REACT_APP_FILE_BASE_URL;
 
 /**
  * `getPresignedUrlService` requests a presigned URL from the server for performing file operations.
