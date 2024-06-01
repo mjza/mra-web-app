@@ -5,20 +5,21 @@ const coreBaseURL = process.env.REACT_APP_CORE_BASE_URL;
 /**
  * Retrieves user details based on provided conditions and pagination.
  *
+ * @param {string} token - The JWT token used to authenticate the logout request.
  * @param {Object} params - The parameters for the request.
  * @param {number} [params.userId] - Optional user ID to retrieve details for a specific user.
  * @param {number} [params.page=1] - Page number of the user details to retrieve.
  * @param {number} [params.limit=30] - Maximum number of user details to return in one response.
  * @returns {Promise<{success: boolean, message: string, data?: Object[], hasMore?: boolean}>} A promise that resolves to an object indicating the outcome of the request. Contains the user details data if successful.
  */
-const fetchUserDetails = async ({ userId, page = 1, limit = 30 } = {}) => {
+const fetchUserDetails = async (token, { userId, page = 1, limit = 30 } = {}) => {
     try {
         const queryParams = new URLSearchParams({ userId, page, limit });
         const response = await fetch(`${coreBaseURL}/v1/user_details?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}` // Adjust based on your auth method
+                'Authorization': `Bearer ${token}` // Adjust based on your auth method
             }
         });
 
@@ -41,6 +42,7 @@ export { fetchUserDetails };
 /**
  * Creates user details for the user whose ID matches the one in the JWT.
  *
+ * @param {string} token - The JWT token used to authenticate the logout request.
  * @param {Object} userDetails - The user details to be created.
  * @param {number} userDetails.userId - The ID of the user.
  * @param {string} [userDetails.firstName] - The first name of the user.
@@ -49,17 +51,16 @@ export { fetchUserDetails };
  * @param {number} [userDetails.genderId] - The gender ID of the user.
  * @param {string} [userDetails.dateOfBirth] - The date of birth of the user.
  * @param {string} [userDetails.profilePictureUrl] - The profile picture URL of the user.
- * @param {string} [userDetails.profilePictureThumbnailUrl] - The profile picture thumbnail URL of the user.
- * @param {string} [userDetails.publicProfilePictureThumbnailUrl] - The public profile picture thumbnail URL of the user.
+ * @param {boolean} [userDetails.isPrivatePicture] - True, if the profile picture must not be shown to public.
  * @returns {Promise<{success: boolean, message: string, data?: Object}>} A promise that resolves to an object indicating the outcome of the request. Contains the created user details if successful.
  */
-const createUserDetails = async (userDetails) => {
+const createUserDetails = async (token, userDetails) => {
     try {
         const response = await fetch(`${coreBaseURL}/v1/user_details`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}` // Adjust based on your auth method
+                'Authorization': `Bearer ${token}` // Adjust based on your auth method
             },
             body: JSON.stringify(userDetails)
         });
@@ -83,6 +84,7 @@ export { createUserDetails };
 /**
  * Updates user details for the user whose ID matches the one in the JWT.
  *
+ * @param {string} token - The JWT token used to authenticate the logout request.
  * @param {number} userId - The ID of the user to update.
  * @param {Object} userDetails - The user details to be updated.
  * @param {string} [userDetails.firstName] - The first name of the user.
@@ -91,17 +93,16 @@ export { createUserDetails };
  * @param {number} [userDetails.genderId] - The gender ID of the user.
  * @param {string} [userDetails.dateOfBirth] - The date of birth of the user.
  * @param {string} [userDetails.profilePictureUrl] - The profile picture URL of the user.
- * @param {string} [userDetails.profilePictureThumbnailUrl] - The profile picture thumbnail URL of the user.
- * @param {string} [userDetails.publicProfilePictureThumbnailUrl] - The public profile picture thumbnail URL of the user.
+ * @param {boolean} [userDetails.isPrivatePicture] - True, if the profile picture must not be shown to public.
  * @returns {Promise<{success: boolean, message: string, data?: Object}>} A promise that resolves to an object indicating the outcome of the request. Contains the updated user details if successful.
  */
-const updateUserDetails = async (userId, userDetails) => {
+const updateUserDetails = async (token, userId, userDetails) => {
     try {
         const response = await fetch(`${coreBaseURL}/v1/user_details/${userId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}` // Adjust based on your auth method
+                'Authorization': `Bearer ${token}` // Adjust based on your auth method
             },
             body: JSON.stringify(userDetails)
         });

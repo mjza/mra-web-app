@@ -13,6 +13,9 @@ import SignUp from './components/features/authentication/SignUp';
 import ForgetUsername from './components/features/authentication/ForgetUsername';
 import ForgetPassword from './components/features/authentication/ForgetPassword';
 import ResetPassword from './components/features/authentication/ResetPassword';
+
+import Profile from './components/features/user/Profile';
+
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
@@ -64,6 +67,7 @@ const AppContent = () => {
       <main>
         <Routes>
           <Route path="/" element={<Navigate replace to="/feed" />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/feed" element={<News />} />
           <Route path="/news" element={<UnderConstruction />} />
           <Route path="/tickets" element={<UnderConstruction />} />
