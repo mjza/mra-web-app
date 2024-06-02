@@ -55,10 +55,10 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        handleReturnBack();
+        handleReturnBack(user);
     }, [user]);
 
-    const handleReturnBack = async () => {
+    const handleReturnBack = async (user) => {
         setIsEditing(false);
         if (user) {
             const { userId, token } = user;
@@ -120,7 +120,7 @@ const Profile = () => {
                                         <button className="btn btn-outline-primary"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleReturnBack();
+                                                handleReturnBack(user);
                                             }}
                                         >
                                             <FontAwesomeIcon icon={faUndo} />
