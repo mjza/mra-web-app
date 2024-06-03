@@ -8,65 +8,97 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faUndo } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faFloppyDisk, faUndo } from '@fortawesome/free-solid-svg-icons';
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { useUser } from '../../../contexts/UserContext';
-import { fetchUserDetails, createUserDetails, updateUserDetails } from '../../../services/core';
+import { fetchGenderTypes, fetchUserDetails, createUserDetails, updateUserDetails } from '../../../services/core';
 
 const Profile = () => {
     const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const { user } = useUser();
     const [userDetails, setUserDetails] = useState({
-        userId: '',
-        firstName: '',
-        middleName: '',
-        lastName: '',
-        genderId: '',
-        dateOfBirth: '',
-        profilePictureUrl: '',
+        userId: null,
+        firstName: null,
+        middleName: null,
+        lastName: null,
+        displayName: null,
+        email: null,
+        genderId: null,
+        dateOfBirth: null,
+        profilePictureUrl: null,
         isPrivatePicture: false,
     });
     const [isEditing, setIsEditing] = useState(false);
-    const [message, setMessage] = useState('');
+    const [genderTypes, setGenderTypes] = useState([]);
 
     const filterUserDetails = (data) => {
+        function isValidDate(dateString) {
+            const date = new Date(dateString);
+            return date instanceof Date && !isNaN(date.getTime());
+        }
         const {
             userId,
             firstName,
             middleName,
             lastName,
+            displayName,
+            email,
             genderId,
             dateOfBirth,
             profilePictureUrl,
             isPrivatePicture,
         } = data;
-    
+
         return {
             userId,
             firstName,
             middleName,
             lastName,
-            genderId,
-            dateOfBirth,
+            displayName,
+            email,
+            genderId: (genderId !== '' ? genderId : null),
+            dateOfBirth: (isValidDate(dateOfBirth) ? dateOfBirth : null),
             profilePictureUrl,
             isPrivatePicture,
         };
     };
 
     useEffect(() => {
-        handleReturnBack(user);
+        const fetchAndSetGenderTypes = async () => {
+            try {
+                const response = await fetchGenderTypes();
+                if (response.success) {
+                    const sortedGenderTypes = response.data.sort((a, b) => a.sortOrder - b.sortOrder);
+                    setGenderTypes(sortedGenderTypes);
+                } else {
+                    setError(response.message);
+                }
+            } catch (error) {
+                console.error('Error fetching gender types:', error);
+                setError('Failed to fetch gender types.');
+            }
+        };
+
+        const loadAllData = async () => {
+            setLoading(true);
+            await fetchAndSetGenderTypes();
+            await loadCurrentUserDetails(user);
+            setLoading(false);
+        };
+
+        loadAllData();
     }, [user]);
 
-    const handleReturnBack = async (user) => {
+
+    const loadCurrentUserDetails = async (user) => {
         setIsEditing(false);
         if (user) {
             const { userId, token } = user;
             fetchUserDetails(token, { userId }).then(response => {
                 if (response.success) {
                     setUserDetails(response.data[0]);
-                } else {
-                    setMessage(response.message);
                 }
             });
         }
@@ -82,20 +114,26 @@ const Profile = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (userDetails.userId) {
-            updateUserDetails(user.token, userDetails.userId, filterUserDetails(userDetails)).then(response => {
-                setMessage(response.message);
+        setError('');
+        const isEditing = !!userDetails.creator;
+        const data = filterUserDetails(userDetails);
+        if (isEditing) {
+            updateUserDetails(user.token, data.userId, data).then(response => {
                 if (response.success) {
+                    setMessage(response.message);
                     setIsEditing(false);
+                } else {
+                    setError(response.message);
                 }
             });
         } else {
-            userDetails.userId = user.userId;
-            createUserDetails(user.token, filterUserDetails(userDetails)).then(response => {
-                setMessage(response.message);
+            createUserDetails(user.token, data).then(response => {
                 if (response.success) {
+                    setMessage(response.message);
                     setUserDetails(response.data);
                     setIsEditing(false);
+                } else {
+                    setError(response.message);
                 }
             });
         }
@@ -107,34 +145,28 @@ const Profile = () => {
 
     return (
         <>
-            <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center py-5 feature-box">
+            <div className='min-vh-100 d-flex flex-column justify-content-center align-items-center py-5'>
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
                     <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
                     <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
-                        <Container className='unfeature-box p-4 rounded-4'>
+                        <Container className='unfeature-box p-4 rounded-4 border border-dark'>
                             <Form onSubmit={handleSubmit} className="w-100">
-                                <div className='d-flex flex-row justify-content-between align-items-center'>
-                                    <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Update Your Personal Details</h1>
-                                    {isEditing ? (
-                                        <button className="btn btn-outline-primary"
+                                <div className='d-flex flex-row justify-content-between align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
+                                    <h1 className="display-6 text-primary">Update Your Personal Details</h1>
+                                    {!isEditing &&
+                                        <Button
+                                            variant="basic"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleReturnBack(user);
-                                            }}
-                                        >
-                                            <FontAwesomeIcon icon={faUndo} />
-                                        </button>
-                                    ) : (
-                                        <button className="btn btn-outline-primary"
-                                            onClick={(e) => {
-                                                e.preventDefault();
+                                                setError('');
+                                                setMessage('');
                                                 setIsEditing(true);
                                             }}
                                         >
-                                            <FontAwesomeIcon icon={faPencilAlt} />
-                                        </button>
-                                    )}
+                                            <FontAwesomeIcon icon={faPencilAlt} className='text-primary' />
+                                        </Button>
+                                    }
                                 </div>
                                 {error &&
                                     <Alert variant="danger">
@@ -147,12 +179,23 @@ const Profile = () => {
                                         ))}
                                     </Alert>
                                 }
+                                {message &&
+                                    <Alert variant="success">
+                                        <b>Success:</b><br />
+                                        {message.split('\n').map((line, index) => (
+                                            <React.Fragment key={index}>
+                                                {line}
+                                                <br />
+                                            </React.Fragment>
+                                        ))}
+                                    </Alert>
+                                }
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">First name:
                                         <Form.Control
                                             type="text"
                                             name="firstName"
-                                            value={userDetails.firstName}
+                                            value={userDetails.firstName ?? ''}
                                             onChange={handleChange}
                                             disabled={!isEditing || loading}
                                         />
@@ -166,7 +209,7 @@ const Profile = () => {
                                         <Form.Control
                                             type="text"
                                             name="middleName"
-                                            value={userDetails.middleName}
+                                            value={userDetails.middleName ?? ''}
                                             onChange={handleChange}
                                             disabled={!isEditing || loading}
                                         />
@@ -180,7 +223,7 @@ const Profile = () => {
                                         <Form.Control
                                             type="text"
                                             name="lastName"
-                                            value={userDetails.lastName}
+                                            value={userDetails.lastName ?? ''}
                                             onChange={handleChange}
                                             disabled={!isEditing || loading}
                                         />
@@ -194,36 +237,86 @@ const Profile = () => {
                                         <Form.Control
                                             type="text"
                                             name="displayName"
-                                            value={userDetails.displayName}
+                                            value={userDetails.displayName ?? ''}
                                             onChange={handleChange}
                                             disabled={!isEditing || loading}
                                         />
                                         <Form.Text className="text-muted">
-                                            It will be shown to public.
+                                            It is shown to public.
                                         </Form.Text>
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Email:
                                         <Form.Control
-                                            type="text"
+                                            type="email"
                                             name="email"
-                                            value={userDetails.email}
+                                            value={userDetails.email ?? ''}
+                                            onChange={handleChange}
                                             disabled={true}
                                         />
                                         <Form.Text className="text-muted">
-                                            Cannot be change.
+                                            It can't be changed.
                                         </Form.Text>
                                     </Form.Label>
                                 </Form.Group>
-                                {isEditing && <Button variant="primary" type="submit" disabled={!isEditing || loading} className="text-nowrap overflow-hidden mt-2 mb-4 mb-xxxl-5">
-                                    {loading ? (
-                                        <>
-                                            <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-                                            &nbsp;Saving...
-                                        </>
-                                    ) : "Save"}
-                                </Button>}
+                                <Form.Group className="mb-2 mb-xxxl-4">
+                                    <Form.Label className="w-100">Gender:
+                                        <Form.Control
+                                            as="select"
+                                            name="genderId"
+                                            value={userDetails.genderId ?? ''}
+                                            onChange={handleChange}
+                                            disabled={!isEditing || loading}
+                                        >
+                                            {typeof userDetails.genderId !== 'number' && <option value="">Select Gender</option>}
+                                            {genderTypes.map(gender => (
+                                                <option key={gender.genderId} value={gender.genderId}>
+                                                    {gender.genderName}
+                                                </option>
+                                            ))}
+                                        </Form.Control>
+                                    </Form.Label>
+                                </Form.Group>
+                                <Form.Group className="mb-2 mb-xxxl-4">
+                                    <Form.Label className="w-100">Date of Birth:
+                                        <Form.Control
+                                            type="date"
+                                            name="dateOfBirth"
+                                            value={userDetails.dateOfBirth ?? ''}
+                                            onChange={handleChange}
+                                            disabled={!isEditing || loading}
+                                        />
+                                    </Form.Label>
+                                </Form.Group>
+                                {isEditing && (
+                                    <div className='d-flex flex-row justify-content-between align-items-center mt-2 mb-4 mb-xxxl-5'>
+                                        <Button variant="primary" type="submit" disabled={!isEditing || loading} className="text-nowrap overflow-hidden">
+                                            {loading ?
+                                                (
+                                                    <>
+                                                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                                                        &nbsp;Saving...
+                                                    </>
+                                                )
+                                                :
+                                                (<>
+                                                    <FontAwesomeIcon icon={faFloppyDisk} />&nbsp;Save
+                                                </>
+                                                )
+                                            }
+                                        </Button>
+                                        <Button
+                                            variant="danger"
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                loadCurrentUserDetails(user);
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faUndo} /> Cancel
+                                        </Button>
+                                    </div>
+                                )}
                             </Form>
                         </Container>
                     </Col>

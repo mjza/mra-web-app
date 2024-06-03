@@ -3,6 +3,41 @@ import { handlingErrors } from './utils';
 const coreBaseURL = process.env.REACT_APP_CORE_BASE_URL;
 
 /**
+ * Retrieves gender types with optional pagination.
+ *
+ * @param {string} token - The JWT token used to authenticate the request.
+ * @param {Object} params - The parameters for the request.
+ * @param {number} [params.page=1] - Page number of the gender types to retrieve.
+ * @param {number} [params.limit=30] - Maximum number of gender types to return in one response.
+ * @returns {Promise<{success: boolean, message: string, data?: Object[], hasMore?: boolean}>} A promise that resolves to an object indicating the outcome of the request. Contains the gender types data if successful.
+ */
+const fetchGenderTypes = async ({ page = 1, limit = 30 } = {}) => {
+    try {
+        const queryParams = new URLSearchParams({ page, limit });
+        const response = await fetch(`${coreBaseURL}/v1/gender_types?${queryParams.toString()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.status === 200) {
+            return { success: true, message: 'Gender types retrieved successfully', data: result.data, hasMore: result.hasMore };
+        } else {
+            const message = handlingErrors(result, 'Failed to retrieve gender types, please try again.');
+            return { success: false, message };
+        }
+    } catch (error) {
+        console.error('Error fetching gender types:', error);
+        return { success: false, message: 'Network error, please try again later.' };
+    }
+}
+
+export { fetchGenderTypes };
+
+/**
  * Retrieves user details based on provided conditions and pagination.
  *
  * @param {string} token - The JWT token used to authenticate the logout request.
