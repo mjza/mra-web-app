@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faFloppyDisk, faUndo } from '@fortawesome/free-solid-svg-icons';
 import LoadingOverlay from '../../ui/LoadingOverlay';
@@ -112,6 +113,14 @@ const Profile = () => {
         }));
     };
 
+    const clearItem = (e) => {
+        const { name } = e.target;
+        setUserDetails(prevDetails => ({
+            ...prevDetails,
+            [name]: null,
+        }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setError('');
@@ -148,8 +157,8 @@ const Profile = () => {
             <div className='min-vh-100 d-flex flex-column justify-content-center align-items-center py-5'>
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
-                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
-                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
+                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={3}></Col> {/* Left gap */}
+                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={6} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
                         <Container className='unfeature-box p-4 rounded-4 border border-dark'>
                             <Form onSubmit={handleSubmit} className="w-100">
                                 <div className='d-flex flex-row justify-content-between align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
@@ -251,6 +260,7 @@ const Profile = () => {
                                         <Form.Control
                                             type="email"
                                             name="email"
+                                            autoComplete='off'
                                             value={userDetails.email ?? ''}
                                             onChange={handleChange}
                                             disabled={true}
@@ -262,31 +272,58 @@ const Profile = () => {
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Gender:
-                                        <Form.Control
-                                            as="select"
-                                            name="genderId"
-                                            value={userDetails.genderId ?? ''}
-                                            onChange={handleChange}
-                                            disabled={!isEditing || loading}
-                                        >
-                                            {typeof userDetails.genderId !== 'number' && <option value="">Select Gender</option>}
-                                            {genderTypes.map(gender => (
-                                                <option key={gender.genderId} value={gender.genderId}>
-                                                    {gender.genderName}
-                                                </option>
-                                            ))}
-                                        </Form.Control>
+                                        <InputGroup>
+                                            <Form.Control
+                                                as="select"
+                                                name="genderId"
+                                                value={userDetails.genderId ?? ''}
+                                                onChange={handleChange}
+                                                disabled={!isEditing || loading}
+                                            >
+                                                {userDetails.genderId ?? <option value="">Select Gender</option>}
+                                                {genderTypes.map(gender => (
+                                                    <option key={gender.genderId} value={gender.genderId}>
+                                                        {gender.genderName}
+                                                    </option>
+                                                ))}
+                                            </Form.Control>
+                                            {isEditing && (
+                                                <Button
+                                                    variant="outline-secondary"
+                                                    name="genderId"
+                                                    onClick={clearItem}
+                                                    disabled={loading}
+                                                    className="input-group-text"
+                                                >
+                                                    &times;
+                                                </Button>
+                                            )}
+                                        </InputGroup>
                                     </Form.Label>
                                 </Form.Group>
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Date of Birth:
-                                        <Form.Control
-                                            type="date"
-                                            name="dateOfBirth"
-                                            value={userDetails.dateOfBirth ?? ''}
-                                            onChange={handleChange}
-                                            disabled={!isEditing || loading}
-                                        />
+                                        <InputGroup>
+
+                                            <Form.Control
+                                                type="date"
+                                                name="dateOfBirth"
+                                                value={userDetails.dateOfBirth ?? ''}
+                                                onChange={handleChange}
+                                                disabled={!isEditing || loading}
+                                            />
+                                            {isEditing && (
+                                                <Button
+                                                    variant="outline-secondary"
+                                                    name="dateOfBirth"
+                                                    onClick={clearItem}
+                                                    disabled={loading}
+                                                    className="input-group-text"
+                                                >
+                                                    &times;
+                                                </Button>
+                                            )}
+                                        </InputGroup>
                                     </Form.Label>
                                 </Form.Group>
                                 {isEditing && (
@@ -320,7 +357,7 @@ const Profile = () => {
                             </Form>
                         </Container>
                     </Col>
-                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Right gap */}
+                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={3}></Col> {/* Right gap */}
                 </Row>
             </div>
         </>

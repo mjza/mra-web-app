@@ -16,7 +16,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faGifts, faCommentDots, faTicket, faHome, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
 import './scss/Navbar.scss';
-import Image from '../../ui/Image';
 import { useUser } from '../../../contexts/UserContext';
 
 const HeaderNavbar = () => {
@@ -101,15 +100,15 @@ const HeaderNavbar = () => {
                         <div className="d-none d-md-none d-lg-block text-truncate" style={{ fontSize: '12px' }}>{link.text}</div>
                       </Nav.Link>
                     ))}
-                  </Nav>
-                  <Image
-                    size={{ height: '40px', width: '40px' }}
-                    borderType="rounded-circle"
-                    countryISOCode="ca"
-                    domain="1"
-                    initialUrls={ user.profilePictureUrl ? user.profilePictureUrl : '/images/avatar.jpg'}
-                    onClick={() => setIsNavOpen(true)}
-                  />
+                  </Nav>                  
+                    <img
+                      src={ user.profilePictureUrl ? user.profilePictureUrl : '/images/avatar.jpg'}
+                      className="d-inline-block align-top rounded-circle ms-2 ms-md-0 avatar"
+                      style={{width: '40px', height: '40px'}}
+                      alt="User Avatar"
+                      onClick={() => setIsNavOpen(true)}
+                    />
+
                 </div>
               </div>
             </Col>
