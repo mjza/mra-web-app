@@ -64,14 +64,15 @@ const Image = ({
 
     const fetchUrls = useCallback(async (baseUrl) => {
         setProcessing(true);
-        const token = user?.token;
-        const { domain } = parseS3Url(baseUrl);
-        const response = await getAccessUrlsService(token, domain, [baseUrl]);
-        if (response.success) {
-            setUrls(response.urls[baseUrl]);
-        } else {
-            setModalMessage(response.message);
-            setShowModal(true);
+        try {
+            const token = user?.token;
+            const { domain } = parseS3Url(baseUrl);
+            const response = await getAccessUrlsService(token, domain, [baseUrl]);
+            if (response.success) {
+                setUrls(response.urls[baseUrl]);
+            }
+        } catch {
+            setUrls([baseUrl]);
         }
         setProcessing(false);
     }, [user]);
@@ -258,7 +259,7 @@ const Image = ({
             srcSet: urls.find(url => url.includes(size.key)),
             media: size.media
         }));
-        const baseImageUrl = urls.find(url => url.includes('-org.')); // Fallback to original if specific sizes not found
+        const baseImageUrl = urls.length > 1 ? urls.find(url => url.includes('-org.')) : urls.length > 0 ? urls[0] : null; // Fallback to original if specific sizes not found
         return (
             <div className={`position-relative d-flex align-items-center justify-content-center overflow-hidden w-100 h-100 ${borderType ? borderType : ''}`}>
                 <picture className={`${isHorizontal ? 'position-relative' : ''} ${borderType === 'rounded-circle' ? 'w-100 h-100' : ''}`}>
@@ -269,8 +270,9 @@ const Image = ({
                         ref={imgRef}
                         src={baseImageUrl}
                         alt="Responsive media"
-                        className="img-fluid flex-fill mw-100 mh-100 object-fit-cover"
+                        className='img-fluid flex-fill mw-100 mh-100 object-fit-cover'
                         crossOrigin="anonymous"
+                        role={onClick || onDoubleClick ? 'button' : ''}
                         style={{
                             width: '100%',
                             height: '100%',

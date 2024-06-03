@@ -16,8 +16,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faGifts, faCommentDots, faTicket, faHome, faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { useLocation } from 'react-router-dom';
 import './scss/Navbar.scss';
+import Image from '../../ui/Image';
+import { useUser } from '../../../contexts/UserContext';
 
 const HeaderNavbar = () => {
+  const { user } = useUser();
   const [searchValue, setSearchValue] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -99,17 +102,14 @@ const HeaderNavbar = () => {
                       </Nav.Link>
                     ))}
                   </Nav>
-                  <OverlayTrigger
-                    overlay={<Tooltip>Profile</Tooltip>}
-                    placement="bottom"
-                  >
-                    <img
-                      src="https://via.placeholder.com/40"
-                      className="d-inline-block align-top rounded-circle ms-2 ms-md-0 avatar"
-                      alt="User Avatar"
-                      onClick={() => setIsNavOpen(true)}
-                    />
-                  </OverlayTrigger>
+                  <Image
+                    size={{ height: '40px', width: '40px' }}
+                    borderType="rounded-circle"
+                    countryISOCode="ca"
+                    domain="1"
+                    initialUrls={ user.profilePictureUrl ? user.profilePictureUrl : '/images/avatar.jpg'}
+                    onClick={() => setIsNavOpen(true)}
+                  />
                 </div>
               </div>
             </Col>
