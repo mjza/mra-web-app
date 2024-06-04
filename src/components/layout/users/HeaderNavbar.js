@@ -52,7 +52,7 @@ const HeaderNavbar = () => {
             <Col xs={0} sm={1} md={1} lg={2} xl={2} xxl={3}></Col>
             <Col xs={12} sm={10} md={10} lg={8} xl={8} xxl={6} className='p-0 m-0'>
               <div className="d-flex align-items-sm-center align-items-md-end justify-content-between">
-                <div className="d-flex align-items-center flex-grow-1">
+                <div className="d-flex align-items-center flex-grow-1 my-auto">
                   <Navbar.Brand href="/" className="me-2">
                     <RCLogo color={iconColor} size="50" />
                   </Navbar.Brand>
@@ -100,14 +100,16 @@ const HeaderNavbar = () => {
                         <div className="d-none d-md-none d-lg-block text-truncate" style={{ fontSize: '12px' }}>{link.text}</div>
                       </Nav.Link>
                     ))}
-                  </Nav>                  
-                    <img
-                      src={ user.profilePictureUrl ? user.profilePictureUrl : '/images/avatar.jpg'}
-                      className="d-inline-block align-top rounded-circle ms-2 ms-md-0 avatar"
-                      style={{width: '40px', height: '40px'}}
-                      alt="User Avatar"
-                      onClick={() => setIsNavOpen(true)}
-                    />
+                  </Nav>
+                  <img
+                    src={user.profilePictureUrl ? user.profilePictureUrl : '/images/avatar.jpg'}
+                    role="button"
+                    className="d-inline-block align-top rounded-circle ms-2 ms-md-0 avatar"
+                    style={{ width: '40px', height: '40px' }}
+                    alt="User Avatar"
+                    onClick={() => setIsNavOpen(true)}
+                  />
+
 
                 </div>
               </div>

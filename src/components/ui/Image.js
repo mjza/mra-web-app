@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 
-const Image = ({
+const Img = ({
     size: { maxHeight = '100%', maxWidth = '100%', height = 'auto', width = 'auto' } = {},
     borderType,
     countryISOCode,
@@ -347,4 +347,4 @@ Image.propTypes = {
     borderType: PropTypes.oneOf([undefined, 'rounded', 'rounded-circle']),
 };
 
-export default Image;
+export default Img;

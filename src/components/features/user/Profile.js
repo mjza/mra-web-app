@@ -13,7 +13,7 @@ import { faPencilAlt, faFloppyDisk, faUndo } from '@fortawesome/free-solid-svg-i
 import { parseS3Url, getAccessUrlsService, getLargestImageUrl } from '../../../services/file';
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { useUser } from '../../../contexts/UserContext';
-import Image from '../../ui/Image';
+import Img from '../../ui/Image';
 import { fetchGenderTypes, fetchUserDetails, createUserDetails, updateUserDetails } from '../../../services/core';
 
 const Profile = () => {
@@ -235,7 +235,7 @@ const Profile = () => {
 
                                 <div className='d-flex flex-row justify-content-around align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
                                     {userDetails.profilePictureUrl || isEditing ?
-                                        (<Image
+                                        (<Img
                                             size={{ height: '300px', width: '300px' }}
                                             borderType="rounded-circle"
                                             countryISOCode="ur"
@@ -246,7 +246,7 @@ const Profile = () => {
                                             onDelete={isEditing && !loading ? handleDeleteImage : null}
                                         />)
                                         :
-                                        (<Image
+                                        (<Img
                                             size={{ height: '300px', width: '300px' }}
                                             borderType="rounded-circle"
                                             countryISOCode="ur"
@@ -360,7 +360,6 @@ const Profile = () => {
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">Date of Birth:
                                         <InputGroup>
-
                                             <Form.Control
                                                 type="date"
                                                 name="dateOfBirth"

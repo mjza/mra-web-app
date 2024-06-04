@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './scss/App.scss';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -15,11 +15,11 @@ import ForgetPassword from './components/features/authentication/ForgetPassword'
 import ResetPassword from './components/features/authentication/ResetPassword';
 
 import Profile from './components/features/user/Profile';
-
+import News from './components/features/public/News';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
-import Image from './components/ui/Image';
+
 
 const infoRoutes = () => [
   <Route key="about" path="/about" element={<UnderConstruction />} />,
@@ -102,55 +102,8 @@ const App = () => {
 
 export default App;
 
-// Dummy components for the route targets
-const News = () => {
-  const [mediaUrl, setMediaUrl] = //useState("https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240525065449681-30a4-4122-1a9b-org.jpg");
-    useState("https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240525200734693-3b19-78a1-fad8-org.jpg");
-  const handleDelete = () => {
-    setMediaUrl(null);
-    // Additional logic for handling delete, e.g., removing from server
-    console.log('Media deleted');
-  };
-  
-  let clickTimeout = null;
 
-  const handleClick = () => {
-    if (clickTimeout) {
-      clearTimeout(clickTimeout);
-      clickTimeout = null;
-    } else {
-      clickTimeout = setTimeout(() => {
-        console.log('Image clicked');
-        clickTimeout = null;
-      }, 250);
-    }
-  };
 
-  const handleDoubleClick = () => {
-    if (clickTimeout) {
-      clearTimeout(clickTimeout);
-      clickTimeout = null;
-    }
-    console.log('Image double-clicked');
-  };
-
-  return (
-    <div className='mh-100 py-5 feature-row'>
-      <h1>&nbsp;</h1>
-      <Image
-        size={{ height: '300px', width: '300px' }}
-        borderType="rounded-circle"
-        countryISOCode="ca"
-        domain="1"
-        initialUrls={mediaUrl}  // Initial media URL, if any
-        onDelete={handleDelete}  // Callback function for handling delete
-        onClick={handleClick}
-        onDoubleClick={handleDoubleClick}
-      />
-      
-    </div>
-  );
-};
 
 
 
