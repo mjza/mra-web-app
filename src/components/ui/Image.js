@@ -15,6 +15,7 @@ const Image = ({
     domain,
     initialUrls = [],
     onUpload,
+    onUploading,
     onDelete,
     onClick,
     onDoubleClick
@@ -34,9 +35,7 @@ const Image = ({
 
     const getFileExtension = (filename) => {
         return filename.split('.').pop().toLowerCase();
-    };
-
-    
+    };    
 
     const fetchUrls = useCallback(async (baseUrl) => {
         setProcessing(true);
@@ -51,7 +50,15 @@ const Image = ({
             setUrls([baseUrl]);
         }
         setProcessing(false);
+        setProgress(0);
+        setCounter(1);
     }, [user]);
+
+    useEffect(() => {
+        if(typeof onUploading === 'function'){
+            onUploading(uploading || processing);
+        }
+    }, [uploading, processing, onUploading]);
 
     useEffect(() => {
         if (typeof initialUrls === 'string') {

@@ -20,6 +20,7 @@ const Profile = () => {
     const [error, setError] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
     const { user } = useUser();
     const [userDetails, setUserDetails] = useState({
         userId: null,
@@ -176,6 +177,10 @@ const Profile = () => {
         }));
     };
 
+    const handleUploadingImage = async (flag) => {
+        setUploading(flag);
+    };
+
     if (!user || !user.token) {
         return <Navigate to="/signin?redirect=%2Fprofile" replace={true} />;
     }
@@ -227,18 +232,29 @@ const Profile = () => {
                                         ))}
                                     </Alert>
                                 }
-                                <div className='d-flex flex-row justify-content-around align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
-                                    <Image
-                                        size={{ height: '300px', width: '300px' }}
-                                        borderType="rounded-circle"
-                                        countryISOCode="ur"
-                                        domain="1"
-                                        initialUrls={userDetails.profilePictureUrl}
-                                        onUpload={handleUploadImage}
-                                        onDelete={isEditing && !loading ? handleDeleteImage : null}
-                                    />
-                                </div>
 
+                                <div className='d-flex flex-row justify-content-around align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
+                                    {userDetails.profilePictureUrl || isEditing ?
+                                        (<Image
+                                            size={{ height: '300px', width: '300px' }}
+                                            borderType="rounded-circle"
+                                            countryISOCode="ur"
+                                            domain="1"
+                                            initialUrls={userDetails.profilePictureUrl}
+                                            onUpload={handleUploadImage}
+                                            onUploading={handleUploadingImage}
+                                            onDelete={isEditing && !loading ? handleDeleteImage : null}
+                                        />)
+                                        :
+                                        (<Image
+                                            size={{ height: '300px', width: '300px' }}
+                                            borderType="rounded-circle"
+                                            countryISOCode="ur"
+                                            domain="1"
+                                            initialUrls='/images/avatar.jpg'
+                                        />)
+                                    }
+                                </div>
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">First name:
                                         <Form.Control
@@ -368,7 +384,7 @@ const Profile = () => {
                                 </Form.Group>
                                 {isEditing && (
                                     <div className='d-flex flex-row justify-content-between align-items-center mt-2 mb-4 mb-xxxl-5'>
-                                        <Button variant="primary" type="submit" disabled={!isEditing || loading} className="text-nowrap overflow-hidden">
+                                        <Button variant="primary" type="submit" disabled={!isEditing || loading || uploading} className="text-nowrap overflow-hidden">
                                             {loading ?
                                                 (
                                                     <>
