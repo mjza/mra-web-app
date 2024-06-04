@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useUser } from '../../contexts/UserContext';
-import { getPresignedUrlService, getAccessUrlsService } from '../../services/file';
+import { parseS3Url, getPresignedUrlService, getAccessUrlsService } from '../../services/file';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ProgressBar from 'react-bootstrap/ProgressBar';
@@ -14,6 +14,7 @@ const Image = ({
     countryISOCode,
     domain,
     initialUrls = [],
+    onUpload,
     onDelete,
     onClick,
     onDoubleClick
@@ -35,32 +36,7 @@ const Image = ({
         return filename.split('.').pop().toLowerCase();
     };
 
-    function parseS3Url(url) {
-        const match = url.match(/^https:\/\/([^.]+)\.s3\.([^.]+)\.amazonaws\.com\/(.+)$/);
-        if (!match) {
-            throw new Error(`Invalid S3 URL: ${url}`);
-        }
-        const [, bucketName, region, key] = match;
-
-        // Extract domain and userId from the key
-        const keyParts = key.split('/');
-        // Find the domain and userId parts based on their positions
-        const domainPart = keyParts[2]; // Domain is always the third part
-        const userPart = keyParts[3]; // UserId is always the fourth part
-
-        if (!domainPart || !userPart || !domainPart.startsWith('d') || !userPart.startsWith('u')) {
-            throw new Error(`Invalid S3 key structure: ${key}`);
-        }
-
-        const domain = parseInt(domainPart.substring(1), 10); // Remove the 'd' prefix and convert to integer
-        const userId = parseInt(userPart.substring(1), 10); // Remove the 'u' prefix and convert to integer
-
-        if (isNaN(userId)) {
-            throw new Error(`Invalid userId extracted from key: ${key}`);
-        }
-
-        return { bucketName, region, key, domain, userId };
-    }
+    
 
     const fetchUrls = useCallback(async (baseUrl) => {
         setProcessing(true);
@@ -217,6 +193,7 @@ const Image = ({
                 if (xhr.status === 204) {
                     const baseUrl = `${presignedUrl}${fields.key}`;
                     fetchUrls(baseUrl);
+                    onUpload && onUpload(baseUrl);                    
                 } else {
                     setModalMessage('File upload failed.');
                     setShowModal(true);
@@ -240,10 +217,10 @@ const Image = ({
     };
 
     const handleDelete = onDelete ? () => {
+        onDelete(urls);
         setUrls([]);
         setUploading(0);
-        setProgress(0);
-        onDelete();
+        setProgress(0);        
     } : undefined;
 
 

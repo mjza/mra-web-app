@@ -1,6 +1,48 @@
-import {handlingErrors} from './utils'; 
+import { handlingErrors } from './utils';
 
 const fileBaseURL = process.env.REACT_APP_FILE_BASE_URL;
+
+const getLargestImageUrl = (urls) => {
+    const sizeOrder = ['xs', 'sm', 'md', 'lg', 'xl'];
+
+    return urls
+        .sort((a, b) => {
+            const sizeA = sizeOrder.findIndex(size => a.includes(`-${size}.`));
+            const sizeB = sizeOrder.findIndex(size => b.includes(`-${size}.`));
+            return sizeB - sizeA;
+        })[0];
+};
+
+export { getLargestImageUrl };
+
+const parseS3Url = (url) => {
+    const match = url.match(/^https:\/\/([^.]+)\.s3\.([^.]+)\.amazonaws\.com\/(.+)$/);
+    if (!match) {
+        throw new Error(`Invalid S3 URL: ${url}`);
+    }
+    const [, bucketName, region, key] = match;
+
+    // Extract domain and userId from the key
+    const keyParts = key.split('/');
+    // Find the domain and userId parts based on their positions
+    const domainPart = keyParts[2]; // Domain is always the third part
+    const userPart = keyParts[3]; // UserId is always the fourth part
+
+    if (!domainPart || !userPart || !domainPart.startsWith('d') || !userPart.startsWith('u')) {
+        throw new Error(`Invalid S3 key structure: ${key}`);
+    }
+
+    const domain = parseInt(domainPart.substring(1), 10); // Remove the 'd' prefix and convert to integer
+    const userId = parseInt(userPart.substring(1), 10); // Remove the 'u' prefix and convert to integer
+
+    if (isNaN(userId)) {
+        throw new Error(`Invalid userId extracted from key: ${key}`);
+    }
+
+    return { bucketName, region, key, domain, userId };
+};
+
+export { parseS3Url };
 
 /**
  * `getPresignedUrlService` requests a presigned URL from the server for performing file operations.

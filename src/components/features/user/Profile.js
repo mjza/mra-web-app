@@ -10,8 +10,10 @@ import Spinner from 'react-bootstrap/Spinner';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faFloppyDisk, faUndo } from '@fortawesome/free-solid-svg-icons';
+import { parseS3Url, getAccessUrlsService, getLargestImageUrl } from '../../../services/file';
 import LoadingOverlay from '../../ui/LoadingOverlay';
 import { useUser } from '../../../contexts/UserContext';
+import Image from '../../ui/Image';
 import { fetchGenderTypes, fetchUserDetails, createUserDetails, updateUserDetails } from '../../../services/core';
 
 const Profile = () => {
@@ -148,6 +150,32 @@ const Profile = () => {
         }
     };
 
+    const handleDeleteImage = () => {
+        setUserDetails(prevDetails => ({
+            ...prevDetails,
+            profilePictureUrl: null,
+        }));
+    };
+
+    const handleUploadImage = async (baseUrl) => {
+        let profilePictureUrl;
+        try {
+            const token = user?.token;
+            const { domain } = parseS3Url(baseUrl);
+            const response = await getAccessUrlsService(token, domain, [baseUrl]);
+            if (response.success) {
+                const urls = response.urls[baseUrl];
+                profilePictureUrl = getLargestImageUrl(urls);
+            }
+        } catch {
+            profilePictureUrl = baseUrl;
+        }
+        setUserDetails(prevDetails => ({
+            ...prevDetails,
+            profilePictureUrl,
+        }));
+    };
+
     if (!user || !user.token) {
         return <Navigate to="/signin?redirect=%2Fprofile" replace={true} />;
     }
@@ -199,6 +227,18 @@ const Profile = () => {
                                         ))}
                                     </Alert>
                                 }
+                                <div className='d-flex flex-row justify-content-around align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
+                                    <Image
+                                        size={{ height: '300px', width: '300px' }}
+                                        borderType="rounded-circle"
+                                        countryISOCode="ur"
+                                        domain="1"
+                                        initialUrls={userDetails.profilePictureUrl}
+                                        onUpload={handleUploadImage}
+                                        onDelete={isEditing && !loading ? handleDeleteImage : null}
+                                    />
+                                </div>
+
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">First name:
                                         <Form.Control
