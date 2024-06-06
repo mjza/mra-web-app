@@ -42,6 +42,11 @@ jobs:
 #        usedocker: false
 #        branch: main
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "github-actions@github.com"
+        git config --global user.name "github-actions"
+
     - name: Move build directory
       run: |
         cd build
