@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import Image from './components/ui/Image';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-//import Alert from 'react-bootstrap/Alert';
-//import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faMicrophone, faMapMarkerAlt, faImages } from '@fortawesome/free-solid-svg-icons';
 import LoadingOverlay from '../../ui/LoadingOverlay';
-//import { useUser } from '../../../contexts/UserContext';
+import { useUser } from '../../../contexts/UserContext';
 const News = () => {
     const [loading, setLoading] = useState(false);
-    setLoading(false);
-    //const { user } = useUser();
+    const { user } = useUser();
     const [ticket, setTicket] = useState({
         ticketId: null,
         title: null
@@ -28,7 +27,6 @@ const News = () => {
         }));
     };
 
-    /*
     const clearItem = (e) => {
         const { name } = e.target;
         setTicket(prevDetails => ({
@@ -36,8 +34,6 @@ const News = () => {
             [name]: null,
         }));
     };
-    */
-
     /*
     const [mediaUrl, setMediaUrl] = //useState("https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240525065449681-30a4-4122-1a9b-org.jpg");
         useState("https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240525200734693-3b19-78a1-fad8-org.jpg");
