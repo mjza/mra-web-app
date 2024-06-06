@@ -53,4 +53,5 @@ jobs:
         git init
         git add .
         git commit -m "Deploy build to Heroku"
+        git branch -M main
         git push --force "https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git" main:refs/heads/main
