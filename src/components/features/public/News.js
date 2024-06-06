@@ -87,9 +87,9 @@ const News = () => {
             <div className='min-vh-100 d-flex flex-column justify-content-start align-items-start py-5'>
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
-                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={3}></Col> {/* Left gap */}
-                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={6} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
-                        <Container className='unfeature-box p-2 rounded-4 border'>
+                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
+                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
+                        <Container className='unfeature-box py-2 px-3 rounded-4 border'>
                             <Form className="w-100">
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">
@@ -109,7 +109,7 @@ const News = () => {
                                                 disabled={loading}
                                                 className="input-group-text"
                                             >
-                                                <FontAwesomeIcon icon={faPaperPlane} />
+                                                <FontAwesomeIcon icon={faPaperPlane} className='text-primary' />
                                             </Button>
                                         </InputGroup>
                                     </Form.Label>
@@ -123,7 +123,7 @@ const News = () => {
                                     disabled={loading}
                                     className="input-group-text"
                                 >
-                                    <FontAwesomeIcon icon={faImages} /> Start by media
+                                    <FontAwesomeIcon icon={faImages} className='text-success'/> Start by media
                                 </Button>
                                 <Button
                                     variant="outline-secondary"
@@ -132,7 +132,7 @@ const News = () => {
                                     disabled={loading}
                                     className="input-group-text"
                                 >
-                                    <FontAwesomeIcon icon={faMapMarkerAlt} /> Start by location
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} className='text-warning'/> Start by location
                                 </Button>
                                 <Button
                                     variant="outline-secondary"
@@ -141,12 +141,12 @@ const News = () => {
                                     disabled={loading}
                                     className="input-group-text"
                                 >
-                                    <FontAwesomeIcon icon={faMicrophone} /> Start by narrating
+                                    <FontAwesomeIcon icon={faMicrophone} className='text-danger'/> Start by narrating
                                 </Button>
                             </div>
                         </Container>
                     </Col>
-                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={3}></Col> {/* Right gap */}
+                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Right gap */}
                 </Row>
             </div>
         </>

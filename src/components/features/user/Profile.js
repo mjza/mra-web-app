@@ -190,8 +190,8 @@ const Profile = () => {
             <div className='min-vh-100 d-flex flex-column justify-content-center align-items-center py-5'>
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
-                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={3}></Col> {/* Left gap */}
-                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={6} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
+                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
+                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
                         <Container className='unfeature-box p-4 rounded-4 border border-dark'>
                             <Form onSubmit={handleSubmit} className="w-100">
                                 <div className='d-flex flex-row justify-content-between align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
@@ -412,7 +412,7 @@ const Profile = () => {
                             </Form>
                         </Container>
                     </Col>
-                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={3}></Col> {/* Right gap */}
+                    <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Right gap */}
                 </Row>
             </div>
         </>
