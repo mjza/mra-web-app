@@ -29,6 +29,12 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm install -g serve` 
+Install serve (if not already installed).
+
+### `serve -s build -p 57935`
+Serve the build directory, it will open the build version in [http://localhost:57935](http://localhost:57935) link.
+
 ### `npm run eject`
 
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**

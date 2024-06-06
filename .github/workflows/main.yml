@@ -33,12 +33,19 @@ jobs:
     - name: Build
       run: npm run build
 
-    - name: Deploy to Heroku
-      uses: akhileshns/heroku-deploy@v3.13.15
-      with:
-        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-        heroku_email: ${{ secrets.HEROKU_EMAIL }}
-        usedocker: false
-        branch: main
+#    - name: Deploy to Heroku
+#      uses: akhileshns/heroku-deploy@v3.13.15
+#      with:
+#        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+#        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+#        usedocker: false
+#        branch: main
 
+    - name: Move build directory
+      run: |
+        cd build
+        git init
+        git add .
+        git commit -m "Deploy build to Heroku"
+        git push --force "https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git" main:refs/heads/main
