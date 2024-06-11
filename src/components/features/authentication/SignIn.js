@@ -56,7 +56,7 @@ const SignIn = () => {
         const { success, message, data } = await loginService(credentials.usernameOrEmail, credentials.password);
         setLoading(false);
         if (success) {
-            login(data, rememberMe);
+            await login(data, rememberMe);
             navigate(redirect, { replace: true });
         } else {
             setError(message);

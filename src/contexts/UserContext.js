@@ -2,25 +2,48 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext(null);
 
+const blobToBase64 = (blob) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+};
+
+const fetchProfilePicture = async (url) => {
+    try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const base64 = await blobToBase64(blob);
+        return base64;
+    } catch (error) {
+        console.error('Failed to fetch profile picture', error);
+        return null;
+    }
+};
+
 export const UserProvider = ({ children }) => {
     const storedUser = sessionStorage.getItem('user') || localStorage.getItem('user');
     const { exp } = storedUser ? JSON.parse(storedUser) : {};
-    // Get the current time in Unix timestamp format (seconds since Epoch)
     const now = Math.floor(Date.now() / 1000);
     const [user, setUser] = useState(exp > now ? JSON.parse(storedUser) : null);
 
-    const login = (userData, remember) => {
+    const login = async (userData, remember) => {
+        const profilePictureUrl = userData.profilePictureUrl || '/images/avatar.jpg';
+        const profilePictureBase64 = await fetchProfilePicture(profilePictureUrl);
+        const updatedUserData = { ...userData, profilePictureBase64 };
+
         if (remember) {
-            localStorage.setItem('user', JSON.stringify(userData));
+            localStorage.setItem('user', JSON.stringify(updatedUserData));
         } else {
-            sessionStorage.setItem('user', JSON.stringify(userData));
+            sessionStorage.setItem('user', JSON.stringify(updatedUserData));
         }
-        setUser(userData);
+        setUser(updatedUserData);
     };
 
     const logout = () => {
         const { exp } = user;
-        // Get the current time in Unix timestamp format (seconds since Epoch)
         const now = Math.floor(Date.now() / 1000);
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
@@ -28,16 +51,34 @@ export const UserProvider = ({ children }) => {
         return exp > now;
     };
 
+    const updateUserData = (newUserData) => {
+        const updatedUser = { ...user, ...newUserData };
+        setUser(updatedUser);
+        const userDataString = JSON.stringify(updatedUser);
+
+        if (sessionStorage.getItem('user')) {
+            sessionStorage.setItem('user', userDataString);
+        } else {
+            localStorage.setItem('user', userDataString);
+        }
+    };
+
+    const updateProfilePictureUrl = async (newUrl) => {
+        const profilePictureBase64 = await fetchProfilePicture(newUrl);
+        updateUserData({ profilePictureUrl: newUrl, profilePictureBase64 });
+    };
+
+    const updateDisplayName = (newDisplayName) => {
+        updateUserData({ displayName: newDisplayName });
+    };
+
     useEffect(() => {
-        // Check sessionStorage first; if not found, then check localStorage
         const sessionUser = sessionStorage.getItem('user');
         const localUser = localStorage.getItem('user');
         const storedUser = sessionUser ? sessionUser : localUser;
         const { exp } = storedUser ? JSON.parse(storedUser) : {};
-        // Get the current time in Unix timestamp format (seconds since Epoch)
         const now = Math.floor(Date.now() / 1000);
 
-        // Compare the expiration time with the current time
         if (exp > now) {
             setUser(JSON.parse(storedUser));
         } else {
@@ -47,7 +88,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ user, login, logout, updateProfilePictureUrl, updateDisplayName }}>
             {children}
         </UserContext.Provider>
     );

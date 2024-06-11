@@ -102,15 +102,13 @@ const HeaderNavbar = () => {
                     ))}
                   </Nav>
                   <img
-                    src={user.profilePictureUrl ? user.profilePictureUrl : '/images/avatar.jpg'}
+                    src={user.profilePictureBase64}
                     role="button"
                     className="d-inline-block align-top rounded-circle ms-2 ms-md-0 avatar"
                     style={{ width: '40px', height: '40px' }}
                     alt="User Avatar"
                     onClick={() => setIsNavOpen(true)}
                   />
-
-
                 </div>
               </div>
             </Col>
