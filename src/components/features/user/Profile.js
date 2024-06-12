@@ -21,7 +21,9 @@ const Profile = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const { user } = useUser();
+    const [isNewProfilePicture, setIsNewProfilePicture] = useState(false);
+    const { user, updateProfilePictureUrl } = useUser();
+    const { userId, token } = user;
     const [userDetails, setUserDetails] = useState({
         userId: null,
         firstName: null,
@@ -88,24 +90,23 @@ const Profile = () => {
         const loadAllData = async () => {
             setLoading(true);
             await fetchAndSetGenderTypes();
-            await loadCurrentUserDetails(user);
+            await loadCurrentUserDetails(userId, token);
             setLoading(false);
         };
 
         loadAllData();
-    }, [user]);
+    }, [userId, token]);
 
 
-    const loadCurrentUserDetails = async (user) => {
+    const loadCurrentUserDetails = async (userId, token) => {
         setIsEditing(false);
-        if (user) {
-            const { userId, token } = user;
-            fetchUserDetails(token, { userId }).then(response => {
-                if (response.success) {
-                    setUserDetails(response.data[0]);
-                }
-            });
-        }
+        if(!userId || !token)
+            return;
+        fetchUserDetails(token, { userId }).then(response => {
+            if (response.success) {
+                setUserDetails(response.data[0]);
+            }
+        });
     };
 
     const handleChange = (e) => {
@@ -129,21 +130,24 @@ const Profile = () => {
         setError('');
         const isEditing = !!userDetails.creator;
         const data = filterUserDetails(userDetails);
-        if (isEditing) {
-            updateUserDetails(user.token, data.userId, data).then(response => {
+        if (isEditing) {            
+            updateUserDetails(user.token, data.userId, data).then(async response => {
                 if (response.success) {
+                    await updateProfilePictureUrl(data.profilePictureUrl);
                     setMessage(response.message);
                     setIsEditing(false);
+                    
                 } else {
                     setError(response.message);
                 }
             });
         } else {
-            createUserDetails(user.token, data).then(response => {
+            createUserDetails(user.token, data).then(async response => {
                 if (response.success) {
+                    await updateProfilePictureUrl(data.profilePictureUrl);
                     setMessage(response.message);
                     setUserDetails(response.data);
-                    setIsEditing(false);
+                    setIsEditing(false);                    
                 } else {
                     setError(response.message);
                 }
@@ -159,22 +163,23 @@ const Profile = () => {
     };
 
     const handleUploadImage = async (baseUrl) => {
-        let profilePictureUrl;
+        let newProfilePictureUrl = null;
         try {
             const token = user?.token;
             const { domain } = parseS3Url(baseUrl);
             const response = await getAccessUrlsService(token, domain, [baseUrl]);
             if (response.success) {
                 const urls = response.urls[baseUrl];
-                profilePictureUrl = getLargestImageUrl(urls);
+                newProfilePictureUrl = getLargestImageUrl(urls);
             }
         } catch {
-            profilePictureUrl = baseUrl;
-        }
+            newProfilePictureUrl = baseUrl;
+        }     
         setUserDetails(prevDetails => ({
             ...prevDetails,
-            profilePictureUrl,
-        }));
+            profilePictureUrl: newProfilePictureUrl,
+        }));  
+        setIsNewProfilePicture(true);
     };
 
     const handleUploadingImage = async (flag) => {
@@ -234,13 +239,13 @@ const Profile = () => {
                                 }
 
                                 <div className='d-flex flex-row justify-content-around align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
-                                    {userDetails.profilePictureUrl || isEditing ?
+                                    {isEditing ?
                                         (<Img
                                             size={{ height: '300px', width: '300px' }}
                                             borderType="rounded-circle"
                                             countryISOCode="ur"
                                             domain="1"
-                                            initialUrls={userDetails.profilePictureUrl}
+                                            initialUrls={ isNewProfilePicture ? userDetails.profilePictureUrl : ( userDetails.profilePictureUrl ? user.profilePictureBase64 : null) }
                                             onUpload={handleUploadImage}
                                             onUploading={handleUploadingImage}
                                             onDelete={isEditing && !loading ? handleDeleteImage : null}
@@ -251,7 +256,7 @@ const Profile = () => {
                                             borderType="rounded-circle"
                                             countryISOCode="ur"
                                             domain="1"
-                                            initialUrls='/images/avatar.jpg'
+                                            initialUrls={user.profilePictureBase64}
                                         />)
                                     }
                                 </div>
@@ -402,7 +407,7 @@ const Profile = () => {
                                             variant="danger"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                loadCurrentUserDetails(user);
+                                                loadCurrentUserDetails(userId, token);
                                             }}
                                         >
                                             <FontAwesomeIcon icon={faUndo} /> Cancel

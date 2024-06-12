@@ -64,7 +64,8 @@ export const UserProvider = ({ children }) => {
     };
 
     const updateProfilePictureUrl = async (newUrl) => {
-        const profilePictureBase64 = await fetchProfilePicture(newUrl);
+        const profilePictureUrl = newUrl || '/images/avatar.jpg';
+        const profilePictureBase64 = await fetchProfilePicture(profilePictureUrl);
         updateUserData({ profilePictureUrl: newUrl, profilePictureBase64 });
     };
 
