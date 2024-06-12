@@ -241,7 +241,7 @@ const Profile = () => {
                                 <div className='d-flex flex-row justify-content-around align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
                                     {isEditing ?
                                         (<Img
-                                            size={{ height: '300px', width: '300px' }}
+                                            size={{ maxWidth: '300px', width: '100%' }}
                                             borderType="rounded-circle"
                                             countryISOCode="ur"
                                             domain="1"
@@ -252,7 +252,7 @@ const Profile = () => {
                                         />)
                                         :
                                         (<Img
-                                            size={{ height: '300px', width: '300px' }}
+                                            size={{ maxWidth: '300px', width: '100%' }}
                                             borderType="rounded-circle"
                                             countryISOCode="ur"
                                             domain="1"
