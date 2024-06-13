@@ -100,7 +100,7 @@ const Profile = () => {
 
     const loadCurrentUserDetails = async (userId, token) => {
         setIsEditing(false);
-        if(!userId || !token)
+        if (!userId || !token)
             return;
         fetchUserDetails(token, { userId }).then(response => {
             if (response.success) {
@@ -130,13 +130,13 @@ const Profile = () => {
         setError('');
         const isEditing = !!userDetails.creator;
         const data = filterUserDetails(userDetails);
-        if (isEditing) {            
+        if (isEditing) {
             updateUserDetails(user.token, data.userId, data).then(async response => {
                 if (response.success) {
                     await updateProfilePictureUrl(data.profilePictureUrl);
                     setMessage(response.message);
                     setIsEditing(false);
-                    
+
                 } else {
                     setError(response.message);
                 }
@@ -147,7 +147,7 @@ const Profile = () => {
                     await updateProfilePictureUrl(data.profilePictureUrl);
                     setMessage(response.message);
                     setUserDetails(response.data);
-                    setIsEditing(false);                    
+                    setIsEditing(false);
                 } else {
                     setError(response.message);
                 }
@@ -174,11 +174,11 @@ const Profile = () => {
             }
         } catch {
             newProfilePictureUrl = baseUrl;
-        }     
+        }
         setUserDetails(prevDetails => ({
             ...prevDetails,
             profilePictureUrl: newProfilePictureUrl,
-        }));  
+        }));
         setIsNewProfilePicture(true);
     };
 
@@ -196,7 +196,7 @@ const Profile = () => {
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
                     <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
-                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
+                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 py-4 pt-md-5 mx-0'> {/* Center content */}
                         <Container className='unfeature-box p-4 rounded-4 border border-dark'>
                             <Form onSubmit={handleSubmit} className="w-100">
                                 <div className='d-flex flex-row justify-content-between align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
@@ -239,26 +239,16 @@ const Profile = () => {
                                 }
 
                                 <div className='d-flex flex-row justify-content-around align-items-center mb-3 mb-xxl-4 mb-xxxl-5'>
-                                    {isEditing ?
-                                        (<Img
-                                            size={{ maxWidth: '300px', width: '100%' }}
-                                            borderType="rounded-circle"
-                                            countryISOCode="ur"
-                                            domain="1"
-                                            initialUrls={ isNewProfilePicture ? userDetails.profilePictureUrl : ( userDetails.profilePictureUrl ? user.profilePictureBase64 : null) }
-                                            onUpload={handleUploadImage}
-                                            onUploading={handleUploadingImage}
-                                            onDelete={isEditing && !loading ? handleDeleteImage : null}
-                                        />)
-                                        :
-                                        (<Img
-                                            size={{ maxWidth: '300px', width: '100%' }}
-                                            borderType="rounded-circle"
-                                            countryISOCode="ur"
-                                            domain="1"
-                                            initialUrls={user.profilePictureBase64}
-                                        />)
-                                    }
+                                    <Img
+                                        size={{ maxWidth: '300px', width: '100%', aspectRatio: '1/1' }}
+                                        borderType="rounded-circle"
+                                        countryISOCode="ur"
+                                        domain="1"
+                                        initialUrls={isEditing ? (isNewProfilePicture ? userDetails.profilePictureUrl : (userDetails.profilePictureUrl ? user.profilePictureBase64 : null)) : user.profilePictureBase64}
+                                        onUpload={isEditing ? handleUploadImage : undefined}
+                                        onUploading={isEditing ? handleUploadingImage : undefined}
+                                        onDelete={isEditing && !loading ? handleDeleteImage : undefined}
+                                    />
                                 </div>
                                 <Form.Group className="mb-2 mb-xxxl-4">
                                     <Form.Label className="w-100">First name:

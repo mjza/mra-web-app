@@ -113,7 +113,7 @@ const ResetPassword = () => {
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
                     <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col>
-                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 pt-4 pt-md-5 mx-0'>
+                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 py-4 pt-md-5 mx-0'>
                         <Container className='unfeature-box p-4 rounded-4'>
                             <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Set a New Password</h1>
                             <Form onSubmit={handleSubmit}>

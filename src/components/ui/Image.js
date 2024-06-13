@@ -9,7 +9,7 @@ import { faCamera, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-
 import PropTypes from 'prop-types';
 
 const Img = ({
-    size: { maxHeight = '100%', maxWidth = '100%', height = 'auto', width = '100%' } = {},
+    size: { maxHeight = '100%', maxWidth = '100%', height = 'auto', width = '100%', aspectRatio = 'auto' } = {},
     borderType,
     countryISOCode,
     domain,
@@ -286,7 +286,7 @@ const Img = ({
     };
 
     return (
-        <div className={`position-relative border ${borderType ? borderType : ''}`} style={{ maxHeight, maxWidth, height, width, aspectRatio: height === 'auto' ? '1/1' : null}}>
+        <div className={`position-relative border ${borderType ? borderType : ''}`} style={{ maxHeight, maxWidth, height, width, aspectRatio}}>
             {processing && (
                 <div className="overlay position-absolute top-0 start-0 end-0 bottom-0 d-flex align-items-center justify-content-center" style={{ backgroundColor: 'rgba(255,255,255,0.8)', }}>
                     <FontAwesomeIcon icon={faSpinner} spin size="3x" />
@@ -343,6 +343,7 @@ Image.propTypes = {
         maxWidth: PropTypes.oneOfType([PropTypes.string]),
         height: PropTypes.oneOfType([PropTypes.string]),
         width: PropTypes.oneOfType([PropTypes.string]),
+        aspectRatio: PropTypes.oneOfType([PropTypes.string]),
     }),
     borderType: PropTypes.oneOf([undefined, 'rounded', 'rounded-circle']),
 };

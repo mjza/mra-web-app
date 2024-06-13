@@ -77,7 +77,7 @@ const News = () => {
             <div className='min-vh-100 d-flex flex-column justify-content-start align-items-start py-5'>
                 <Row className="w-100 p-0 m-0">
                     <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
-                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 pt-4 pt-md-5 mx-0'> {/* Center content */}
+                    <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 py-4 pt-md-5 mx-0'> {/* Center content */}
                         <Container className='unfeature-box py-2 px-3 rounded-4 border'>
                             <Form className="w-100">
                                 <Form.Group className="mb-2 mb-xxxl-4">
