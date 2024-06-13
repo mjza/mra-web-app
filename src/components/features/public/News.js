@@ -108,25 +108,25 @@ const News = () => {
                                     variant="outline-secondary"
                                     name="startMedia"
                                     onClick={() => { }}
-                                    className="input-group-text"
+                                    className="input-group-text px-3 px-sm-1 px-md-3"
                                 >
-                                    <FontAwesomeIcon icon={faImages} className='text-success'/> Start by media
+                                    <FontAwesomeIcon icon={faImages} className='text-success'/><span className='d-none d-sm-inline'>&nbsp;Start by media</span> 
                                 </Button>
                                 <Button
                                     variant="outline-secondary"
                                     name="startLocation"
                                     onClick={() => { }}
-                                    className="input-group-text"
+                                    className="input-group-text px-3 px-sm-1 px-md-3"
                                 >
-                                    <FontAwesomeIcon icon={faMapMarkerAlt} className='text-warning'/> Start by location
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} className='text-warning'/><span className='d-none d-sm-inline'>&nbsp;Start by location</span>
                                 </Button>
                                 <Button
                                     variant="outline-secondary"
                                     name="startNarrating"
                                     onClick={() => { }}
-                                    className="input-group-text"
+                                    className="input-group-text px-3 px-sm-1 px-md-3"
                                 >
-                                    <FontAwesomeIcon icon={faMicrophone} className='text-danger'/> Start by narrating
+                                    <FontAwesomeIcon icon={faMicrophone} className='text-danger'/><span className='d-none d-sm-inline'>&nbsp;Start by narrating</span>
                                 </Button>
                             </div>
                         </Container>
