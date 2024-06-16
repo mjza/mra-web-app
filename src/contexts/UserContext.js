@@ -33,7 +33,7 @@ export const UserProvider = ({ children }) => {
         const profilePictureUrl = userData.profilePictureUrl || '/images/avatar.jpg';
         const profilePictureBase64 = await fetchProfilePicture(profilePictureUrl);
         const updatedUserData = { ...userData, profilePictureBase64 };
-
+        document.documentElement.setAttribute('data-bs-user', true);
         if (remember) {
             localStorage.setItem('user', JSON.stringify(updatedUserData));
         } else {
@@ -48,6 +48,7 @@ export const UserProvider = ({ children }) => {
         localStorage.removeItem('user');
         sessionStorage.removeItem('user');
         setUser(null);
+        document.documentElement.setAttribute('data-bs-user', false);
         return exp > now;
     };
 
@@ -82,7 +83,9 @@ export const UserProvider = ({ children }) => {
 
         if (exp > now) {
             setUser(JSON.parse(storedUser));
+            document.documentElement.setAttribute('data-bs-user', true);
         } else {
+            document.documentElement.setAttribute('data-bs-user', false);
             localStorage.removeItem('user');
             sessionStorage.removeItem('user');
         }

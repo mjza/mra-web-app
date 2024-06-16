@@ -26,9 +26,14 @@ body {
     .unfeature-box {
       background-color: #fff;
     }
+
     .feature-box {
       background-color: aliceblue;
     }
+  }
+
+  html[data-bs-user='true'] & {
+    background-color: aliceblue;//#f4f2ee;
   }
 
   /* Dark theme styles */
@@ -39,6 +44,7 @@ body {
     .unfeature-box {
       background-color: #000;
     }
+
     .feature-box {
       background-color: #201f1f;
     }
@@ -137,6 +143,7 @@ $display-line-height: 1.2;
           height: #{$i + 0%} !important;
         }
       }
+
       .w-#{$break}-auto {
         width: auto !important;
       }
