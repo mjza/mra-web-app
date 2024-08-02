@@ -142,6 +142,40 @@ const registerService = async (username, displayName, email, password, loginRedi
 export { registerService };
 
 /**
+ * Resend the activiation link.
+ * 
+ * @param {string} usernameOrEmail - The user's username or email address to be used for login.
+ * @param {string} loginRedirectURL - The URL to redirect after login, optional.
+ * @returns {Promise<{success: boolean, message?: string, userId?: number}>} A promise that resolves to an object indicating the result of the registration attempt. On success, returns a success message; on failure, returns an error message.
+ */
+const resendActivation = async (usernameOrEmail, loginRedirectURL = `${appURL}/signin`) => {
+    try {
+        const response = await fetch(`${baseURL}/v1/resend-activation`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ usernameOrEmail, loginRedirectURL })
+        });
+
+        const result = await response.json();
+
+        if (response.status === 200) {
+            // Success case
+            return { success: true, message: result.message };
+        } else {
+            const message = handlingErrors(result, 'Request failed, please try again.');
+            return { success: false, message };
+        }
+    } catch (error) {
+        console.error('Resend activation service error:', error);
+        return { success: false, message: 'Network error, please try again later.' };
+    }
+}
+
+export { resendActivation };
+
+/**
  * Retrieves usernames associated with a specific email address and sends them via email.
  * 
  * @param {string} email - The email address to search for associated usernames.

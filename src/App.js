@@ -13,6 +13,7 @@ import SignUp from './components/features/authentication/SignUp';
 import ForgetUsername from './components/features/authentication/ForgetUsername';
 import ForgetPassword from './components/features/authentication/ForgetPassword';
 import ResetPassword from './components/features/authentication/ResetPassword';
+import ResendActivation from './components/features/authentication/ResendActivation';
 
 import Profile from './components/features/user/Profile';
 import News from './components/features/public/News';
@@ -51,6 +52,7 @@ const AppContent = () => {
           <Route path="/forgot-username" element={<ForgetUsername />} />
           <Route path="/forgot-password" element={<ForgetPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/resend-activation" element={<ResendActivation />} />
           <Route path="/news" element={<UnderConstruction />} />
           <Route path="/tickets" element={<UnderConstruction />} />
           <Route path="/qrcodes" element={<UnderConstruction />} />

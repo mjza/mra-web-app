@@ -276,6 +276,12 @@ const SignUp = () => {
                                         <a href="/signin" className="text-decoration-none">Sign in</a>
                                     </div>
                                 </div>
+                                <div className="d-flex flex-row justify-content-center mt-2">
+                                    <div>
+                                        Registered but not yet activated?&nbsp;
+                                        <a href="/resend-activation" className="text-decoration-none">Resend activation</a>
+                                    </div>
+                                </div>
                             </Form>
                         </Container>
                     </Col>
