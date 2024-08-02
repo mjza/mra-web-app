@@ -19,7 +19,6 @@ const ResendActivation = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(usernameOrEmail);
         if (!usernameOrEmail || (!/\s*\S+@\S+\.\S+\s*/.test(usernameOrEmail) && !/\s*\S+\s*/.test(usernameOrEmail)) ) {
             setMessage('Please enter a valid email address or a username.');
             setAlertVariant('danger');
