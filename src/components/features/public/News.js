@@ -80,7 +80,7 @@ const News = () => {
                     <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 py-4 pt-md-5 mx-0'> {/* Center content */}
                         <Container className='unfeature-box py-2 px-3 rounded-4 border'>
                             <Form className="w-100">
-                                <Form.Group className="mb-2 mb-xxxl-4">
+                                <Form.Group className="mb-2">
                                     <Form.Label className="w-100">
                                         <InputGroup>
                                             <Form.Control
@@ -108,7 +108,7 @@ const News = () => {
                                     variant="outline-secondary"
                                     name="startMedia"
                                     onClick={() => { }}
-                                    className="input-group-text px-3 px-sm-1 px-md-3"
+                                    className="input-group-text me-1 px-3 px-sm-1 px-md-3 text-truncate"
                                 >
                                     <FontAwesomeIcon icon={faImages} className='text-success'/><span className='d-none d-sm-inline'>&nbsp;Start by media</span> 
                                 </Button>
@@ -116,7 +116,7 @@ const News = () => {
                                     variant="outline-secondary"
                                     name="startLocation"
                                     onClick={() => { }}
-                                    className="input-group-text px-3 px-sm-1 px-md-3"
+                                    className="input-group-text px-3 px-sm-1 px-md-3 text-truncate"
                                 >
                                     <FontAwesomeIcon icon={faMapMarkerAlt} className='text-warning'/><span className='d-none d-sm-inline'>&nbsp;Start by location</span>
                                 </Button>
@@ -124,7 +124,7 @@ const News = () => {
                                     variant="outline-secondary"
                                     name="startNarrating"
                                     onClick={() => { }}
-                                    className="input-group-text px-3 px-sm-1 px-md-3"
+                                    className="input-group-text ms-1 px-3 px-sm-1 px-md-3 text-truncate"
                                 >
                                     <FontAwesomeIcon icon={faMicrophone} className='text-danger'/><span className='d-none d-sm-inline'>&nbsp;Start by narrating</span>
                                 </Button>
