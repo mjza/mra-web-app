@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 // import Image from './components/ui/Image';
-import { getGeolocation, capturePicture } from '../../../services/utils';
+import { getGeolocation } from '../../../services/utils';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Webcam from 'react-webcam';
 //import Alert from 'react-bootstrap/Alert';
 //import Spinner from 'react-bootstrap/Spinner';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -13,6 +14,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faMicrophone, faMapMarkerAlt, faImages } from '@fortawesome/free-solid-svg-icons';
 
 const News = () => {
+    const webcamRef = useRef(null);
+
+    const videoConstraints = {
+        width: { min: 640, ideal: 1280, max: 1920 },
+        height: { min: 480, ideal: 720, max: 1080 },
+        facingMode: 'user', // Switch to 'environment' for the back camera
+        frameRate: { min: 15, ideal: 30, max: 60 }, // Specify desired frame rate
+      };
+      
+
     const [ticket, setTicket] = useState({
         ticketId: null,
         title: null
@@ -24,6 +35,12 @@ const News = () => {
             [name]: type === 'checkbox' ? checked : value,
         }));
     };
+    // Callback to capture the image
+    const capture = useCallback(() => {
+        const imageSrc = webcamRef.current.getScreenshot();
+        console.log(imageSrc); // This will be a base64 encoded string of the image
+        // You can do something with the captured image, e.g., upload it to a server
+    }, [webcamRef]);
 
     /*
     const [mediaUrl, setMediaUrl] = //useState("https://mra-public-bucket.s3.us-east-2.amazonaws.com/images/ca/d1/u46/240525065449681-30a4-4122-1a9b-org.jpg");
@@ -104,22 +121,26 @@ const News = () => {
                                     </Form.Label>
                                 </Form.Group>
                             </Form>
+
+                            <Webcam
+                                audio={false} // Disable audio capture
+                                ref={webcamRef} // Reference to the webcam component
+                                screenshotFormat="image/jpeg" // Specify image format
+                                videoConstraints={videoConstraints} // Apply video constraints
+                                style={{ width: '100%', height: 'auto' }} // Responsive styling
+                            />
+
                             <div className="d-flex justify-content-between">
+                                
                                 <Button
                                     variant="outline-secondary"
                                     name="startMedia"
-                                    onClick={() => { 
-
-                                        capturePicture('base64').then(canvas => {
-                                            console.log(canvas);
-                                          }).catch(error => {
-                                            console.error('Error capturing image:', error);
-                                          });
-
+                                    onClick={() => {
+                                        capture()
                                     }}
                                     className="input-group-text me-1 px-auto text-truncate"
                                 >
-                                    <FontAwesomeIcon icon={faImages} className='text-success'/><span className='d-none d-sm-inline'>&nbsp;Start by media</span> 
+                                    <FontAwesomeIcon icon={faImages} className='text-success' /><span className='d-none d-sm-inline'>&nbsp;Start by media</span>
                                 </Button>
                                 <Button
                                     variant="outline-secondary"
@@ -127,7 +148,7 @@ const News = () => {
                                     onClick={() => { getGeolocation() }}
                                     className="input-group-text px-auto text-truncate"
                                 >
-                                    <FontAwesomeIcon icon={faMapMarkerAlt} className='text-warning'/><span className='d-none d-sm-inline'>&nbsp;Start by location</span>
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} className='text-warning' /><span className='d-none d-sm-inline'>&nbsp;Start by location</span>
                                 </Button>
                                 <Button
                                     variant="outline-secondary"
@@ -135,7 +156,7 @@ const News = () => {
                                     onClick={() => { }}
                                     className="input-group-text ms-1 px-auto text-truncate"
                                 >
-                                    <FontAwesomeIcon icon={faMicrophone} className='text-danger'/><span className='d-none d-sm-inline'>&nbsp;Start by narrating</span>
+                                    <FontAwesomeIcon icon={faMicrophone} className='text-danger' /><span className='d-none d-sm-inline'>&nbsp;Start by narrating</span>
                                 </Button>
                             </div>
                         </Container>
