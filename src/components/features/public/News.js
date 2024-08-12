@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 // import Image from './components/ui/Image';
+import { getGeolocation, capturePicture } from '../../../services/utils';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -107,16 +108,24 @@ const News = () => {
                                 <Button
                                     variant="outline-secondary"
                                     name="startMedia"
-                                    onClick={() => { }}
-                                    className="input-group-text me-1 px-3 px-sm-1 px-md-3 text-truncate"
+                                    onClick={() => { 
+
+                                        capturePicture('base64').then(canvas => {
+                                            console.log(canvas);
+                                          }).catch(error => {
+                                            console.error('Error capturing image:', error);
+                                          });
+
+                                    }}
+                                    className="input-group-text me-1 px-auto text-truncate"
                                 >
                                     <FontAwesomeIcon icon={faImages} className='text-success'/><span className='d-none d-sm-inline'>&nbsp;Start by media</span> 
                                 </Button>
                                 <Button
                                     variant="outline-secondary"
                                     name="startLocation"
-                                    onClick={() => { }}
-                                    className="input-group-text px-3 px-sm-1 px-md-3 text-truncate"
+                                    onClick={() => { getGeolocation() }}
+                                    className="input-group-text px-auto text-truncate"
                                 >
                                     <FontAwesomeIcon icon={faMapMarkerAlt} className='text-warning'/><span className='d-none d-sm-inline'>&nbsp;Start by location</span>
                                 </Button>
@@ -124,7 +133,7 @@ const News = () => {
                                     variant="outline-secondary"
                                     name="startNarrating"
                                     onClick={() => { }}
-                                    className="input-group-text ms-1 px-3 px-sm-1 px-md-3 text-truncate"
+                                    className="input-group-text ms-1 px-auto text-truncate"
                                 >
                                     <FontAwesomeIcon icon={faMicrophone} className='text-danger'/><span className='d-none d-sm-inline'>&nbsp;Start by narrating</span>
                                 </Button>
