@@ -41,6 +41,21 @@ body {
     background-color: #000;
     color: #f8f9fa;
 
+    /* Override Bootstrap text color classes */
+    .text-primary,
+    .text-secondary,
+    .text-success,
+    .text-danger,
+    .text-warning,
+    .text-info,
+    .text-light,
+    .text-dark,
+    .text-muted,
+    .text-black-50,
+    .text-white-50 {
+      color: #f8f9fa !important; /* Set all text to white */
+    }
+
     .unfeature-box {
       background-color: #000;
     }

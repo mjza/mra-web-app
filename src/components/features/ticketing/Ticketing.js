@@ -1,6 +1,6 @@
 // Ticketing.js
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, useLocation } from "react-router-dom";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
@@ -13,8 +13,9 @@ const Ticketing = () => {
   const { stepId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const initialStep = stepId ? parseInt(stepId, 10) - 1 : 0;
-  const [currentStep, setCurrentStep] = useState(initialStep);
+  const [currentStep, setCurrentStep] = useState(initialStep >= 0 && initialStep < steps.length ? initialStep : 0);
   const [formData, setFormData] = useState({});
 
   // Extract title from query parameters
@@ -22,7 +23,11 @@ const Ticketing = () => {
 
   useEffect(() => {
     if (currentStep >= 0 && currentStep < steps.length) {
-      navigate(`/new-ticket/${currentStep + 1}?title=${title}`);
+        const calculatedUrl = title ? `/new-ticket/${currentStep + 1}?title=${encodeURIComponent(title)}` : `/new-ticket/${currentStep + 1}`;
+        const currentUrl = `${location.pathname}${location.search}`;
+        if (currentUrl !== calculatedUrl) {
+          navigate(calculatedUrl);
+        }
     }
   }, [currentStep, navigate, title]);
 
@@ -38,6 +43,8 @@ const Ticketing = () => {
   const handleBack = () => {
     if (currentStep > 0) {
       setCurrentStep((prevStep) => prevStep - 1);
+    } else{
+        navigate('/');  
     }
   };
 
