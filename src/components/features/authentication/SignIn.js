@@ -65,7 +65,7 @@ const SignIn = () => {
 
     return (
         <>
-            <div className="min-vh-100 align-items-center py-5">
+            <div className="min-vh-100 align-items-center">
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
                     <Col xs={1} sm={1} md={1} lg={2} xl={2} xxl={3}></Col> {/* Left gap */}

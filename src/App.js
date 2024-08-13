@@ -16,7 +16,8 @@ import ResetPassword from './components/features/authentication/ResetPassword';
 import ResendActivation from './components/features/authentication/ResendActivation';
 
 import Profile from './components/features/user/Profile';
-import News from './components/features/public/News';
+import Feed from './components/features/user/Feed';
+import Ticketing from './components/features/ticketing/Ticketing';
 import NotFound from './components/pages/NotFound';
 import UnderConstruction from './components/pages/UnderConstruction';
 import RegistrationSuccess from './components/pages/RegistrationSuccess';
@@ -43,7 +44,7 @@ const AppContent = () => {
 
     return <>
       <PublicUserHeaderNavbar />
-      <main>
+      <main className='py-5'>
         <Routes>
           <Route path="/" element={<Navigate replace to={signInPath} />} />
           <Route path="/signin" element={<SignIn />} />
@@ -66,11 +67,12 @@ const AppContent = () => {
   } else {
     return <>
       <UserHeaderNavbar />
-      <main>
+      <main className='py-5'>
         <Routes>
           <Route path="/" element={<Navigate replace to="/feed" />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/feed" element={<News />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/new-ticket/:stepId" element={<Ticketing />} />
           <Route path="/news" element={<UnderConstruction />} />
           <Route path="/tickets" element={<UnderConstruction />} />
           <Route path="/qrcodes" element={<UnderConstruction />} />

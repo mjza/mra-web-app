@@ -40,7 +40,7 @@ const ForgotPassword = () => {
 
     return (
         <>
-            <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center py-5 feature-box">
+            <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center feature-box">
                 <Row className="w-100 p-0 m-0">
                     {loading && <LoadingOverlay />}
                     <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
