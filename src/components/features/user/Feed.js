@@ -38,16 +38,16 @@ const Feed = () => {
                         <Container className='unfeature-box py-2 px-3 rounded-4 border'>
                             <Form className="w-100">
                                 <div className="d-flex justify-content-between">
-                                    <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Start a new ticket</h1>
+                                    <h1 className="display-6 text-primary">Start a new ticket</h1>
                                     <Button
                                         variant="outline-secondary"
                                         name="startNewTicket"
                                         onClick={() => { 
                                             navigate('/new-ticket/1')
                                         }}
-                                        className="px-auto py-1 my-auto text-truncate fw-bold"
+                                        className="px-auto py-1 my-auto fw-bold btn-success"
                                     >
-                                        <FontAwesomeIcon icon={faPlus} className='text-success' />
+                                        <FontAwesomeIcon icon={faPlus} className='text-light' />
                                     </Button>
                                 </div>
                                 <Form.Group className="mb-2">
