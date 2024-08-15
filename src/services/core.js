@@ -1,4 +1,4 @@
-import { handlingErrors } from './utils'; 
+import { handlingErrors, createQueryParams } from './utils'; 
 
 const coreBaseURL = process.env.REACT_APP_CORE_BASE_URL;
 
@@ -54,7 +54,7 @@ const fetchUserDetails = async (token, { userId, page = 1, limit = 30 } = {}) =>
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Adjust based on your auth method
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -95,7 +95,7 @@ const createUserDetails = async (token, userDetails) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Adjust based on your auth method
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(userDetails)
         });
@@ -137,7 +137,7 @@ const updateUserDetails = async (token, userId, userDetails) => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}` // Adjust based on your auth method
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(userDetails)
         });
@@ -157,3 +157,54 @@ const updateUserDetails = async (token, userId, userDetails) => {
 }
 
 export { updateUserDetails };
+
+/**
+ * Retrieves ticket categories based on provided conditions and pagination.
+ *
+ * @param {string} token - The JWT token used to authenticate the request.
+ * @param {Object} params - The parameters for the request.
+ * @param {string} [params.ticketTitle] - Optional ticket title to search for similar categories.
+ * @param {number} [params.latitude] - Optional latitude for geolocation-based filtering.
+ * @param {number} [params.longitude] - Optional longitude for geolocation-based filtering.
+ * @param {number} [params.customerId] - Optional customer ID to filter categories. Takes priority over customerTypeId if set.
+ * @param {number} [params.customerTypeId] - Optional customer type ID to filter categories. Ignored if customerId is set.
+ * @param {number} [params.page=1] - Page number of the ticket categories to retrieve.
+ * @param {number} [params.limit=30] - Maximum number of ticket categories to return in one response.
+ * @returns {Promise<{success: boolean, message: string, data?: Object[], hasMore?: boolean}>} A promise that resolves to an object indicating the outcome of the request. Contains the ticket categories data if successful.
+ */
+const fetchTicketCategories = async (token, { ticketTitle, latitude, longitude, customerId, customerTypeId, page = 1, limit = 30 } = {}) => {
+    try {
+        const queryParams = createQueryParams({
+            ticketTitle,
+            latitude,
+            longitude,
+            customerId,
+            customerTypeId,
+            page,
+            limit
+        });        
+
+        const response = await fetch(`${coreBaseURL}/v1/ticket_categories?${queryParams.toString()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const result = await response.json();
+
+        if (response.status === 200) {
+            return { success: true, message: 'Ticket categories retrieved successfully', data: result.data, hasMore: result.hasMore };
+        } else {
+            const message = handlingErrors(result, 'Failed to retrieve ticket categories, please try again.');
+            return { success: false, message };
+        }
+    } catch (error) {
+        console.error('Error fetching ticket categories:', error);
+        return { success: false, message: 'Network error, please try again later.' };
+    }
+}
+
+export { fetchTicketCategories };
+

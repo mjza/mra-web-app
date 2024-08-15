@@ -25,3 +25,16 @@ const handlingErrors = (data, message) => {
 }
 
 export { handlingErrors };
+
+const createQueryParams = (params) => {
+    // Create a new object excluding undefined or empty values
+    const cleanedParams = Object.fromEntries(
+        Object.entries(params).filter(
+            ([, value]) => value !== undefined && value !== null && value !== ''
+        )
+    );
+
+    return new URLSearchParams(cleanedParams);
+};
+
+export {createQueryParams};

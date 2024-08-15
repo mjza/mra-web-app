@@ -14,6 +14,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
+import { useUser } from '../../../contexts/UserContext';
 
 const steps = [Step1, Step2, Step3, Step4, Step5];
 
@@ -27,6 +28,8 @@ const Ticketing = () => {
   const initialStep = stepId ? parseInt(stepId, 10) - 1 : 0;
   const [currentStep, setCurrentStep] = useState(initialStep >= 0 && initialStep < steps.length ? initialStep : 0);
   const [formData, setFormData] = useState({});
+  const { user } = useUser();
+  const { token } = user;
 
   // Extract title from query parameters
   const title = searchParams.get("title") || "";
@@ -101,6 +104,7 @@ const Ticketing = () => {
                   setError={setError}
                   setLoading={setLoading}
                   loding={loading}
+                  token={token}
                 />
 
                 <div className={`d-flex ${currentStep > 0 ? 'justify-content-between' : 'justify-content-end'}`}>
