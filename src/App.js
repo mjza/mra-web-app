@@ -42,7 +42,8 @@ const AppContent = () => {
     const redirectTo = `${location.pathname}${location.search}`;
     const signInPath = `/signin?redirect=${encodeURIComponent(redirectTo)}`;
 
-    return <>
+    return (
+    <>
       <PublicUserHeaderNavbar />
       <main className='py-5'>
         <Routes>
@@ -63,27 +64,30 @@ const AppContent = () => {
       </main>
       <Footer />
       <PublicUserFooterNavbar />
-    </>;
+    </>
+    );
   } else {
-    return <>
-      <UserHeaderNavbar />
-      <main className='py-5'>
-        <Routes>
-          <Route path="/" element={<Navigate replace to="/feed" />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/new-ticket/:stepId" element={<Ticketing />} />
-          <Route path="/news" element={<UnderConstruction />} />
-          <Route path="/tickets" element={<UnderConstruction />} />
-          <Route path="/qrcodes" element={<UnderConstruction />} />
-          <Route path="/messaging" element={<UnderConstruction />} />
-          <Route path="/gifts" element={<UnderConstruction />} />
-          {infoRoutes()}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <UserFooterNavbar />
-    </>;
+    return (
+      <div className="d-flex flex-column min-vh-100">
+        <UserHeaderNavbar />
+        <main className='my-5'>
+          <Routes>
+            <Route path="/" element={<Navigate replace to="/feed" />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/new-ticket/:stepId" element={<Ticketing />} />
+            <Route path="/news" element={<UnderConstruction />} />
+            <Route path="/tickets" element={<UnderConstruction />} />
+            <Route path="/qrcodes" element={<UnderConstruction />} />
+            <Route path="/messaging" element={<UnderConstruction />} />
+            <Route path="/gifts" element={<UnderConstruction />} />
+            {infoRoutes()}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </main>
+        <UserFooterNavbar />
+      </div>
+    );
   }
 };
 
@@ -92,19 +96,19 @@ const AppContent = () => {
 const App = () => {
 
   return (
-    <Router>
-      <ThemeProvider>
-        <UserProvider>
-          <div className="App">
-            <AppContent />
-          </div>
-        </UserProvider>
-      </ThemeProvider>
-    </Router>
-  );
+        <Router>
+          <ThemeProvider>
+            <UserProvider>
+              <div className="App">
+                <AppContent />
+              </div>
+            </UserProvider>
+          </ThemeProvider>
+        </Router>
+        );
 }
 
-export default App;
+        export default App;
 
 
 

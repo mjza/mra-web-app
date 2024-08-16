@@ -76,14 +76,14 @@ const Ticketing = () => {
 
       </div>
 
-      <div className="min-vh-100 d-flex flex-column justify-content-start align-items-center feature-box">
+      <div className="min-vh-100 d-flex flex-column justify-content-start align-items-center">
         <Row className="w-100 p-0 m-0">
           {loading && <LoadingOverlay />}
           <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
           <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 py-4 pt-md-5 mx-0'> {/* Center content */}
-            <Container className='unfeature-box p-4 rounded-4'>
+            <Container className='p-4 rounded-4 border'>
               <Form onSubmit={handleSubmit} className="w-100">
-                <h1 className="display-4 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Create a new report</h1>
+                <h1 className="display-5 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Create a new report</h1>
                 {error &&
                   <Alert variant="danger">
                     <b>Errors:</b><br />
