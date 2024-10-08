@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner';
-import LoadingOverlay from '../../ui/LoadingOverlay';
-import { resetPassword } from '../../../services/auth';
+import { faDice, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faDice } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
+import { resetPassword } from '../../../services/auth.js';
+import LoadingOverlay from '../../ui/LoadingOverlay.js';
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();

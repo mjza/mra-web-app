@@ -1,26 +1,25 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './scss/App.scss';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { UserProvider, useUser } from './contexts/UserContext';
-import PublicUserHeaderNavbar from './components/layout/public/HeaderNavbar';
-import PublicUserFooterNavbar from './components/layout/public/FooterNavbar';
-import Footer from './components/common/Footer';
-import UserHeaderNavbar from './components/layout/users/HeaderNavbar';
-import UserFooterNavbar from './components/layout/users/FooterNavbar';
-import SignIn from './components/features/authentication/SignIn';
-import SignUp from './components/features/authentication/SignUp';
-import ForgetUsername from './components/features/authentication/ForgetUsername';
-import ForgetPassword from './components/features/authentication/ForgetPassword';
-import ResetPassword from './components/features/authentication/ResetPassword';
-import ResendActivation from './components/features/authentication/ResendActivation';
-
-import Profile from './components/features/user/Profile';
-import Feed from './components/features/user/Feed';
-import Ticketing from './components/features/ticketing/Ticketing';
-import NotFound from './components/pages/NotFound';
-import UnderConstruction from './components/pages/UnderConstruction';
-import RegistrationSuccess from './components/pages/RegistrationSuccess';
+import { ThemeProvider } from './contexts/ThemeContext.js';
+import { UserProvider, useUser } from './contexts/UserContext.js';
+import PublicUserHeaderNavbar from './components/layout/public/HeaderNavbar.js';
+import PublicUserFooterNavbar from './components/layout/public/FooterNavbar.js';
+import Footer from './components/common/Footer.js';
+import UserHeaderNavbar from './components/layout/users/HeaderNavbar.js';
+import UserFooterNavbar from './components/layout/users/FooterNavbar.js';
+import SignIn from './components/features/authentication/SignIn.js';
+import SignUp from './components/features/authentication/SignUp.js';
+import ForgetUsername from './components/features/authentication/ForgetUsername.js';
+import ForgetPassword from './components/features/authentication/ForgetPassword.js';
+import ResetPassword from './components/features/authentication/ResetPassword.js';
+import ResendActivation from './components/features/authentication/ResendActivation.js';
+import Profile from './components/features/user/Profile.js';
+import Feed from './components/features/user/Feed.js';
+import Ticketing from './components/features/ticketing/Ticketing.js';
+import NotFound from './components/pages/NotFound.js';
+import UnderConstruction from './components/pages/UnderConstruction.js';
+import RegistrationSuccess from './components/pages/RegistrationSuccess.js';
 
 
 const infoRoutes = () => [

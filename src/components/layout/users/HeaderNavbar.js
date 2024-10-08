@@ -1,22 +1,13 @@
-import React, { useState, useContext } from 'react';
-import ThemeContext from '../../../contexts/ThemeContext';
-import RCLogo from '../../common/RCLogo';
-import SideNavigation from './SideNavigation';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Tooltip from 'react-bootstrap/Tooltip';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import { faCommentDots, faGifts, faHome, faQrcode, faSearch, faTicket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faGifts, faCommentDots, faTicket, faHome, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import React, { useContext, useState } from 'react';
+import { Col, Container, Form, FormControl, InputGroup, Nav, Navbar, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
+import ThemeContext from '../../../contexts/ThemeContext.js';
+import { useUser } from '../../../contexts/UserContext.js';
+import RCLogo from '../../common/RCLogo.js';
 import './scss/Navbar.scss';
-import { useUser } from '../../../contexts/UserContext';
+import SideNavigation from './SideNavigation.js';
 
 const HeaderNavbar = () => {
   const { user } = useUser();

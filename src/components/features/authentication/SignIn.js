@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { LinkContainer } from 'react-router-bootstrap';
-import { useUser } from '../../../contexts/UserContext';
-import LoadingOverlay from '../../ui/LoadingOverlay';
-import { loginService } from '../../../services/auth';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner';
-import AdvertisementCarousel from '../../common/AdvertisementCarousel';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useUser } from '../../../contexts/UserContext.js';
+import { loginService } from '../../../services/auth.js';
+import AdvertisementCarousel from '../../common/AdvertisementCarousel.js';
+import LoadingOverlay from '../../ui/LoadingOverlay.js';
 
 const SignIn = () => {
     const navigate = useNavigate();

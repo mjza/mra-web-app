@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useUser } from '../../contexts/UserContext';
-import { parseS3Url, getPresignedUrlService, getAccessUrlsService } from '../../services/file';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import ProgressBar from 'react-bootstrap/ProgressBar';
+import { faCamera, faCircleXmark, faSpinner, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faSpinner, faCircleXmark, faUpload } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Modal, ProgressBar } from 'react-bootstrap';
+import { useUser } from '../../contexts/UserContext.js';
+import { getAccessUrlsService, getPresignedUrlService, parseS3Url } from '../../services/file.js';
 
 const Img = ({
     size: { maxHeight = '100%', maxWidth = '100%', height = 'auto', width = '100%', aspectRatio = 'auto' } = {},

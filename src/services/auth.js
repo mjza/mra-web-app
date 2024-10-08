@@ -1,4 +1,4 @@
-import {handlingErrors} from './utils'; 
+import {handlingErrors} from './utils.js'; 
 
 const appURL = process.env.REACT_APP_BASE_URL;
 const baseURL = process.env.REACT_APP_AUTH_BASE_URL;

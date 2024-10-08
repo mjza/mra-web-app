@@ -1,17 +1,11 @@
-import React, { useContext } from 'react';
-import ThemeContext from '../../../contexts/ThemeContext';
-import RCLogo from '../../common/RCLogo';
-import ToggleThemeButton from '../../ui/ToggleThemeButton';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Tooltip from 'react-bootstrap/Tooltip';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import { faNewspaper, faQrcode, faTicket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faNewspaper, faTicket, faQrcode } from '@fortawesome/free-solid-svg-icons';
+import React, { useContext } from 'react';
+import { Col, Container, Nav, Navbar, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
+import ThemeContext from '../../../contexts/ThemeContext.js';
+import RCLogo from '../../common/RCLogo.js';
+import ToggleThemeButton from '../../ui/ToggleThemeButton.js';
 
 const HeaderNavbar = () => {
   const navigate = useNavigate();

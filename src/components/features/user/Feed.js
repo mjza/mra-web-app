@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
-import { getGeolocation } from '../../ui/utils';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
+import { faImages, faMapMarkerAlt, faMicrophone, faPaperPlane, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faMicrophone, faMapMarkerAlt, faImages, faPlus } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react';
+import { Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
+import { useNavigate } from "react-router-dom";
+import { getGeolocation } from '../../ui/utils.js';
 
 const Feed = () => {
     const [ticket, setTicket] = useState({ title: "" });

@@ -1,4 +1,4 @@
-import { handlingErrors } from './utils';
+import { handlingErrors } from './utils.js';
 
 const fileBaseURL = process.env.REACT_APP_FILE_BASE_URL;
 

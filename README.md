@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Update All Outdated Packages
+Update all packages to their latest versions regardless of version ranges: If you want to update all your dependencies to the absolute latest version (which may include major version updates that could break your code), you can use:
+
+```
+npx npm-check-updates -u
+npm install
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -74,3 +82,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+

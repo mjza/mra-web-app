@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { getGeolocation } from '../../ui/utils';
+import { getGeolocation } from '../../ui/utils.js';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

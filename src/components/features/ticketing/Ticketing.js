@@ -1,20 +1,14 @@
 // Ticketing.js
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams, useLocation } from "react-router-dom";
-import Step1 from "./Step1";
-import Step2 from "./Step2";
-import Step3 from "./Step3";
-import Step4 from "./Step4";
-import Step5 from "./Step5";
-import LoadingOverlay from '../../ui/LoadingOverlay';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner';
-import { useUser } from '../../../contexts/UserContext';
+import React, { useEffect, useState } from "react";
+import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useUser } from '../../../contexts/UserContext.js';
+import LoadingOverlay from '../../ui/LoadingOverlay.js';
+import Step1 from "./Step1.js";
+import Step2 from "./Step2.js";
+import Step3 from "./Step3.js";
+import Step4 from "./Step4.js";
+import Step5 from "./Step5.js";
 
 const steps = [Step1, Step2, Step3, Step4, Step5];
 

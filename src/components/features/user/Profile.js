@@ -1,20 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner';
-import InputGroup from 'react-bootstrap/InputGroup';
+import { faFloppyDisk, faPencilAlt, faUndo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faFloppyDisk, faUndo } from '@fortawesome/free-solid-svg-icons';
-import { parseS3Url, getAccessUrlsService, getLargestImageUrl } from '../../../services/file';
-import LoadingOverlay from '../../ui/LoadingOverlay';
-import { useUser } from '../../../contexts/UserContext';
-import Img from '../../ui/Image';
-import { fetchGenderTypes, fetchUserDetails, createUserDetails, updateUserDetails } from '../../../services/core';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, Col, Container, Form, InputGroup, Row, Spinner } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom';
+import { useUser } from '../../../contexts/UserContext.js';
+import { createUserDetails, fetchGenderTypes, fetchUserDetails, updateUserDetails } from '../../../services/core.js';
+import { getAccessUrlsService, getLargestImageUrl, parseS3Url } from '../../../services/file.js';
+import Img from '../../ui/Image.js';
+import LoadingOverlay from '../../ui/LoadingOverlay.js';
 
 const Profile = () => {
     const [error, setError] = useState('');

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useUser } from '../../../contexts/UserContext';
+import { useUser } from '../../../contexts/UserContext.js';
 import { Navigate } from 'react-router-dom';
-import ConfirmDialog from '../../common/ConfirmDialog';
-import LoadingOverlay from '../../ui/LoadingOverlay';
-import { logoutService } from '../../../services/auth';
+import ConfirmDialog from '../../common/ConfirmDialog.js';
+import LoadingOverlay from '../../ui/LoadingOverlay.js';
+import { logoutService } from '../../../services/auth.js';
 
 const SignOut = () => {
     const { user, logout } = useUser();

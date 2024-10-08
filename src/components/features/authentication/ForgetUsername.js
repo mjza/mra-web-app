@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner';
-import { fetchUsernamesByEmail } from '../../../services/auth';
-import LoadingOverlay from '../../ui/LoadingOverlay';
+import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { fetchUsernamesByEmail } from '../../../services/auth.js';
+import LoadingOverlay from '../../ui/LoadingOverlay.js';
 
 
 const ForgetUsername = () => {

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import ThemeContext from '../../../contexts/ThemeContext';
-import SignOut from '../../features/authentication/SignOut';
-import ToggleThemeButton from '../../ui/ToggleThemeButton';
+import ThemeContext from '../../../contexts/ThemeContext.js';
+import SignOut from '../../features/authentication/SignOut.js';
+import ToggleThemeButton from '../../ui/ToggleThemeButton.js';
 import './scss/SideNavigation.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
