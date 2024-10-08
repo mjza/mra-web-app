@@ -11,13 +11,14 @@ const coreBaseURL = process.env.REACT_APP_CORE_BASE_URL;
  * @param {number} [params.limit=30] - Maximum number of gender types to return in one response.
  * @returns {Promise<{success: boolean, message: string, data?: Object[], hasMore?: boolean}>} A promise that resolves to an object indicating the outcome of the request. Contains the gender types data if successful.
  */
-const fetchGenderTypes = async ({ page = 1, limit = 30 } = {}) => {
+const fetchGenderTypes = async (token, { page = 1, limit = 30 } = {}) => {
     try {
         const queryParams = new URLSearchParams({ page, limit });
         const response = await fetch(`${coreBaseURL}/v1/gender_types?${queryParams.toString()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         });
 

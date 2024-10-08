@@ -67,7 +67,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchAndSetGenderTypes = async () => {
             try {
-                const response = await fetchGenderTypes();
+                const response = await fetchGenderTypes(token);
                 if (response.success) {
                     const sortedGenderTypes = response.data.sort((a, b) => a.sortOrder - b.sortOrder);
                     setGenderTypes(sortedGenderTypes);
