@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
-import { fetchUsernamesByEmail } from '../../../services/auth.js';
-import LoadingOverlay from '../../ui/LoadingOverlay.js';
+import { requestPasswordResetToken } from '../../../services/auth.mjs';
+import LoadingOverlay from '../../ui/LoadingOverlay.mjs';
 
-
-const ForgetUsername = () => {
-    const [email, setEmail] = useState('');
+const ForgotPassword = () => {
+    const [username, setUsername] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [alertVariant, setAlertVariant] = useState('danger');
@@ -13,14 +12,19 @@ const ForgetUsername = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!email || !/\s*\S+@\S+\.\S+\s*/.test(email)) {
-            setMessage('Please enter a valid email address.');
+        if (!username) {
+            setMessage('Please enter your username.');
+            setAlertVariant('danger');
+            return;
+        }
+        if (username.trim().length < 5 || username.trim().length > 30) {
+            setMessage('Username must be between 5 and 30 characters.');
             setAlertVariant('danger');
             return;
         }
 
         setLoading(true);
-        const response = await fetchUsernamesByEmail(email.trim());
+        const response = await requestPasswordResetToken(username);
         setLoading(false);
 
         setMessage(response.message);
@@ -36,23 +40,23 @@ const ForgetUsername = () => {
                     <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
                     <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 py-4 pt-md-5 mx-0'> {/* Center content */}
                         <Container className='unfeature-box p-4 rounded-4'>
-                            <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Retrieve Username(s)</h1>
+                            <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Reset Your Password</h1>
                             <Form onSubmit={handleSubmit} >
-                                <Form.Group controlId="formBasicEmail" className="mb-3">
-                                    <Form.Label className="w-100">Email address:
+                                <Form.Group controlId="formBasicUsername" className="mb-3">
+                                    <Form.Label className="w-100">Username:
                                         <Form.Control
-                                            type="email"
-                                            name="email"
-                                            autoComplete="email"
-                                            placeholder="Enter email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
+                                            type="text"
+                                            name="username"
+                                            autoComplete="username"
+                                            placeholder="Enter username"
+                                            value={username}
+                                            onChange={(e) => setUsername(e.target.value)}
                                             required
                                             disabled={loading || formDisabled}
                                         />
                                     </Form.Label>
                                     <Form.Text className="text-muted">
-                                        We'll send your username(s) to your email address.
+                                        We'll send a password reset link to the email associated with your account.
                                     </Form.Text>
                                 </Form.Group>
                                 <Button variant="primary" type="submit" disabled={loading || formDisabled} className="text-nowrap overflow-hidden w-100 mt-2 mb-4 mb-xxxl-5">
@@ -61,7 +65,7 @@ const ForgetUsername = () => {
                                             <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
                                             &nbsp;Loading...
                                         </>
-                                    ) : "Retrieve Username"}
+                                    ) : "Send Reset Link"}
                                 </Button>
                             </Form>
                             {message && (
@@ -84,4 +88,4 @@ const ForgetUsername = () => {
     );
 };
 
-export default ForgetUsername;
+export default ForgotPassword;

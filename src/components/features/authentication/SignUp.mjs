@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import LoadingOverlay from '../../ui/LoadingOverlay.js';
-import { registerService } from '../../../services/auth.js';
-import { Container , Row , Col , Form , Button , Alert , Spinner} from 'react-bootstrap';
+import { faDice, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faDice } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react';
+import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { registerService } from '../../../services/auth.mjs';
+import LoadingOverlay from '../../ui/LoadingOverlay.mjs';
 
 const SignUp = () => {
     const [userInfo, setUserInfo] = useState({

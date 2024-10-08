@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
-import { resendActivation } from '../../../services/auth.js';
-import LoadingOverlay from '../../ui/LoadingOverlay.js';
+import { fetchUsernamesByEmail } from '../../../services/auth.mjs';
+import LoadingOverlay from '../../ui/LoadingOverlay.mjs';
 
 
-const ResendActivation = () => {
-    const [usernameOrEmail, setUsernameOrEmail] = useState('');
+const ForgetUsername = () => {
+    const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [alertVariant, setAlertVariant] = useState('danger');
@@ -13,14 +13,14 @@ const ResendActivation = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!usernameOrEmail || (!/\s*\S+@\S+\.\S+\s*/.test(usernameOrEmail) && !/\s*\S+\s*/.test(usernameOrEmail)) ) {
-            setMessage('Please enter a valid email address or a username.');
+        if (!email || !/\s*\S+@\S+\.\S+\s*/.test(email)) {
+            setMessage('Please enter a valid email address.');
             setAlertVariant('danger');
             return;
         }
 
         setLoading(true);
-        const response = await resendActivation(usernameOrEmail.trim());
+        const response = await fetchUsernamesByEmail(email.trim());
         setLoading(false);
 
         setMessage(response.message);
@@ -36,22 +36,23 @@ const ResendActivation = () => {
                     <Col xs={1} sm={1} md={1} lg={2} xl={3} xxl={4}></Col> {/* Left gap */}
                     <Col xs={10} sm={10} md={10} lg={8} xl={6} xxl={4} className='px-0 py-4 pt-md-5 mx-0'> {/* Center content */}
                         <Container className='unfeature-box p-4 rounded-4'>
-                            <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Resend Activation Email</h1>
-                            <h6 className='text-muted'><i>No problem, use the below form to have a new activation email sent to you.</i></h6>
+                            <h1 className="display-6 text-primary mb-3 mb-xxl-4 mb-xxxl-5">Retrieve Username(s)</h1>
                             <Form onSubmit={handleSubmit} >
                                 <Form.Group controlId="formBasicEmail" className="mb-3">
-                                    <Form.Label className="w-100">Username or Email:
+                                    <Form.Label className="w-100">Email address:
                                         <Form.Control
-                                            type="text"
-                                            name="usernameOrEmail"
-                                            autoComplete="username"
-                                            onChange={(e) => setUsernameOrEmail(e.target.value)}
+                                            type="email"
+                                            name="email"
+                                            autoComplete="email"
+                                            placeholder="Enter email"
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             required
                                             disabled={loading || formDisabled}
                                         />
                                     </Form.Label>
                                     <Form.Text className="text-muted">
-                                        It is better you enter your username if you have several users.
+                                        We'll send your username(s) to your email address.
                                     </Form.Text>
                                 </Form.Group>
                                 <Button variant="primary" type="submit" disabled={loading || formDisabled} className="text-nowrap overflow-hidden w-100 mt-2 mb-4 mb-xxxl-5">
@@ -83,4 +84,4 @@ const ResendActivation = () => {
     );
 };
 
-export default ResendActivation;
+export default ForgetUsername;

@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useUser } from '../../../contexts/UserContext.js';
-import { loginService } from '../../../services/auth.js';
-import AdvertisementCarousel from '../../common/AdvertisementCarousel.js';
-import LoadingOverlay from '../../ui/LoadingOverlay.js';
+import { useUser } from '../../../contexts/UserContext.mjs';
+import { loginService } from '../../../services/auth.mjs';
+import AdvertisementCarousel from '../../common/AdvertisementCarousel.mjs';
+import LoadingOverlay from '../../ui/LoadingOverlay.mjs';
 
 const SignIn = () => {
     const navigate = useNavigate();

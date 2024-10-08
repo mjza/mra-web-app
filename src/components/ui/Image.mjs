@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Modal, ProgressBar } from 'react-bootstrap';
-import { useUser } from '../../contexts/UserContext.js';
-import { getAccessUrlsService, getPresignedUrlService, parseS3Url } from '../../services/file.js';
+import { useUser } from '../../contexts/UserContext.mjs';
+import { getAccessUrlsService, getPresignedUrlService, parseS3Url } from '../../services/file.mjs';
 
 const Img = ({
     size: { maxHeight = '100%', maxWidth = '100%', height = 'auto', width = '100%', aspectRatio = 'auto' } = {},

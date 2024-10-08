@@ -1,4 +1,4 @@
-import { handlingErrors, createQueryParams } from './utils.js'; 
+import { createQueryParams, handlingErrors } from './utils.mjs';
 
 const coreBaseURL = process.env.REACT_APP_CORE_BASE_URL;
 

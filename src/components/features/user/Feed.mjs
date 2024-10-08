@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import { useNavigate } from "react-router-dom";
-import { getGeolocation } from '../../ui/utils.js';
+import { getGeolocation } from '../../ui/utils.mjs';
 
 const Feed = () => {
     const [ticket, setTicket] = useState({ title: "" });

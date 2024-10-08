@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
-import { resetPassword } from '../../../services/auth.js';
-import LoadingOverlay from '../../ui/LoadingOverlay.js';
+import { resetPassword } from '../../../services/auth.mjs';
+import LoadingOverlay from '../../ui/LoadingOverlay.mjs';
 
 const ResetPassword = () => {
     const [searchParams] = useSearchParams();

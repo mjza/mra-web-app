@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import ThemeContext from '../../../contexts/ThemeContext.js';
+import ThemeContext from '../../../contexts/ThemeContext.mjs';
 
 const FooterNavbar = () => {
     const location = useLocation();

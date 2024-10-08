@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, InputGroup, Row, Spinner } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
-import { useUser } from '../../../contexts/UserContext.js';
-import { createUserDetails, fetchGenderTypes, fetchUserDetails, updateUserDetails } from '../../../services/core.js';
-import { getAccessUrlsService, getLargestImageUrl, parseS3Url } from '../../../services/file.js';
-import Img from '../../ui/Image.js';
-import LoadingOverlay from '../../ui/LoadingOverlay.js';
+import { useUser } from '../../../contexts/UserContext.mjs';
+import { createUserDetails, fetchGenderTypes, fetchUserDetails, updateUserDetails } from '../../../services/core.mjs';
+import { getAccessUrlsService, getLargestImageUrl, parseS3Url } from '../../../services/file.mjs';
+import Img from '../../ui/Image.mjs';
+import LoadingOverlay from '../../ui/LoadingOverlay.mjs';
 
 const Profile = () => {
     const [error, setError] = useState('');

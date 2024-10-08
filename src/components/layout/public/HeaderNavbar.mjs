@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext } from 'react';
 import { Col, Container, Nav, Navbar, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ThemeContext from '../../../contexts/ThemeContext.js';
-import RCLogo from '../../common/RCLogo.js';
-import ToggleThemeButton from '../../ui/ToggleThemeButton.js';
+import ThemeContext from '../../../contexts/ThemeContext.mjs';
+import RCLogo from '../../common/RCLogo.mjs';
+import ToggleThemeButton from '../../ui/ToggleThemeButton.mjs';
 
 const HeaderNavbar = () => {
   const navigate = useNavigate();

@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import ThemeContext from '../../../contexts/ThemeContext.js';
-import SignOut from '../../features/authentication/SignOut.js';
-import ToggleThemeButton from '../../ui/ToggleThemeButton.js';
-import './scss/SideNavigation.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useContext } from 'react';
+import ThemeContext from '../../../contexts/ThemeContext.mjs';
+import SignOut from '../../features/authentication/SignOut.mjs';
+import ToggleThemeButton from '../../ui/ToggleThemeButton.mjs';
+import './scss/SideNavigation.scss';
 
 const SideNavigation = ({ isOpen, onClose }) => {
   const { theme } = useContext(ThemeContext);

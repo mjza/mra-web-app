@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import ThemeContext from '../../contexts/ThemeContext.js';
+import ThemeContext from '../../contexts/ThemeContext.mjs';
 
 const LoadingOverlay = () => {
     const { theme } = useContext(ThemeContext);

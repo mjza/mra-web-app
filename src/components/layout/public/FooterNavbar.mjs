@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { Navbar , Nav } from 'react-bootstrap';
+import { faNewspaper, faQrcode, faTicket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faNewspaper, faTicket, faQrcode} from '@fortawesome/free-solid-svg-icons';
-import ThemeContext from '../../../contexts/ThemeContext.js';
+import React, { useContext } from 'react';
+import { Nav, Navbar } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
+import ThemeContext from '../../../contexts/ThemeContext.mjs';
 
 const FooterNavbar = () => {
     const location = useLocation();

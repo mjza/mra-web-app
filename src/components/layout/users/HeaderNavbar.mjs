@@ -3,11 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useState } from 'react';
 import { Col, Container, Form, FormControl, InputGroup, Nav, Navbar, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import ThemeContext from '../../../contexts/ThemeContext.js';
-import { useUser } from '../../../contexts/UserContext.js';
-import RCLogo from '../../common/RCLogo.js';
+import ThemeContext from '../../../contexts/ThemeContext.mjs';
+import { useUser } from '../../../contexts/UserContext.mjs';
+import RCLogo from '../../common/RCLogo.mjs';
 import './scss/Navbar.scss';
-import SideNavigation from './SideNavigation.js';
+import SideNavigation from './SideNavigation.mjs';
 
 const HeaderNavbar = () => {
   const { user } = useUser();

@@ -1,7 +1,7 @@
 // Step1.js
 import React, { useEffect, useState } from "react";
 import { Button, Form, InputGroup } from 'react-bootstrap';
-import { fetchTicketCategories } from '../../../services/core.js';
+import { fetchTicketCategories } from '../../../services/core.mjs';
 
 const Step1 = ({ data, onNext, onBack, setError, setLoading, loading, token }) => {
   const [inputData, setInputData] = useState(data.step1 || {});

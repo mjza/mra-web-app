@@ -1,8 +1,8 @@
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext } from 'react';
-import {Form} from 'react-bootstrap';
-import ThemeContext from '../../contexts/ThemeContext.js';
+import { Form } from 'react-bootstrap';
+import ThemeContext from '../../contexts/ThemeContext.mjs';
 
 function ToggleThemeButton({ useIcons = false, fontSize = 1 }) {
   const { theme, setTheme } = useContext(ThemeContext);

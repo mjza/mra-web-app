@@ -1,8 +1,8 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.js';
-import reportWebVitals from './reportWebVitals.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import App from './App.mjs';
+import reportWebVitals from './reportWebVitals.mjs';
 import './scss/index.scss'; // Keep this always after bootstrap
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

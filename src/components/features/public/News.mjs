@@ -1,16 +1,16 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { getGeolocation } from '../../ui/utils.js';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
+import React, { useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import { getGeolocation } from '../../ui/utils.mjs';
 //import Webcam from 'react-webcam';
 //import Alert from 'react-bootstrap/Alert';
 //import Spinner from 'react-bootstrap/Spinner';
-import InputGroup from 'react-bootstrap/InputGroup';
+import { faImages, faMapMarkerAlt, faMicrophone, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faMicrophone, faMapMarkerAlt, faImages } from '@fortawesome/free-solid-svg-icons';
+import InputGroup from 'react-bootstrap/InputGroup';
 
 const News = () => {
     const webcamRef = useRef(null);
