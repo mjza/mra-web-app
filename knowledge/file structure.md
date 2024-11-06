@@ -8,6 +8,7 @@ Organizing a React application with a comprehensive and scalable folder structur
 project-root/
 ├── public/
 │   └── index.html
+│   └── images/
 ├── src/
 │   ├── assets/
 │   │   ├── images/
@@ -87,7 +88,7 @@ project-root/
 
 - **`public/`**: Contains static files like `index.html` that are not processed by Webpack.
 
-- **`src/`**: The main directory for your application's source code.
+- **`src/`**: The main directory for theapplication's source code.
 
   - **`assets/`**: Static assets such as images, fonts, and global styles.
 
@@ -113,7 +114,7 @@ project-root/
 
   - **`App.js`**: The root component that sets up routes and global providers.
 
-  - **`index.js`**: Entry point of your React application.
+  - **`index.js`**: Entry point of theReact application.
 
 **Benefits of This Structure:**
 
@@ -129,21 +130,65 @@ project-root/
 
 - **Routing**: Use a routing library like `react-router-dom` to manage navigation between pages.
 
-- **State Management**: Consider using Context API or Redux for state management if your app grows in complexity.
+- **State Management**: Consider using Context API or Redux for state management if theapp grows in complexity.
 
 - **Styling**: You can use CSS modules, SASS, or styled-components for styling to keep styles scoped and maintainable.
 
-- **Testing**: Include test files alongside components/pages to keep your tests organized.
+- **Testing**: Include test files alongside components/pages to keep thetests organized.
 
-By following this structure, you create a modular, clean, and efficient codebase that's easier to navigate and extend. 
 
+---
+## Where to put images 
+
+In React applications, the placement of image assets depends on how we intend to use them:
+
+**1. `src/assets/images`:**
+
+- **Purpose:** Store images that are imported and utilized within theReact components or CSS files.
+- **Usage:** Import these images directly into theJavaScript or CSS modules. For example:
+
+  ```javascript
+  import React from 'react';
+  import logo from './assets/images/logo.png';
+
+  function Header() {
+    return <img src={logo} alt="Logo" />;
+  }
+
+  export default Header;
+  ```
+
+  In this setup, the build process handles these images, optimizing and bundling them appropriately. This approach ensures that images are processed by the build tool, benefiting from optimizations like hashing for cache busting. [Ref](https://create-react-app.dev/docs/adding-images-fonts-and-files/)
+
+**2. `public/images`:**
+
+- **Purpose:** Store static images that need to be accessed directly via a URL or are referenced in the `public/index.html` file.
+- **Usage:** Access these images using absolute paths. For example:
+
+  ```html
+  <img src="/images/logo.png" alt="Logo" />
+  ```
+
+  Files in the `public` directory are not processed by the build tool; they are copied directly to the build output. This is useful for assets that must retain their original filenames or when you need to reference them without importing. [Ref](https://create-react-app.dev/docs/using-the-public-folder/)
+
+**Key Differences:**
+
+- **Build Processing:** Images in `src/assets/images` are processed by the build tool, allowing for optimizations like minification and hashing. In contrast, images in `public/images` are not processed and retain their original state.
+- **Referencing:** Images in `src` are imported into thecomponents or stylesheets, while images in `public` are accessed via absolute paths.
+
+**Recommendation:**
+
+- **Use `src/assets/images`** for images that are part of theReact components or stylesheets, benefiting from build optimizations and easier module management.
+- **Use `public/images`** for images that need to be accessed directly, such as favicons, manifest icons, or when a specific file structure is required in the build output.
+
+By organizing images based on their usage, we can maintain a clean and efficient project structure. 
 ---
 
 ## Specific to our use case
 
-For a React web application with multiple pages like login, signup, user profile, settings, home/feed, news, ads, and others, it's crucial to have a well-organized folder structure. This not only enhances maintainability but also makes your code scalable as your application grows.
+For a React web application with multiple pages like login, signup, user profile, settings, home/feed, news, ads, and others, it's crucial to have a well-organized folder structure. This not only enhances maintainability but also makes thecode scalable as theapplication grows.
 
-Here's a recommended folder structure for your React app:
+Here's a recommended folder structure for theReact app:
 
 ```
 project-root/
@@ -206,7 +251,7 @@ project-root/
 
 - **`public/`**: Contains static files like `index.html` that are not processed by Webpack.
 
-- **`src/`**: The main directory for your application's source code.
+- **`src/`**: The main directory for theapplication's source code.
   - **`components/`**: Holds reusable UI components.
     - **`common/`**: Components used across multiple pages (e.g., Header, Footer).
     - **`specific/`**: Components that are specific but reusable in certain contexts.
@@ -217,7 +262,7 @@ project-root/
   - **`assets/`**: Static assets like images, fonts, and global styles.
     - **`styles/`**: Global CSS files and style variables.
   - **`App.js`**: The root component that sets up routes and global providers.
-  - **`index.js`**: Entry point of your React application.
+  - **`index.js`**: Entry point of theReact application.
 
 ### Benefits of This Structure:
 
@@ -229,9 +274,9 @@ project-root/
 ### Additional Tips:
 
 - **Routing**: Use a routing library like `react-router-dom` to manage navigation between pages.
-- **State Management**: Consider using Context API or Redux for state management if your app grows in complexity.
+- **State Management**: Consider using Context API or Redux for state management if theapp grows in complexity.
 - **Styling**: You can use CSS modules, SASS, or styled-components for styling to keep styles scoped and maintainable.
-- **Testing**: Include a `tests/` directory within `src/` or alongside components/pages to keep your tests organized.
+- **Testing**: Include a `tests/` directory within `src/` or alongside components/pages to keep thetests organized.
 
 ### Example of a Page Component:
 
@@ -271,5 +316,3 @@ export const login = async (credentials) => {
 
 // Other authentication-related functions
 ```
-
-By following this structure, you create a modular, clean, and efficient codebase that's easier to navigate and extend.
