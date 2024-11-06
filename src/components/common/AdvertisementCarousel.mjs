@@ -1,27 +1,31 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Carousel } from 'react-bootstrap';
+import banner1 from '../../assets/images/banners/banner1.webp';
+import banner2 from '../../assets/images/banners/banner2.webp';
+import banner3 from '../../assets/images/banners/banner3.webp';
+import banner4 from '../../assets/images/banners/banner4.webp';
 
 function AdvertisementCarousel() {
     const advertisements = [
         {
-            src: "images/banner1.webp",
+            src: banner1,
             title: "Empower Your Community",
             text: "Spot issues? Report instantly with MyReportApp! Whether it's damage in your neighborhood, suggestions for the advancement of a city, organizational flaws, or service complaints, share them privately with facility managers or publicly with the RC community. Your voice matters. Let's make it heard."
         },
         
         {
-            src: "/images/banner2.webp",
+            src: banner2,
             title: "Engage With Organizations",
             text: "Take action in your community with MyReportApp. Vote on local issues, track their resolution, and stay informed by simply scanning QR codes on issue announcements. Your involvement can drive change. Start by keeping updated on the progress of reports in your neighborhood."
         },
         {
-            src: "/images/banner3.webp",
+            src: banner3,
             title: "Enhance Citizen Satisfaction",
             text: "MyReportApp is designed with happiness in mind. As a smart city solution, it not only facilitates efficient issue reporting and monitoring but also rewards engaged citizens with perks from local institutions. Report, monitor, and get rewarded. Join our community of responsible citizens."
         },
         {
-            src: "/images/banner4.webp",
+            src: banner4,
             title: "Stay Updated Locally",
             text: "Keep your finger on the pulse of your city with MyReportApp. More than just a report management tool, our app supports local businesses by offering a platform for eco-friendly and digital advertising. Stay informed and engaged with everything happening around you."
         },

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const UserContext = createContext(null);
 
@@ -30,7 +30,7 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(exp > now ? JSON.parse(storedUser) : null);
 
     const login = async (userData, remember) => {
-        const profilePictureUrl = userData.profilePictureUrl || '/images/avatar.jpg';
+        const profilePictureUrl = userData.profilePictureUrl || '/images/ui/avatar.jpg';
         const profilePictureBase64 = await fetchProfilePicture(profilePictureUrl);
         const updatedUserData = { ...userData, profilePictureBase64 };
         document.documentElement.setAttribute('data-bs-user', true);
@@ -65,7 +65,7 @@ export const UserProvider = ({ children }) => {
     };
 
     const updateProfilePictureUrl = async (newUrl) => {
-        const profilePictureUrl = newUrl || '/images/avatar.jpg';
+        const profilePictureUrl = newUrl || '/images/ui/avatar.jpg';
         const profilePictureBase64 = await fetchProfilePicture(profilePictureUrl);
         updateUserData({ profilePictureUrl: newUrl, profilePictureBase64 });
     };

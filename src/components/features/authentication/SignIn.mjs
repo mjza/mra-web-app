@@ -8,6 +8,7 @@ import { useUser } from '../../../contexts/UserContext.mjs';
 import { loginService } from '../../../services/auth.mjs';
 import AdvertisementCarousel from '../../common/AdvertisementCarousel.mjs';
 import LoadingOverlay from '../../ui/LoadingOverlay.mjs';
+import banner0 from '../../../assets/images/banners/banner0.webp';
 
 const SignIn = () => {
     const navigate = useNavigate();
@@ -150,7 +151,7 @@ const SignIn = () => {
                                 {/* Image Column */}
                                 <Col sm={12} md={6} className="pe-md-0">
                                     <img
-                                        src="/images/banner0.webp"
+                                        src={banner0}
                                         alt="A graph that explains the main functionality of the application."
                                         className="py-3 img-fluid"
                                         style={{
